@@ -1,0 +1,32 @@
+# 服务器配置
+server:
+  port: 8080
+
+# 数据库配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.64.128:3306/aimatch?useSSL=false&serverTimezone=UTC
+    username: root
+    password: wk18477948wk
+  # Redis配置
+  redis:
+    host: 192.168.64.128
+    port: 6379
+
+# MyBatis配置
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.entity
+
+# Sa-Token配置
+sa-token:
+  token-name: Authorization
+  timeout: 3600
+  auto-renew: true
+  is-concurrent: true
+  is-share: true
+
+deepseek:
+  api-url: https://api.deepseek.com/v1/chat/completions
+  api-key: sk-04637f0860384641a3182466f70194e0
