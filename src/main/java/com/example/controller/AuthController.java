@@ -37,8 +37,6 @@ public class AuthController {
         return ResponseResult.success(token);
     }
 
-
-
     @PostMapping("/logout")
     public ResponseResult<?> logout() {
         logger.info("用户登出: {}", StpUtil.getLoginId());
@@ -57,6 +55,5 @@ public class AuthController {
         retMap.put("userId", loginId);
         // 返回用户信息
         return retMap;
-
     }
 }    

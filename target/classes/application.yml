@@ -9,10 +9,10 @@ spring:
     url: jdbc:mysql://192.168.64.128:3306/aimatch?useSSL=false&serverTimezone=UTC
     username: root
     password: wk18477948wk
-  # Redis配置
-  redis:
-    host: 192.168.64.128
-    port: 6379
+#  # Redis配置
+#  redis:
+#    host: 192.168.64.128
+#    port: 6379
 
 # MyBatis配置
 mybatis-plus:
@@ -25,7 +25,7 @@ sa-token:
   timeout: 3600
   auto-renew: true
   is-concurrent: true
-  is-share: true
+  is-share: false
 
 deepseek:
   api-url: https://api.deepseek.com/v1/chat/completions
