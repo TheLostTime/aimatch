@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MyBatisCodeHelperDatasource">
+    <option name="projectProfile">
+      <ProjectProfile>
+        <option name="addSerializeUid" value="true" />
+        <option name="baseClassSearchXml" value="true" />
+        <option name="generateService" value="true" />
+        <option name="generateServiceInterface" value="true" />
+        <option name="javaMapperPackage" value="com.example.mapper" />
+        <option name="javaMapperPath" value="$PROJECT_DIR$/src/main/java" />
+        <option name="javaModelPackage" value="com.example.entity" />
+        <option name="javaModelPath" value="$PROJECT_DIR$/src/main/java" />
+        <option name="lastDatabaseCrudChooseModuleName" value="aimatch" />
+        <option name="lombokAllArgConstructor" value="true" />
+        <option name="lombokDataAnnotation" value="true" />
+        <option name="moduleNameToPackageAndPathMap">
+          <map>
+            <entry key="aimatch">
+              <value>
+                <UserPackageAndPathInfoByModule>
+                  <option name="javaMapperPackage" value="com.example.mapper" />
+                  <option name="javaMapperPath" value="$PROJECT_DIR$/src/main/java" />
+                  <option name="javaModelPacakge" value="com.example.entity" />
+                  <option name="javaModelPath" value="$PROJECT_DIR$/src/main/java" />
+                  <option name="javaServiceInterfacePackage" value="com.example.service" />
+                  <option name="javaServiceInterfacePath" value="$PROJECT_DIR$/src/main/java" />
+                  <option name="javaServicePackage" value="com.example.service.impl" />
+                  <option name="javaServicePath" value="$PROJECT_DIR$/src/main/java" />
+                  <option name="xmlPackage" value="mapper" />
+                  <option name="xmlPath" value="$PROJECT_DIR$/src/main/resources" />
+                </UserPackageAndPathInfoByModule>
+              </value>
+            </entry>
+          </map>
+        </option>
+        <option name="mybatisPlusStaticField" value="false" />
+        <option name="tableGenerateConfigs">
+          <map>
+            <entry key="aimatch:t_company">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TCompany" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_employee">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TEmployee" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_employee_resume_file">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TEmployeeResumeFile" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_employee_save_job">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TEmployeeSaveJob" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_employee_vip">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TEmployeeVip" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_hr">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="THr" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_hr_paid_permisions">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="THrPaidPermisions" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_hr_paid_permisions_use_detail">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="THrPaidPermisionsUseDetail" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_hr_vip">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="THrVip" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_position">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TPosition" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_position_key_word">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TPositionKeyWord" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_position_toolbox">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TPositionToolbox" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_resume_base_info">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TResumeBaseInfo" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_resume_education">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TResumeEducation" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_resume_interest_job">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TResumeInterestJob" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_resume_project">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TResumeProject" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_resume_work">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TResumeWork" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_user">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TUser" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_vip_package">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="TVipPackage" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+          </map>
+        </option>
+        <option name="useSwagger" value="true" />
+        <option name="userMybatisPlus" value="true" />
+        <option name="xmlMapperPackage" value="mapper" />
+        <option name="xmlMapperPath" value="$PROJECT_DIR$/src/main/resources" />
+      </ProjectProfile>
+    </option>
+  </component>
+</project>

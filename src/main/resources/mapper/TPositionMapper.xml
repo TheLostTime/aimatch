@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TPositionMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.TPosition">
+    <!--@mbg.generated-->
+    <!--@Table t_position-->
+    <id column="position_id" jdbcType="VARCHAR" property="positionId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="position_type" jdbcType="VARCHAR" property="positionType" />
+    <result column="position_status" jdbcType="INTEGER" property="positionStatus" />
+    <result column="work_type" jdbcType="VARCHAR" property="workType" />
+    <result column="position_name" jdbcType="VARCHAR" property="positionName" />
+    <result column="position_description" jdbcType="LONGVARCHAR" property="positionDescription" />
+    <result column="job_category" jdbcType="VARCHAR" property="jobCategory" />
+    <result column="degree_lower_limit" jdbcType="INTEGER" property="degreeLowerLimit" />
+    <result column="experience_lower_limit" jdbcType="INTEGER" property="experienceLowerLimit" />
+    <result column="salary_lower_limit" jdbcType="INTEGER" property="salaryLowerLimit" />
+    <result column="salary_upper_limit" jdbcType="INTEGER" property="salaryUpperLimit" />
+    <result column="salary_month" jdbcType="INTEGER" property="salaryMonth" />
+    <result column="work_place" jdbcType="VARCHAR" property="workPlace" />
+    <result column="is_oversea" jdbcType="INTEGER" property="isOversea" />
+    <result column="oversea_remainder" jdbcType="INTEGER" property="overseaRemainder" />
+    <result column="position_num" jdbcType="INTEGER" property="positionNum" />
+    <result column="position_num" jdbcType="INTEGER" property="positionNum" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    position_id, position_type, position_status, work_type, position_name, position_description, 
+    job_category, degree_lower_limit, experience_lower_limit, salary_lower_limit, salary_upper_limit, 
+    salary_month, work_place, is_oversea, oversea_remainder, position_num,updateTime,reason
+  </sql>
+
+  <select id="queryOfflinePosition" resultMap="BaseResultMap">
+        select  * from t_position where
+        position_status = 2
+        and update_time &lt;= date_sub(now(),interval #{offlineDay} day)
+  </select>
+
+</mapper>

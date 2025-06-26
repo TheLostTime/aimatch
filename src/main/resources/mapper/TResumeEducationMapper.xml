@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TResumeEducationMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.TResumeEducation">
+    <!--@mbg.generated-->
+    <!--@Table t_resume_education-->
+    <id column="education_id" jdbcType="VARCHAR" property="educationId" />
+    <result column="education_index" jdbcType="INTEGER" property="educationIndex" />
+    <result column="resume_id" jdbcType="VARCHAR" property="resumeId" />
+    <result column="degree" jdbcType="VARCHAR" property="degree" />
+    <result column="college" jdbcType="VARCHAR" property="college" />
+    <result column="major" jdbcType="VARCHAR" property="major" />
+    <result column="begin_date" jdbcType="TIMESTAMP" property="beginDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    education_id, education_index, resume_id, `degree`, college, major, begin_date, end_date
+  </sql>
+</mapper>

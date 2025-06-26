@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TPositionToolboxMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.TPositionToolbox">
+    <!--@mbg.generated-->
+    <!--@Table t_position_toolbox-->
+    <id column="position_id" jdbcType="VARCHAR" property="positionId" />
+    <result column="ai_examiner" jdbcType="INTEGER" property="aiExaminer" />
+    <result column="ai_examiner_desc" jdbcType="LONGVARCHAR" property="aiExaminerDesc" />
+    <result column="oversea_remainder" jdbcType="INTEGER" property="overseaRemainder" />
+    <result column="resume_threshold" jdbcType="INTEGER" property="resumeThreshold" />
+    <result column="degree_lower_limit" jdbcType="INTEGER" property="degreeLowerLimit" />
+    <result column="experience_lower_limit" jdbcType="INTEGER" property="experienceLowerLimit" />
+    <result column="experience_upper_limit" jdbcType="INTEGER" property="experienceUpperLimit" />
+    <result column="age_lower_limit" jdbcType="INTEGER" property="ageLowerLimit" />
+    <result column="age_upper_limit" jdbcType="INTEGER" property="ageUpperLimit" />
+    <result column="college" jdbcType="VARCHAR" property="college" />
+    <result column="major" jdbcType="VARCHAR" property="major" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="residentia_address" jdbcType="VARCHAR" property="residentiaAddress" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    position_id, ai_examiner, ai_examiner_desc, oversea_remainder, resume_threshold, 
+    degree_lower_limit, experience_lower_limit, experience_upper_limit, age_lower_limit, 
+    age_upper_limit, college, major, gender, residentia_address
+  </sql>
+</mapper>

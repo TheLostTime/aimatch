@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TResumeInterestJobMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.TResumeInterestJob">
+    <!--@mbg.generated-->
+    <!--@Table t_resume_interest_job-->
+    <id column="interest_id" jdbcType="VARCHAR" property="interestId" />
+    <result column="interest_index" jdbcType="INTEGER" property="interestIndex" />
+    <result column="resume_id" jdbcType="VARCHAR" property="resumeId" />
+    <result column="job_category" jdbcType="VARCHAR" property="jobCategory" />
+    <result column="position_name" jdbcType="VARCHAR" property="positionName" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="salary_lower_limit" jdbcType="INTEGER" property="salaryLowerLimit" />
+    <result column="salary_upper_limit" jdbcType="INTEGER" property="salaryUpperLimit" />
+    <result column="salary_month" jdbcType="INTEGER" property="salaryMonth" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    interest_id, interest_index, resume_id, job_category, position_name, city, salary_lower_limit, 
+    salary_upper_limit, salary_month
+  </sql>
+</mapper>

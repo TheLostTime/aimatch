@@ -1,0 +1,49 @@
+2025-06-06 09:07:36.812 [lettuce-nioEventLoop-4-2] WARN  i.l.core.protocol.ConnectionWatchdog - Cannot reconnect to [192.168.64.128:6379]: java.nio.channels.ClosedChannelException
+java.nio.channels.ClosedChannelException: null
+	at io.netty.channel.nio.AbstractNioChannel.doClose(AbstractNioChannel.java:502)
+	at io.netty.channel.socket.nio.NioSocketChannel.doClose(NioSocketChannel.java:349)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.doClose0(AbstractChannel.java:754)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.close(AbstractChannel.java:731)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.close(AbstractChannel.java:620)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.close(DefaultChannelPipeline.java:1352)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeClose(AbstractChannelHandlerContext.java:749)
+	at io.netty.channel.AbstractChannelHandlerContext.access$1200(AbstractChannelHandlerContext.java:61)
+	at io.netty.channel.AbstractChannelHandlerContext$11.run(AbstractChannelHandlerContext.java:732)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask$$$capture(AbstractEventExecutor.java:174)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute$$$capture(AbstractEventExecutor.java:167)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-06-06 09:07:36.869 [lettuce-eventExecutorLoop-1-9] INFO  i.l.core.protocol.ConnectionWatchdog - Reconnecting, last destination was 192.168.64.128:6379
+2025-06-06 09:07:36.905 [lettuce-nioEventLoop-4-3] WARN  i.l.core.protocol.ConnectionWatchdog - Cannot reconnect to [192.168.64.128:6379]: No route to host: no further information: /192.168.64.128:6379
+io.netty.channel.AbstractChannel$AnnotatedNoRouteToHostException: No route to host: no further information: /192.168.64.128:6379
+Caused by: java.net.NoRouteToHostException: No route to host: no further information
+	at java.base/sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:779)
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:337)
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:334)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2025-06-06 09:07:49.184 [lettuce-nioEventLoop-4-13] INFO  i.l.c.protocol.ReconnectionHandler - Reconnected to 192.168.64.128:6379
+2025-06-06 09:08:02.572 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=15h3m40s491ms488µs201ns).
+2025-06-06 09:37:11.325 [http-nio-8080-exec-3] INFO  c.example.controller.AuthController - 接收登录请求: wk
+2025-06-06 09:37:11.325 [http-nio-8080-exec-3] INFO  c.e.service.impl.UserServiceImpl - 查找用户: wk
+2025-06-06 09:37:11.332 [http-nio-8080-exec-3] DEBUG c.e.mapper.UserMapper.findByUsername - ==>  Preparing: SELECT * FROM users WHERE username = ?
+2025-06-06 09:37:11.340 [http-nio-8080-exec-3] DEBUG c.e.mapper.UserMapper.findByUsername - ==> Parameters: wk(String)
+2025-06-06 09:37:11.347 [http-nio-8080-exec-3] DEBUG c.e.mapper.UserMapper.findByUsername - <==      Total: 1
+2025-06-06 09:37:11.394 [http-nio-8080-exec-3] INFO  c.e.service.impl.UserServiceImpl - 更新用户登录时间: 4
+2025-06-06 09:37:11.394 [http-nio-8080-exec-3] DEBUG c.e.m.UserMapper.updateLastLoginTime - ==>  Preparing: UPDATE users SET last_login_time = ? WHERE id = ?
+2025-06-06 09:37:11.397 [http-nio-8080-exec-3] DEBUG c.e.m.UserMapper.updateLastLoginTime - ==> Parameters: 2025-06-06T09:37:11.394980600(LocalDateTime), 4(Long)
+2025-06-06 09:37:11.399 [http-nio-8080-exec-3] DEBUG c.e.m.UserMapper.updateLastLoginTime - <==    Updates: 1
+2025-06-06 09:37:11.399 [http-nio-8080-exec-3] INFO  c.e.service.impl.UserServiceImpl - 用户登录成功: wk

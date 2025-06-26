@@ -1,0 +1,382 @@
+package com.example.service.impl;
+
+import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.entity.*;
+import com.example.exception.BusinessException;
+import com.example.mapper.*;
+import com.example.req.HrActivateReq;
+import com.example.req.HrJoinCompanyReq;
+import com.example.req.SavePositionReq;
+import com.example.resp.HrInfoResp;
+import com.example.service.*;
+import com.example.util.FileToDbUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Date;
+import java.util.List;
+
+import static com.example.constant.Constants.*;
+
+@Service
+@Slf4j
+public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> implements TCompanyService{
+
+    @Autowired
+    private THrService tHrService;
+
+    @Autowired
+    private THrMapper tHrMapper;
+
+    @Autowired
+    private TCompanyMapper tCompanyMapper;
+
+    @Autowired
+    private THrVipService tHrVipService;
+
+    @Autowired
+    private THrVipMapper tHrVipMapper;
+
+    @Autowired
+    private TVipPackageService tVipPackageService;
+
+    @Autowired
+    private TVipPackageMapper tVipPackageMapper;
+
+    @Autowired
+    private THrPaidPermisionsService tHrPaidPermisionsService;
+
+    @Autowired
+    private TPositionService tPositionService;
+
+    @Autowired
+    private TPositionMapper tPositionMapper;
+
+    @Autowired
+    private TPositionKeyWordService tPositionKeyWordService;
+
+    @Autowired
+    private TPositionKeyWordMapper tPositionKeyWordMapper;
+
+    @Autowired
+    private TPositionToolboxService tPositionToolboxService;
+
+    @Autowired
+    private TPositionToolboxMapper tPositionToolboxMapper;
+
+    @Autowired
+    private THrPaidPermisionsUseDetailService tHrPaidPermisionsUseDetailService;
+
+    @Override
+    public void joinCompany(HrJoinCompanyReq hrJoinCompany) {
+        // 查看旗下是否有公司了
+        SaSession saSession = StpUtil.getSession();
+        TUser userInfo = (TUser) saSession.get("userInfo");
+        THr tHr = tHrService.getById(userInfo.getUserId());
+        if (null!= tHr && StringUtils.isNotEmpty(tHr.getCompanyId())) {
+            throw new BusinessException(10001,"您已经加入公司了");
+        }
+
+        // 1. 公司信息录入
+        TCompany tCompany = TCompany.builder()
+                .name(hrJoinCompany.getCompanyName())
+                .industry(hrJoinCompany.getIndustry())
+                .scale(hrJoinCompany.getScale())
+                .enterpriseCertified("NO")
+                .enterpriseLicense("")
+                .incumbencyCertificate("")
+                .build();
+
+        this.save(tCompany);
+
+
+        // 2. hr信息录入
+        THr tHr2 = THr.builder()
+                .userId(userInfo.getUserId())
+                .name(hrJoinCompany.getHrName())
+                .title(hrJoinCompany.getTitle())
+                .companyId(tCompany.getCompanyId())
+                .vipType("NO")
+                .realName(2)  // 未实名认证
+                .build();
+
+        tHrService.save(tHr2);
+    }
+
+    @Override
+    public HrInfoResp getHrStatus() {
+        SaSession saSession = StpUtil.getSession();
+        TUser userInfo = (TUser) saSession.get("userInfo");
+        THr tHr = tHrService.getById(userInfo.getUserId());
+        HrInfoResp hrInfo = HrInfoResp.builder()
+                .userId(tHr.getUserId())
+                .name(tHr.getName())
+                .title(tHr.getTitle())
+                .joinCompanyStatus(tHr.getCompanyId()==null?"NO":"YES")
+                .realNameAuthed(tHr.getRealName()==1?"YES":"NO")
+                .enterpriseCertified("NO")
+                .vipType(tHr.getVipType())
+                .build();
+        TCompany tCompany = tCompanyMapper.selectById(tHr.getCompanyId());
+        if (null != tCompany) {
+            hrInfo.setEnterpriseCertified(tCompany.getEnterpriseCertified().equals("YES")?"YES":"NO");
+        }
+        return hrInfo;
+    }
+
+    @Override
+    public void applyCertification(MultipartFile enterpriseLicenseFile, MultipartFile incumbencyCertificateFile) {
+        String enterpriseLicense = FileToDbUtil.fileToStr(enterpriseLicenseFile);
+        String incumbencyCertificate = FileToDbUtil.fileToStr(incumbencyCertificateFile);
+        SaSession saSession = StpUtil.getSession();
+        TUser userInfo = (TUser) saSession.get("userInfo");
+        THr tHr = tHrService.getById(userInfo.getUserId());
+        TCompany tCompany = tCompanyMapper.selectById(tHr.getCompanyId());
+        if (null != tCompany) {
+            // 更新公司信息
+            tCompanyMapper.updateById(TCompany.builder()
+                    .companyId(tHr.getCompanyId())
+                    .incumbencyCertificate(incumbencyCertificate)
+                    .enterpriseLicense(enterpriseLicense)
+                    .enterpriseCertified(COMPANY_STATUS_WAITING)
+                    .build());
+        }
+    }
+
+    @Override
+    public List<TCompany> queryCompanyList() {
+        List<TCompany> list = tCompanyMapper.queryCompanyList();
+        return list;
+    }
+
+    @Override
+    public void auditCompany(String companyId,String status,String reason) {
+        // 查询公司信息
+        TCompany tCompany = tCompanyMapper.selectById(companyId);
+        if (!COMPANY_STATUS_WAITING.equals(tCompany.getEnterpriseCertified())) {
+            throw new BusinessException(10013,"公司状态不是待审核");
+        }
+        if (status.equals(COMPANY_STATUS_PASS)) {
+            tCompanyMapper.updateById(TCompany.builder()
+                    .companyId(companyId)
+                    .enterpriseCertified(COMPANY_STATUS_PASS)
+                    .build());
+            return;
+        }
+        if (status.equals(COMPANY_STATUS_FAIL)) {
+            tCompanyMapper.updateById(TCompany.builder()
+                    .companyId(companyId)
+                    .enterpriseCertified(COMPANY_STATUS_FAIL)
+                    .reason(reason)
+                    .build());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void savePosition(SavePositionReq savePositionReq) {
+        String positionId = savePositionReq.getPosition().getPositionId();
+        savePositionReq.getPosition().setUserId(StpUtil.getLoginId().toString());
+        savePositionReq.getPosition().setUpdateTime(DateUtil.date());
+        if (StringUtils.isNotEmpty(positionId)) {
+            log.info("修改岗位...");
+            tPositionMapper.updateById(savePositionReq.getPosition());
+            savePositionReq.getKeyWords().forEach(item->{
+                tPositionKeyWordMapper.updateById(item);
+            });
+            if (null != savePositionReq.getToolbox()) {
+                tPositionToolboxMapper.updateById(savePositionReq.getToolbox());
+            }
+        } else {
+            log.info("保存岗位...");
+            tPositionMapper.insert(savePositionReq.getPosition());
+            savePositionReq.getKeyWords().forEach(item->{
+                item.setPositionId(savePositionReq.getPosition().getPositionId());
+                tPositionKeyWordMapper.insert(item);
+            });
+            if (null != savePositionReq.getToolbox()) {
+                savePositionReq.getToolbox().setPositionId(savePositionReq.getPosition().getPositionId());
+                tPositionToolboxMapper.insert(savePositionReq.getToolbox());
+            }
+        }
+    }
+
+    @Override
+    public void offlinePosition(String positionId) {
+        // 查询当前岗位
+        TPosition tPosition = tPositionService.getById(positionId);
+        if (null == tPosition) {
+            throw new BusinessException(10002,"岗位不存在");
+        }
+        if (tPosition.getPositionStatus() != POSITION_STATUS_ONLINE) {
+            throw new BusinessException(10003,"只有上线的岗位才能下线");
+        }
+        tPositionMapper.updateById(TPosition.builder()
+                .positionId(positionId)
+                .positionStatus(POSITION_STATUS_OFFLINE)
+                .updateTime(DateUtil.date())
+                .build());
+    }
+
+
+
+    @Override
+    @Transactional
+    public void publishPosition(String positionId) {
+        // 查询hr信息
+        THr tHr = tHrMapper.selectById(StpUtil.getLoginId().toString());
+        // 查询公司信息
+        TCompany tCompany = tCompanyMapper.selectById(tHr.getCompanyId());
+        // 校验企业是否通过审核
+        if (!tCompany.getEnterpriseCertified().equals(COMPANY_STATUS_PASS)) {
+            throw new BusinessException(10017,"公司未通过审核");
+        }
+        // 校验是否是会员
+        THrVip tHrVip = tHrVipService.getById(StpUtil.getLoginId().toString());
+        if (null == tHrVip || !(tHrVip.getVipType().equals("HIGH") || tHrVip.getVipType().equals("NORMAL"))) {
+            throw new BusinessException(10004,"会员才能发布岗位");
+        }
+        // 查询岗位
+        TPosition tPosition = tPositionService.getById(positionId);
+        if (null == tPosition) {
+            throw new BusinessException(10005,"岗位不存在");
+        }
+        if (!tPosition.getUserId().equals(StpUtil.getLoginId().toString())) {
+            throw new BusinessException(10006,"您没有权限发布此岗位");
+        }
+        if (tPosition.getPositionStatus() != POSITION_STATUS_DRAFT) {
+            throw new BusinessException(10007,"只有草稿才能发布");
+        }
+        // 校验付费权限使用情况
+        THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = tHrPaidPermisionsUseDetailService.getById(StpUtil.getLoginId().toString());
+        if (null == tHrPaidPermisionsUseDetail) {
+            throw new BusinessException(10008,"付费权限使用详情不存在");
+        }
+
+        if (tHrPaidPermisionsUseDetail.getUsedPositionNum() <= 0) {
+            throw new BusinessException(10009,"已使用岗位数量已达到上限");
+        }
+
+        // 更新岗位状态为待审核
+        tPosition.setPositionStatus(POSITION_STATUS_AUDIT);
+        tPosition.setUpdateTime(DateUtil.date());
+        tPositionMapper.updateById(tPosition);
+
+        // 将付费权限岗位使用情况-1
+        tHrPaidPermisionsUseDetail.setUsedPositionNum(tHrPaidPermisionsUseDetail.getUsedPositionNum()-1);
+        tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
+
+    }
+
+    @Override
+    @Transactional
+    public void activateVip(HrActivateReq hrActivateReq) {
+        // 查询是否是会员
+        THrVip tHrVipOri = tHrVipService.getById(StpUtil.getLoginId().toString());
+        if (null != tHrVipOri && (tHrVipOri.getVipType().equals(VIP_NORMAL) || tHrVipOri.getVipType().equals(VIP_HIGH))) {
+            throw new BusinessException(10010,"已经是会员，无需激活");
+        }
+
+        // 1.激活vip
+        Date currentDate = DateUtil.date();
+        Date futureDate = DateUtil.offsetDay(currentDate, hrActivateReq.getSpec());
+        THrVip tHrVip = THrVip.builder()
+                .vipType(hrActivateReq.getVipType())
+                .userId(StpUtil.getLoginId().toString())
+                .beginTime(currentDate)
+                .expireTime(futureDate)
+                .build();
+        tHrVipService.save(tHrVip);
+
+        // 将t_hr表vip_type字段更新为hrActivateReq.getVipType()
+        tHrMapper.updateById(THr.builder()
+                .vipType(hrActivateReq.getVipType())
+                .userId(StpUtil.getLoginId().toString())
+                .build()
+        );
+
+        // 2.根据vip_type和spec查询套餐规格
+        TVipPackage tVipPackage = tVipPackageMapper.queryPackage(hrActivateReq);
+        if (null == tVipPackage) {
+            throw new BusinessException(10011,"套餐不存在");
+        }
+        // 3.开通权限
+        THrPaidPermisions tHrPaidPermisions = THrPaidPermisions.builder()
+                .aiGenerate(tVipPackage.getAiGenerate())
+                .downloadNum(tVipPackage.getDownloadNum())
+                .positionNum(tVipPackage.getPositionNum())
+                .sayHello(tVipPackage.getSayHello())
+                .viewResume(tVipPackage.getViewResume())
+                .userId(StpUtil.getLoginId().toString())
+                .build();
+        tHrPaidPermisionsService.save(tHrPaidPermisions);
+
+        // 4.初始化权限使用情况
+        THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = THrPaidPermisionsUseDetail.builder()
+                .userId(StpUtil.getLoginId().toString())
+                .usedPositionNum(tVipPackage.getPositionNum())
+                .usedViewResume(tVipPackage.getViewResume())
+                .usedSayHello(tVipPackage.getSayHello())
+                .usedDownloadNum(tVipPackage.getDownloadNum())
+                .createTime(currentDate)
+                .updateTime(currentDate)
+                .build();
+        tHrPaidPermisionsUseDetailService.save(tHrPaidPermisionsUseDetail);
+    }
+
+    @Override
+    @Transactional
+    public void upgradeVip(HrActivateReq hrActivateReq) {
+        // 查询当期用户是否是普通vip
+        THrVip tHrVip = tHrVipService.getById(StpUtil.getLoginId().toString());
+        if (null == tHrVip || !tHrVip.getVipType().equals(VIP_NORMAL)) {
+            throw new BusinessException(10012,"您不是普通vip");
+        }
+
+        // 升级vip
+        tHrVipService.updateById(THrVip.builder()
+                .userId(StpUtil.getLoginId().toString())
+                .vipType(hrActivateReq.getVipType())
+                .build()
+        );
+
+        // 2.根据vip_type和spec查询套餐规格
+        TVipPackage tVipPackage = tVipPackageMapper.queryPackage(hrActivateReq);
+        if (null == tVipPackage) {
+            throw new BusinessException(10013,"套餐不存在");
+        }
+
+        // 3.升级套餐
+        tHrPaidPermisionsService.updateById(THrPaidPermisions.builder()
+                .aiGenerate(tVipPackage.getAiGenerate())
+                .downloadNum(tVipPackage.getDownloadNum())
+                .positionNum(tVipPackage.getPositionNum())
+                .sayHello(tVipPackage.getSayHello())
+                .viewResume(tVipPackage.getViewResume())
+                .userId(StpUtil.getLoginId().toString())
+                .build()
+        );
+
+        // 4.更新权限使用情况
+        THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = THrPaidPermisionsUseDetail.builder()
+                .userId(StpUtil.getLoginId().toString())
+                .usedPositionNum(tVipPackage.getPositionNum())
+                .usedViewResume(tVipPackage.getViewResume())
+                .usedSayHello(tVipPackage.getSayHello())
+                .usedDownloadNum(tVipPackage.getDownloadNum())
+                .updateTime(DateUtil.date())
+                .build();
+        tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
+    }
+
+
+}

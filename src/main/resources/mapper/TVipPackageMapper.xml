@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TVipPackageMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.TVipPackage">
+    <!--@mbg.generated-->
+    <!--@Table t_vip_package-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="vip_type" jdbcType="VARCHAR" property="vipType" />
+    <result column="spec" jdbcType="INTEGER" property="spec" />
+    <result column="position_num" jdbcType="INTEGER" property="positionNum" />
+    <result column="view_resume" jdbcType="INTEGER" property="viewResume" />
+    <result column="say_hello" jdbcType="INTEGER" property="sayHello" />
+    <result column="download_num" jdbcType="INTEGER" property="downloadNum" />
+    <result column="ai_generate" jdbcType="INTEGER" property="aiGenerate" />
+    <result column="price" jdbcType="INTEGER" property="price" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, vip_type, spec, position_num, view_resume, say_hello, download_num, ai_generate, 
+    price
+  </sql>
+  <select id="queryPackage" resultMap="BaseResultMap">
+  select * from t_vip_package where vip_type = #{vipType} and spec = #{spec}
+   </select>
+</mapper>

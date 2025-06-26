@@ -29,4 +29,8 @@ public class ResponseResult<T> {
         return new ResponseResult<>(code, message, null);
     }
 
+    public static <T> ResponseResult<T> error(int code, String message,T data) {
+        return new ResponseResult<>(code, message, data);
+    }
+
 }

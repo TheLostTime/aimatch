@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import com.example.entity.ResponseResult;
 import com.example.service.DeepSeekService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Api(value = "测试", tags = {"测试"})
 @RestController
 @RequestMapping("/api")
 public class HelloController {
@@ -37,7 +39,6 @@ public class HelloController {
         if (message == null || message.isEmpty()) {
             return ResponseResult.error("消息不能为空");
         }
-
         String reply = deepSeekService.chat(message);
         return ResponseResult.success(reply);
     }

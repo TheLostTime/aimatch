@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TPositionKeyWordMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.TPositionKeyWord">
+    <!--@mbg.generated-->
+    <!--@Table t_position_key_word-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="position_id" jdbcType="VARCHAR" property="positionId" />
+    <result column="key_word" jdbcType="VARCHAR" property="keyWord" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, position_id, key_word
+  </sql>
+</mapper>

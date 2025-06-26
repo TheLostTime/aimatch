@@ -1,0 +1,36 @@
+package com.example.resp;
+
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
+@ApiModel(value="HrInfoResp")
+@Data
+@AllArgsConstructor
+@Builder
+public class HrInfoResp {
+
+    @ApiModelProperty(value="用户ID")
+    private String userId;
+
+    @ApiModelProperty(value="HR名称")
+    private String name;
+
+    @ApiModelProperty(value="HR职务")
+    private String title;
+
+    @ApiModelProperty(value="是否加入企业YES、NO")
+    private String joinCompanyStatus;
+
+    @ApiModelProperty(value="是否已实名YES、NO")
+    private String realNameAuthed;
+
+    @ApiModelProperty(value="是否企业认证YES、NO")
+    private String enterpriseCertified;
+
+    @ApiModelProperty(value="NO-非vip、NORMAL--普通vip、HIGH-豪华vip")
+    private String vipType;
+}

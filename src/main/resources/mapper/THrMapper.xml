@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.THrMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.THr">
+    <!--@mbg.generated-->
+    <!--@Table t_hr-->
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="vip_type" jdbcType="VARCHAR" property="vipType" />
+    <result column="real_name" jdbcType="INTEGER" property="realName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_id, `name`, title, company_id, vip_type,real_name
+  </sql>
+</mapper>

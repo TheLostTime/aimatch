@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TEmployeeSaveJobMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.TEmployeeSaveJob">
+    <!--@mbg.generated-->
+    <!--@Table t_employee_save_job-->
+    <id column="position_id" jdbcType="VARCHAR" property="positionId" />
+    <id column="employee_user_id" jdbcType="VARCHAR" property="employeeUserId" />
+    <result column="save_flag" jdbcType="BOOLEAN" property="saveFlag" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    position_id, employee_user_id, save_flag, create_time, update_time
+  </sql>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.THrPaidPermisionsUseDetailMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.THrPaidPermisionsUseDetail">
+    <!--@mbg.generated-->
+    <!--@Table t_hr_paid_permisions_use_detail-->
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="used_position_num" jdbcType="INTEGER" property="usedPositionNum" />
+    <result column="used_view_resume" jdbcType="INTEGER" property="usedViewResume" />
+    <result column="used_say_hello" jdbcType="INTEGER" property="usedSayHello" />
+    <result column="used_download_num" jdbcType="INTEGER" property="usedDownloadNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_id, used_position_num, used_view_resume, used_say_hello, used_download_num, 
+    create_time, update_time
+  </sql>
+</mapper>

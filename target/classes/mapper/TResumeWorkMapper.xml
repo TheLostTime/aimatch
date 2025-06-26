@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TResumeWorkMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.TResumeWork">
+    <!--@mbg.generated-->
+    <!--@Table t_resume_work-->
+    <id column="work_id" jdbcType="VARCHAR" property="workId" />
+    <result column="work_index" jdbcType="INTEGER" property="workIndex" />
+    <result column="resume_id" jdbcType="VARCHAR" property="resumeId" />
+    <result column="position_name" jdbcType="VARCHAR" property="positionName" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="begin_date" jdbcType="TIMESTAMP" property="beginDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="work_desc" jdbcType="VARCHAR" property="workDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    work_id, work_index, resume_id, position_name, company_name, begin_date, end_date, 
+    work_desc
+  </sql>
+</mapper>

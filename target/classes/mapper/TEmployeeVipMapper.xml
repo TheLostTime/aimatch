@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TEmployeeVipMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.TEmployeeVip">
+    <!--@mbg.generated-->
+    <!--@Table t_employee_vip-->
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="vip_type" jdbcType="VARCHAR" property="vipType" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_id, vip_type, begin_time, expire_time
+  </sql>
+</mapper>

@@ -9,10 +9,19 @@ spring:
     url: jdbc:mysql://192.168.64.128:3306/aimatch?useSSL=false&serverTimezone=UTC
     username: root
     password: wk18477948wk
-#  # Redis配置
-#  redis:
-#    host: 192.168.64.128
-#    port: 6379
+  mvc:
+    pathmatch:
+      matching-strategy : ant_path_matcher
+  # Redis配置
+  redis:
+    host: 192.168.64.128
+    port: 6379
+  # Jackson配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss  # 设置日期格式
+    time-zone: GMT+8  # 设置时区
+    serialization:
+      write-dates-as-timestamps: false  # 禁止将日期序列化为时间戳，使用上面配置的格式
 
 # MyBatis配置
 mybatis-plus:
@@ -30,3 +39,4 @@ sa-token:
 deepseek:
   api-url: https://api.deepseek.com/v1/chat/completions
   api-key: sk-04637f0860384641a3182466f70194e0
+

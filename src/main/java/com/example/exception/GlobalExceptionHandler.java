@@ -19,7 +19,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseResult<?> handleOtherException() {
+    public ResponseResult<?> handleOtherException(Exception e) {
+        logger.error("服务器内部错误: {}", e.getMessage(), e);
         return ResponseResult.error("服务器内部错误");
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseResult<?> handleBusinessException(BusinessException e) {
+        logger.error("业务异常: {}", e.getMessage(), e);
+        return ResponseResult.error(e.getCode(), e.getMessage(),e.getData());
     }
 }

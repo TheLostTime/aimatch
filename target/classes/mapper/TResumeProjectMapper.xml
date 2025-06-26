@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TResumeProjectMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.TResumeProject">
+    <!--@mbg.generated-->
+    <!--@Table t_resume_project-->
+    <id column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_index" jdbcType="INTEGER" property="projectIndex" />
+    <result column="resume_id" jdbcType="VARCHAR" property="resumeId" />
+    <result column="position_name" jdbcType="VARCHAR" property="positionName" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="begin_date" jdbcType="TIMESTAMP" property="beginDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="project_desc" jdbcType="VARCHAR" property="projectDesc" />
+    <result column="project_achievements" jdbcType="VARCHAR" property="projectAchievements" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    project_id, project_index, resume_id, position_name, project_name, begin_date, end_date, 
+    project_desc, project_achievements
+  </sql>
+</mapper>
