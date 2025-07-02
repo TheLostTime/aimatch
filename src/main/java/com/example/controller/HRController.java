@@ -8,6 +8,7 @@ import com.example.req.HrActivateReq;
 import com.example.req.HrJoinCompanyReq;
 import com.example.req.SavePositionReq;
 import com.example.resp.HrInfoResp;
+import com.example.service.DeepSeekService;
 import com.example.service.TCompanyService;
 import com.example.service.THrService;
 import io.swagger.annotations.Api;
@@ -18,10 +19,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Flux;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.Map;
 
 @Api(value = "HR", tags = {"HR相关"})
 @RestController
@@ -36,6 +43,10 @@ public class HRController {
 
     @Autowired
     private THrService thrService;
+
+
+    @Autowired
+    private DeepSeekService deepSeekService;
 
 
     @ApiOperation(value = "hr个人信息+加入公司", notes = "", httpMethod = "POST")
@@ -140,6 +151,17 @@ public class HRController {
         }
         return ResponseResult.success(true);
     }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "body", dataType = "Map<String, Object>", name = "request", value = "{\"content\":\"\"}", required = true)
+    })
+    @ApiOperation(value = "HR发起大模型对话（生成岗位描述）", notes = "", httpMethod = "POST")
+    @PostMapping(value = "/chat/completions", produces = "text/event-stream;charset=UTF-8")
+    public Flux<String> chat(@RequestBody Map<String, Object> request) {
+        String content = (String) request.get("content");
+        return deepSeekService.chatFlux(content);
+    }
+
 
 
 

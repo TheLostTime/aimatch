@@ -1,11 +1,9 @@
 package com.example.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.stp.StpUtil;
 import com.example.entity.ResponseResult;
 import com.example.entity.TCompany;
 import com.example.entity.TPosition;
-import com.example.req.SavePositionReq;
 import com.example.service.TCompanyService;
 import com.example.service.TPositionService;
 import io.swagger.annotations.Api;
@@ -29,6 +27,7 @@ public class ManagerController {
 
     @Autowired
     private TPositionService positionService;
+
 
     @ApiOperation(value = "查询所有企业列表", notes = "", httpMethod = "GET")
     @SaCheckLogin
@@ -81,6 +80,8 @@ public class ManagerController {
         positionService.auditPosition(positionId,status,reason);
         return ResponseResult.success();
     }
+
+
 
 
 

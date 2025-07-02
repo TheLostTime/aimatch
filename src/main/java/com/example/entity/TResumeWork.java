@@ -19,6 +19,7 @@ import lombok.Data;
 @AllArgsConstructor
 @TableName(value = "t_resume_work")
 public class TResumeWork implements Serializable {
+
     /**
      * 工作id
      */

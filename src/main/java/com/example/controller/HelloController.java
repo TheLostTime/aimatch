@@ -39,7 +39,7 @@ public class HelloController {
         if (message == null || message.isEmpty()) {
             return ResponseResult.error("消息不能为空");
         }
-        String reply = deepSeekService.chat(message);
+        String reply = deepSeekService.chat(message,true,"helloContext");
         return ResponseResult.success(reply);
     }
 

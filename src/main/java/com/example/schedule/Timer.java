@@ -3,14 +3,12 @@ package com.example.schedule;
 import com.example.entity.TPosition;
 import com.example.mapper.TPositionMapper;
 import com.example.service.TCompanyService;
-import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@ApiModel(value = "定时任务")
 @Component
 public class Timer {
 

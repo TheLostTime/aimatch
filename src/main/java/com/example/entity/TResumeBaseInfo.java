@@ -8,14 +8,18 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
     * 求职者简历基础信息表
     */
-@ApiModel(value="com-example-entity-TResumeBaseInfo")
+@ApiModel(value="TResumeBaseInfo")
 @Data
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @TableName(value = "t_resume_base_info")
 public class TResumeBaseInfo implements Serializable {
     /**

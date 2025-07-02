@@ -2,9 +2,18 @@ package com.example.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
+import com.example.entity.THr;
+import com.example.entity.THrVip;
 import com.example.exception.BusinessException;
+import com.example.mapper.THrMapper;
+import com.example.req.ResumeListReq;
+import com.example.resp.ResumeItem;
+import com.example.resp.ResumeListResp;
+import com.example.service.THrVipService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.mapper.TPositionMapper;
@@ -15,6 +24,13 @@ import static com.example.constant.Constants.*;
 
 @Service
 public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition> implements TPositionService{
+
+    @Autowired
+    private THrMapper tHrMapper;
+
+    @Autowired
+    private THrVipService tHrVipService;
+
 
     @Override
     public List<TPosition> queryPositionList() {
@@ -49,5 +65,16 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
                     .reason(reason)
                     .build());
         }
+    }
+
+    @Override
+    public ResumeListResp getResumeList(ResumeListReq resumeListReq) {
+        THrVip tHrVip = tHrVipService.getById(StpUtil.getLoginId().toString());
+        if (resumeListReq.getQueryType().equals("ai")
+                && (null == tHrVip || !tHrVip.getVipType().equals(VIP_NORMAL)
+                        || !tHrVip.getVipType().equals(VIP_HIGH) )) {
+                throw new BusinessException(10020,"会员才能使用ai智能筛选");
+        }
+        return null;
     }
 }
