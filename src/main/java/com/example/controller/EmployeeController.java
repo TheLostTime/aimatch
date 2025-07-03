@@ -4,6 +4,8 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.example.entity.ResponseResult;
 import com.example.entity.TResumeBaseInfo;
 import com.example.req.SaveResumeReq;
+import com.example.resp.EmployeeStatusResp;
+import com.example.service.TEmployeeService;
 import com.example.service.TPositionService;
 import com.example.service.TResumeBaseInfoService;
 import io.swagger.annotations.Api;
@@ -26,13 +28,17 @@ public class EmployeeController {
     @Autowired
     private TResumeBaseInfoService tResumeBaseInfoService;
 
+    @Autowired
+    private TEmployeeService tEmployeeService;
+
 
 
     @ApiOperation(value = "查询求职者状态", notes = "", httpMethod = "GET")
     @SaCheckLogin
     @GetMapping("/status")
-    public ResponseResult<?> getEmployeeStatus() {
-        return ResponseResult.success();
+    public ResponseResult<EmployeeStatusResp> getEmployeeStatus() {
+        EmployeeStatusResp resp = tResumeBaseInfoService.getEmployeeStatus();
+        return ResponseResult.success(resp);
     }
 
     @ApiOperation(value = "创建/修改在线简历", notes = "", httpMethod = "POST")

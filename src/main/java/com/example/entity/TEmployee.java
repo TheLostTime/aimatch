@@ -14,7 +14,7 @@ import lombok.Data;
 /**
     * 求职者基本信息表
     */
-@ApiModel(value="com-example-entity-TEmployee")
+@ApiModel(value="TEmployee")
 @Data
 @AllArgsConstructor
 @TableName(value = "t_employee")

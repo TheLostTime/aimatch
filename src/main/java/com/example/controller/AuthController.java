@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import com.example.entity.ResponseResult;
@@ -13,9 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
 
 @Api(value = "用户管理API", tags = {"用户管理"})
 @RestController
@@ -33,6 +32,17 @@ public class AuthController {
     public ResponseResult<?> register(@RequestBody TUser user) {
         logger.info("接收注册请求: {}", user.getAccount());
         userService.registerUser(user);
+        return ResponseResult.success();
+    }
+
+    @SaCheckLogin
+    @PostMapping("/updateAvatar")
+    @ApiOperation(value = "更新用户头像", notes = "", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "form", dataType = "file", name = "avatar", value = "", required = false),
+    })
+    public ResponseResult<?> updateAvatar(@RequestPart @RequestParam("avatarFile") MultipartFile avatarFile) {
+        userService.updateAvatar(avatarFile);
         return ResponseResult.success();
     }
 

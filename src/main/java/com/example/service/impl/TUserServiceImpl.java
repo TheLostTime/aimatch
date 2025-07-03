@@ -6,10 +6,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.entity.TUser;
 import com.example.mapper.TUserMapper;
 import com.example.service.TUserService;
+import com.example.util.FileToDbUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 @Service
+@Slf4j
 public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements TUserService{
     private static final Logger logger = LoggerFactory.getLogger(TUserServiceImpl.class);
 
@@ -31,7 +36,6 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
             throw new IllegalArgumentException("用户名已存在");
         }
         user.setPassword(SaSecureUtil.sha256(user.getPassword()));
-
         int result = baseMapper.insert(user);
         if (result != 1) {
             logger.error("用户注册失败: {}", user.getAccount());
@@ -59,5 +63,16 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
 
         logger.info("用户登录成功: {}", user.getAccount());
         return token;
+    }
+
+    @Override
+    public void updateAvatar(MultipartFile avatarFile) {
+        String loginId = StpUtil.getLoginId().toString();
+        String avatar = FileToDbUtil.fileToStr(avatarFile);
+        baseMapper.updateById(TUser.builder()
+                .userId(loginId)
+                .avatar(avatar)
+                .build());
+        log.info("更新头像成功");
     }
 }

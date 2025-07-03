@@ -4,9 +4,11 @@ import com.example.entity.TCompany;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.entity.THrVip;
 import com.example.entity.TPosition;
+import com.example.req.GetJobListReq;
 import com.example.req.HrActivateReq;
 import com.example.req.HrJoinCompanyReq;
 import com.example.req.SavePositionReq;
+import com.example.resp.GetJobListResp;
 import com.example.resp.HrInfoResp;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,4 +36,5 @@ public interface TCompanyService extends IService<TCompany>{
 
     void auditCompany(String companyId,String status,String reason);
 
+    List<GetJobListResp> getJobList(GetJobListReq getJobListReq);
 }

@@ -1,0 +1,36 @@
+package com.example.controller;
+
+import com.example.entity.ResponseResult;
+import com.example.entity.TCompany;
+import com.example.req.GetJobListReq;
+import com.example.resp.GetJobListResp;
+import com.example.service.TCompanyService;
+import com.example.service.TResumeBaseInfoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Api(value = "访客", tags = {"访客"})
+@RestController
+@RequestMapping("/guest")
+@Slf4j
+public class GuestController {
+
+    @Autowired
+    private TResumeBaseInfoService tResumeBaseInfoService;
+
+    @Autowired
+    private TCompanyService tCompanyService;
+
+    @GetMapping("/job/list")
+    @ApiOperation(value = "查看职位列表", notes = "", httpMethod = "GET")
+    public ResponseResult<List<GetJobListResp>> getJobList(@ModelAttribute GetJobListReq getJobListReq) {
+        List<GetJobListResp> getJobListResp = tCompanyService.getJobList(getJobListReq);
+        return ResponseResult.success(getJobListResp);
+    }
+
+}    

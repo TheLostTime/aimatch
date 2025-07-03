@@ -18,6 +18,8 @@ public class SaveResumeReq {
 
     private String resumeId;
 
+    private TEmployee tEmployee;
+
     private TResumeBaseInfo tResumeBaseInfo;
 
     private List<TResumeWork> tResumeWork;

@@ -32,7 +32,7 @@ mybatis-plus:
 sa-token:
   token-name: Authorization
   timeout: 3600
-  auto-renew: true
+  auto-renew: false
   is-concurrent: true
   is-share: false
 
