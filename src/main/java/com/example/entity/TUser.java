@@ -8,15 +8,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NonNull;
+
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
 @ApiModel(value="TUser")
 @Data
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @TableName(value = "t_user")
 public class TUser implements Serializable {
     /**

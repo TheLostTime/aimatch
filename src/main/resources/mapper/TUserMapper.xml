@@ -10,6 +10,19 @@
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="avatar" jdbcType="LONGVARCHAR" property="avatar" />
   </resultMap>
+
+  <resultMap id="BaseResultEmployeeMap" type="com.example.entity.TUser">
+    <result column="employee_user_type" jdbcType="VARCHAR" property="userType" />
+    <result column="employee_account" jdbcType="VARCHAR" property="account" />
+    <result column="employee_avatar" jdbcType="LONGVARCHAR" property="avatar" />
+  </resultMap>
+
+   <resultMap id="BaseResultHrMap" type="com.example.entity.TUser">
+    <result column="hr_user_type" jdbcType="VARCHAR" property="userType" />
+    <result column="hr_account" jdbcType="VARCHAR" property="account" />
+    <result column="hr_avatar" jdbcType="LONGVARCHAR" property="avatar" />
+  </resultMap>
+
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     user_id, user_type, account, `password`, avatar

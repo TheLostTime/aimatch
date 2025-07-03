@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 
 @ApiModel(value="ResumeListReq")
 @Data
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class ResumeListReq {
 
     @ApiModelProperty(value="查询类型 default-默认查询、ai-ai智选")

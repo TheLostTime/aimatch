@@ -29,9 +29,9 @@ public class TCompany implements Serializable {
     /**
      * 公司名称
      */
-    @TableField(value = "name")
+    @TableField(value = "company_name")
     @ApiModelProperty(value="公司名称")
-    private String name;
+    private String companyName;
 
     /**
      * 所属行业

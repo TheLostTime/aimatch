@@ -10,10 +10,12 @@ import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @ApiModel(value="com-example-entity-THr")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @TableName(value = "t_hr")
 public class THr implements Serializable {

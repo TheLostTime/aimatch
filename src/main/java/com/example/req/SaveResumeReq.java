@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@ApiModel(value="SavePositionReq")
+@ApiModel(value="SaveResumeReq")
 @Data
 @Builder
 @AllArgsConstructor
@@ -17,6 +17,8 @@ import java.util.List;
 public class SaveResumeReq {
 
     private String resumeId;
+
+    private TEmployee tEmployee;
 
     private TResumeBaseInfo tResumeBaseInfo;
 

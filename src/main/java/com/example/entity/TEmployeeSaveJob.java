@@ -9,7 +9,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
     * 求职者收藏职位表
@@ -17,12 +19,14 @@ import lombok.Data;
 @ApiModel(value="com-example-entity-TEmployeeSaveJob")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @TableName(value = "t_employee_save_job")
 public class TEmployeeSaveJob implements Serializable {
     /**
      * 岗位id，与t_position表主键相同
      */
-    @TableId(value = "position_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "position_id", type = IdType.INPUT)
     @ApiModelProperty(value="岗位id，与t_position表主键相同")
     private String positionId;
 
@@ -30,6 +34,7 @@ public class TEmployeeSaveJob implements Serializable {
      * 求职者用户id
      */
     @ApiModelProperty(value="求职者用户id")
+    @TableField(value = "employee_user_id")
     private String employeeUserId;
 
     /**

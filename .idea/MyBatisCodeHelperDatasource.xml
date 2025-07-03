@@ -91,6 +91,15 @@
                 </TableGenerateConfig>
               </value>
             </entry>
+            <entry key="aimatch:t_hr_mark_resume">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="THrMarkResume" />
+                  <option name="moduleName" value="aimatch" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
             <entry key="aimatch:t_hr_paid_permisions">
               <value>
                 <TableGenerateConfig>
@@ -117,6 +126,15 @@
                   <option name="moduleName" value="aimatch" />
                   <option name="sequenceColumn" value="" />
                   <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="aimatch:t_im_message">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="TImMessage" />
+                  <option name="moduleName" value="aimatch" />
                   <option name="useActualColumnName" value="false" />
                 </TableGenerateConfig>
               </value>

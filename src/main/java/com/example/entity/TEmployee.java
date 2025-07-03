@@ -4,25 +4,30 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
     * 求职者基本信息表
     */
-@ApiModel(value="com-example-entity-TEmployee")
+@ApiModel(value="TEmployee")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @TableName(value = "t_employee")
 public class TEmployee implements Serializable {
     /**
      * 用户id，与t_user表主键相同
      */
-    @TableId(value = "user_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "user_id", type = IdType.INPUT)
     @ApiModelProperty(value="用户id，与t_user表主键相同")
     private String userId;
 
@@ -52,7 +57,7 @@ public class TEmployee implements Serializable {
      */
     @TableField(value = "birth_date")
     @ApiModelProperty(value="出生日期，记录到月")
-    private Date birthDate;
+    private String birthDate;
 
     /**
      * 年龄，根据出生日期自动计算
@@ -73,7 +78,7 @@ public class TEmployee implements Serializable {
      */
     @TableField(value = "start_work_date")
     @ApiModelProperty(value="参加工作日期，记录到月")
-    private Date startWorkDate;
+    private String startWorkDate;
 
     /**
      * 工作经验，单位：年，1<=经验<=99

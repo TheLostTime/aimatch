@@ -9,14 +9,18 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
     * 求职者VIP状态表
     */
-@ApiModel(value="com-example-entity-TEmployeeVip")
+@ApiModel(value="TEmployeeVip")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @TableName(value = "t_employee_vip")
 public class TEmployeeVip implements Serializable {
     /**

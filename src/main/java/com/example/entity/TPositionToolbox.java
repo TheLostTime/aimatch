@@ -8,7 +8,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
     * 岗位工具箱表
@@ -16,6 +18,8 @@ import lombok.Data;
 @ApiModel(value="com-example-entity-TPositionToolbox")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @TableName(value = "t_position_toolbox")
 public class TPositionToolbox implements Serializable {
     /**

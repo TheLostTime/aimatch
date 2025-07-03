@@ -27,6 +27,10 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.example.entity
+  configuration :
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+
 
 # Sa-Token配置
 sa-token:
@@ -39,4 +43,7 @@ sa-token:
 deepseek:
   api-url: https://api.deepseek.com/v1/chat/completions
   api-key: sk-04637f0860384641a3182466f70194e0
+
+upload:
+  resumeFilePath: D:\指标建设\AIMatch\aimatch\upload
 

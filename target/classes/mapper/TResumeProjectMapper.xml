@@ -9,8 +9,8 @@
     <result column="resume_id" jdbcType="VARCHAR" property="resumeId" />
     <result column="position_name" jdbcType="VARCHAR" property="positionName" />
     <result column="project_name" jdbcType="VARCHAR" property="projectName" />
-    <result column="begin_date" jdbcType="TIMESTAMP" property="beginDate" />
-    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="begin_date" jdbcType="VARCHAR" property="beginDate" />
+    <result column="end_date" jdbcType="VARCHAR" property="endDate" />
     <result column="project_desc" jdbcType="VARCHAR" property="projectDesc" />
     <result column="project_achievements" jdbcType="VARCHAR" property="projectAchievements" />
   </resultMap>

@@ -9,8 +9,8 @@
     <result column="resume_id" jdbcType="VARCHAR" property="resumeId" />
     <result column="position_name" jdbcType="VARCHAR" property="positionName" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
-    <result column="begin_date" jdbcType="TIMESTAMP" property="beginDate" />
-    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="begin_date" jdbcType="VARCHAR" property="beginDate" />
+    <result column="end_date" jdbcType="VARCHAR" property="endDate" />
     <result column="work_desc" jdbcType="VARCHAR" property="workDesc" />
   </resultMap>
   <sql id="Base_Column_List">

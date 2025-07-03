@@ -11,6 +11,13 @@
     <result column="vip_type" jdbcType="VARCHAR" property="vipType" />
     <result column="real_name" jdbcType="INTEGER" property="realName" />
   </resultMap>
+
+  <resultMap id="BaseResultMap2" type="com.example.entity.THr">
+    <result column="hr_name" jdbcType="VARCHAR" property="name" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="vip_type" jdbcType="VARCHAR" property="vipType" />
+  </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     user_id, `name`, title, company_id, vip_type,real_name

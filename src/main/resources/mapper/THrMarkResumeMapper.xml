@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.THrMarkResumeMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.THrMarkResume">
+    <!--@mbg.generated-->
+    <!--@Table t_hr_mark_resume-->
+    <id column="position_id" jdbcType="VARCHAR" property="positionId" />
+    <id column="resume_id" jdbcType="VARCHAR" property="resumeId" />
+    <result column="hr_user_id" jdbcType="VARCHAR" property="hrUserId" />
+    <result column="employee_user_id" jdbcType="VARCHAR" property="employeeUserId" />
+    <result column="save_flag" jdbcType="BOOLEAN" property="saveFlag" />
+    <result column="resume_status" jdbcType="VARCHAR" property="resumeStatus" />
+    <result column="test_scores" jdbcType="VARCHAR" property="testScores" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    position_id, resume_id, hr_user_id, employee_user_id, save_flag, resume_status, test_scores,
+    create_time, update_time
+  </sql>
+
+
+   <resultMap id="BaseResultMap2" type="com.example.resp.ChatSessionResp">
+    <association property="tHrMarkResume" resultMap="com.example.mapper.THrMarkResumeMapper.BaseResultMap"/>
+    <association property="tUserEmployee" resultMap="com.example.mapper.TUserMapper.BaseResultEmployeeMap"/>
+    <association property="tUserHr" resultMap="com.example.mapper.TUserMapper.BaseResultHrMap"/>
+    <association property="imMessage" resultMap="com.example.mapper.TImMessageMapper.BaseResultMap"/>
+    <association property="tCompany" resultMap="com.example.mapper.TCompanyMapper.BaseResultMap"/>
+    <association property="tHr" resultMap="com.example.mapper.THrMapper.BaseResultMap2"/>
+    <association property="tEmployee" resultMap="com.example.mapper.TEmployeeMapper.BaseResultMap2"/>
+    <association property="tPosition" resultMap="com.example.mapper.TPositionMapper.BaseResultMap"/>
+  </resultMap>
+
+
+  <select id="chatSessionList" resultMap="BaseResultMap2">
+        select
+        a.position_id,a.resume_id,a.hr_user_id,a.employee_user_id,a.update_time,
+        b.user_id,b.user_type,b.message,b.create_time,
+        <if test='userType == "0"'>
+        d.name as hr_name,d.title,
+        c.company_id,c.company_name,c.industry,c.scale,
+        f.position_name,f.degree_lower_limit,f.experience_lower_limit,f.salary_lower_limit,f.salary_upper_limit,f.salary_month,f.work_place,
+        g.user_type as hr_user_type,
+        g.avatar as hr_avatar,
+        g.account as hr_account
+        </if>
+        <if test='userType == "1" or userType == "2"'>
+        e.name as employee_name,e.gender,
+        h.user_type as employee_user_type,
+        h.avatar as employee_avatar,
+        h.account as employee_account
+        </if>
+        from
+        (
+            select z.* from t_hr_mark_resume z
+            <where>
+                <if test="userId != null">
+                    (z.hr_user_id = #{userId} or z.employee_user_id = #{userId})
+                </if>
+                <if test="resumeStatus != null">
+                    and z.resume_status in (#{resumeStatus})
+                </if>
+            </where>
+        ) a
+        left join
+        (
+            select m1.* from t_im_message m1
+             inner join
+            (
+                select position_id,resume_id,max(message_index) as maxIndex from t_im_message m3
+                group by user_id,position_id,resume_id
+            ) m2
+            on  m1.position_id = m2.position_id
+            and m1.resume_id = m2.resume_id
+            and m1.message_index = m2.maxIndex
+        ) b
+        on a.resume_id = b.resume_id and a.position_id = b.position_id
+        <if test='userType == "0"'>
+            inner join
+            (
+                select * from t_hr
+                <where>
+                    <if test="name != null">
+                        name like concat('%',#{name},'%')
+                    </if>
+                </where>
+            ) d
+            on a.hr_user_id = d.user_id
+            inner join t_user g on a.hr_user_id = g.user_id
+            inner join t_company c on d.company_id = c.company_id
+            inner join t_position f on a.position_id = f.position_id
+        </if>
+        <if test='userType == "1" or userType == "2"'>
+            inner join
+            (
+                select *  from t_employee
+                 <where>
+                    <if test="name != null">
+                        name like concat('%',#{name},'%')
+                    </if>
+                </where>
+            ) e
+            on a.employee_user_id = e.user_id
+            inner join t_user h on a.employee_user_id = h.user_id
+        </if>
+  </select>
+</mapper>

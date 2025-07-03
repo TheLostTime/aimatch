@@ -8,7 +8,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
     * 求职者附件简历存储表
@@ -16,6 +18,8 @@ import lombok.Data;
 @ApiModel(value="com-example-entity-TEmployeeResumeFile")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @TableName(value = "t_employee_resume_file")
 public class TEmployeeResumeFile implements Serializable {
     /**

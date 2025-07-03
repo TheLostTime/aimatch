@@ -25,6 +25,32 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="reason" jdbcType="VARCHAR" property="reason" />
   </resultMap>
+
+  <resultMap id="BaseResultMap2" type="com.example.resp.GetJobListResp">
+    <id property="positionId" column="position_id"/>
+    <!-- 映射 t_position 到 tPosition 属性 -->
+    <association property="tPosition" resultMap="com.example.mapper.TPositionMapper.BaseResultMap"/>
+
+    <!-- 映射 t_user 到 tUser 属性 -->
+    <association property="tUser" resultMap="com.example.mapper.TUserMapper.BaseResultMap"/>
+
+    <!-- 映射 t_company 到 tCompany 属性 -->
+    <association property="tCompany" resultMap="com.example.mapper.TCompanyMapper.BaseResultMap"/>
+
+
+    <!-- 映射 t_hr 到 tHr 属性 -->
+    <association property="tHr" resultMap="com.example.mapper.THrMapper.BaseResultMap"/>
+
+
+    <!-- 映射 t_position_toolbox 到 tPositionToolbox 属性 -->
+    <association property="tPositionToolbox" resultMap="com.example.mapper.TPositionToolboxMapper.BaseResultMap2"/>
+
+    <!-- 映射 t_position_key_word 到 keyWords 属性 -->
+    <collection property="keyWords"  ofType="com.example.entity.TPositionKeyWord"
+    resultMap="com.example.mapper.TPositionKeyWordMapper.BaseResultMap"/>
+
+  </resultMap>
+
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     position_id, position_type, position_status, work_type, position_name, position_description, 
@@ -36,6 +62,68 @@
         select  * from t_position where
         position_status = 2
         and update_time &lt;= date_sub(now(),interval #{offlineDay} day)
+  </select>
+
+  <select id="getPositonInfoByReq" resultMap="BaseResultMap2">
+        select
+               a.position_id, a.user_id, a.position_type, a.position_status,
+               a.work_type, a.position_name, a.position_description, a.job_category,
+               a.degree_lower_limit, a.experience_lower_limit, a.salary_lower_limit,
+               a.salary_upper_limit, a.salary_month, a.work_place, a.is_oversea,
+               a.oversea_remainder, a.position_num, a.update_time, a.reason,
+               b.user_type, b.account, b.avatar,
+               d.name, d.title, d.company_id, d.vip_type, d.real_name,
+               c.company_id, c.company_name, c.industry, c.scale, c.enterprise_certified,
+               e.ai_examiner, e.ai_examiner_desc, e.oversea_remainder,
+               e.resume_threshold, e.degree_lower_limit as tool_degree_lower_limit,
+               e.experience_lower_limit as tool_experience_lower_limit,
+               e.experience_upper_limit as tool_experience_upper_limit, e.age_lower_limit,
+               e.age_upper_limit,e.college, e.major, e.gender, e.residentia_address,
+               f.id, f.key_word
+        from t_position a
+        left join t_user b on a.user_id = b.user_id
+        left join t_hr d on a.user_id = d.user_id
+        left join t_company c on d.company_id = c.company_id
+        left join t_position_toolbox e on a.position_id = e.position_id
+        left join t_position_key_word f on a.position_id = f.position_id
+        <where>
+            <!-- 岗位关键词精确匹配 -->
+            <if test="keyWord != null and keyWord != ''">
+                 EXISTS (
+                    SELECT 1
+                    FROM t_position_key_word k
+                    WHERE k.position_id = a.position_id
+                    AND k.key_word = #{keyWord}
+                 )
+            </if>
+            <if test="scale != null and scale != ''">
+                and c.scale = #{scale}
+            </if>
+            <if test="positionName != null and positionName != ''">
+                and a.position_name like concat('%',#{positionName},'%')
+            </if>
+            <if test="workType != null and workType != ''">
+                and a.work_type = #{workType}
+            </if>
+            <if test="salaryLowerLimit != null">
+                and a.salary_lower_limit &gt;= #{salaryLowerLimit}
+            </if>
+            <if test="salaryUpperLimit != null">
+                and a.salary_upper_limit &lt;= #{salaryUpperLimit}
+            </if>
+            <if test="experienceLowerLimit != null">
+                and a.experience_lower_limit &gt;= #{experienceLowerLimit}
+            </if>
+            <if test="degreeLowerLimit != null">
+                and a.degree_lower_limit &gt;= #{degreeLowerLimit}
+            </if>
+            <if test="jobCategory != null and jobCategory != ''">
+                and a.job_category = #{jobCategory}
+            </if>
+            <if test="positionType != null and positionType != ''">
+                and a.position_type = #{positionType}
+            </if>
+        </where>
   </select>
 
 </mapper>

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -60,14 +61,14 @@ public class TResumeWork implements Serializable {
      */
     @TableField(value = "begin_date")
     @ApiModelProperty(value="工作开始时间，UTC时间（年月）")
-    private Date beginDate;
+    private String beginDate;
 
     /**
      * 工作结束时间，UTC时间（年月）
      */
     @TableField(value = "end_date")
     @ApiModelProperty(value="工作结束时间，UTC时间（年月）")
-    private Date endDate;
+    private String endDate;
 
     /**
      * 工作描述

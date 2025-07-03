@@ -3,21 +3,21 @@ package com.example.service.impl;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.entity.*;
 import com.example.exception.BusinessException;
 import com.example.mapper.*;
+import com.example.req.GetJobListReq;
 import com.example.req.HrActivateReq;
 import com.example.req.HrJoinCompanyReq;
 import com.example.req.SavePositionReq;
+import com.example.resp.GetJobListResp;
 import com.example.resp.HrInfoResp;
 import com.example.service.*;
 import com.example.util.FileToDbUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,6 +76,10 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
     @Autowired
     private THrPaidPermisionsUseDetailService tHrPaidPermisionsUseDetailService;
 
+    @Autowired
+    private TUserService tUserService;
+
+
     @Override
     public void joinCompany(HrJoinCompanyReq hrJoinCompany) {
         // 查看旗下是否有公司了
@@ -88,7 +92,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
 
         // 1. 公司信息录入
         TCompany tCompany = TCompany.builder()
-                .name(hrJoinCompany.getCompanyName())
+                .companyName(hrJoinCompany.getCompanyName())
                 .industry(hrJoinCompany.getIndustry())
                 .scale(hrJoinCompany.getScale())
                 .enterpriseCertified("NO")
@@ -126,7 +130,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .enterpriseCertified("NO")
                 .vipType(tHr.getVipType())
                 .build();
-        TCompany tCompany = tCompanyMapper.selectById(tHr.getCompanyId());
+        TCompany tCompany = this.getById(tHr.getCompanyId());
         if (null != tCompany) {
             hrInfo.setEnterpriseCertified(tCompany.getEnterpriseCertified().equals("YES")?"YES":"NO");
         }
@@ -140,10 +144,10 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
         SaSession saSession = StpUtil.getSession();
         TUser userInfo = (TUser) saSession.get("userInfo");
         THr tHr = tHrService.getById(userInfo.getUserId());
-        TCompany tCompany = tCompanyMapper.selectById(tHr.getCompanyId());
+        TCompany tCompany = this.getById(tHr.getCompanyId());
         if (null != tCompany) {
             // 更新公司信息
-            tCompanyMapper.updateById(TCompany.builder()
+            this.updateById(TCompany.builder()
                     .companyId(tHr.getCompanyId())
                     .incumbencyCertificate(incumbencyCertificate)
                     .enterpriseLicense(enterpriseLicense)
@@ -154,7 +158,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
 
     @Override
     public List<TCompany> queryCompanyList() {
-        List<TCompany> list = tCompanyMapper.queryCompanyList();
+        List<TCompany> list = this.getBaseMapper().queryCompanyList();
         return list;
     }
 
@@ -179,6 +183,12 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                     .reason(reason)
                     .build());
         }
+    }
+
+    @Override
+    public List<GetJobListResp> getJobList(GetJobListReq getJobListReq) {
+        List<GetJobListResp> getJobListResp = tPositionMapper.getPositonInfoByReq(getJobListReq);
+        return getJobListResp;
     }
 
     @Override

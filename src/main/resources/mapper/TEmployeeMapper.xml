@@ -8,10 +8,25 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="gender" jdbcType="VARCHAR" property="gender" />
     <result column="identity" jdbcType="INTEGER" property="identity" />
-    <result column="birth_date" jdbcType="TIMESTAMP" property="birthDate" />
+    <result column="birth_date" jdbcType="VARCHAR" property="birthDate" />
     <result column="age" jdbcType="INTEGER" property="age" />
     <result column="residentia_address" jdbcType="VARCHAR" property="residentiaAddress" />
-    <result column="start_work_date" jdbcType="TIMESTAMP" property="startWorkDate" />
+    <result column="start_work_date" jdbcType="VARCHAR" property="startWorkDate" />
+    <result column="work_experience" jdbcType="INTEGER" property="workExperience" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="mail" jdbcType="VARCHAR" property="mail" />
+  </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.example.entity.TEmployee">
+    <!--@mbg.generated-->
+    <!--@Table t_employee-->
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="identity" jdbcType="INTEGER" property="identity" />
+    <result column="birth_date" jdbcType="VARCHAR" property="birthDate" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="residentia_address" jdbcType="VARCHAR" property="residentiaAddress" />
+    <result column="start_work_date" jdbcType="VARCHAR" property="startWorkDate" />
     <result column="work_experience" jdbcType="INTEGER" property="workExperience" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="mail" jdbcType="VARCHAR" property="mail" />
