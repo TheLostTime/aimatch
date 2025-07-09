@@ -10,6 +10,7 @@ import com.example.req.SaveResumeReq;
 import com.example.resp.ChatSessionResp;
 import com.example.resp.EmployeeStatusResp;
 import com.example.resp.GetSaveJobListResp;
+import com.example.resp.ResumeDetailResp;
 import com.example.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -94,6 +95,18 @@ public class EmployeeController {
         return ResponseResult.success(resumeFiles);
     }
 
+    @ApiOperation(value = "查询简历详情 ", notes = "", httpMethod = "GET")
+    @SaCheckLogin
+    @GetMapping("/resume/detail")
+    public ResponseResult<ResumeDetailResp> getResumeDetail() {
+        ResumeDetailResp resumeDetailResp = tResumeBaseInfoService.getResumeDetail();
+        return ResponseResult.success(resumeDetailResp);
+    }
+
+
+
+
+
 
     @ApiOperation(value = "收藏/取消收藏职位", notes = "", httpMethod = "POST")
     @SaCheckLogin
@@ -137,6 +150,12 @@ public class EmployeeController {
         return ResponseResult.success(resumeStatus);
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "positionId", value = "", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "resumeId", value = "", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "message", value = "", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "messageType", value = "三种类型new_message|normal|hr_say_hello", required = true)
+    })
     @ApiOperation(value = "发送聊天消息", notes = "", httpMethod = "POST")
     @SaCheckLogin
     @PostMapping("/im/message/create")
@@ -158,6 +177,8 @@ public class EmployeeController {
         List<ChatSessionResp> chatSessionResp = tHrMarkResumeService.chatSessionList(positionId,name,resumeStatus);
         return ResponseResult.success(chatSessionResp);
     }
+
+
 
 
 

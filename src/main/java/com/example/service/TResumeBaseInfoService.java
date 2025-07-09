@@ -8,6 +8,7 @@ import com.example.req.SaveResumeReq;
 import com.example.resp.ChatSessionResp;
 import com.example.resp.EmployeeStatusResp;
 import com.example.resp.GetJobListResp;
+import com.example.resp.ResumeDetailResp;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface TResumeBaseInfoService extends IService<TResumeBaseInfo>{
     String imNewMessage(String positionId, String resumeId);
 
     void createMessage(String positionId, String resumeId, String message, String messageType);
+
+    ResumeDetailResp getResumeDetail();
 }

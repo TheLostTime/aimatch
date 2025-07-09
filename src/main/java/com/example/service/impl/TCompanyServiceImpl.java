@@ -13,6 +13,7 @@ import com.example.req.HrJoinCompanyReq;
 import com.example.req.SavePositionReq;
 import com.example.resp.GetJobListResp;
 import com.example.resp.HrInfoResp;
+import com.example.resp.PositionDetailResp;
 import com.example.service.*;
 import com.example.util.FileToDbUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -189,6 +190,21 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
     public List<GetJobListResp> getJobList(GetJobListReq getJobListReq) {
         List<GetJobListResp> getJobListResp = tPositionMapper.getPositonInfoByReq(getJobListReq);
         return getJobListResp;
+    }
+
+    @Override
+    public PositionDetailResp getPositionDetail(String positionId) {
+        // 查询岗位信息
+        TPosition tPosition = tPositionMapper.selectById(positionId);
+        if (null == tPosition) {
+            throw new BusinessException(10014,"岗位不存在");
+        }
+        // 根据岗位ID查询工具箱信息
+        TPositionToolbox tPositionToolbox = tPositionToolboxMapper.selectById(positionId);
+        return PositionDetailResp.builder()
+                .tPosition(tPosition)
+                .tPositionToolbox(tPositionToolbox)
+                .build();
     }
 
     @Override

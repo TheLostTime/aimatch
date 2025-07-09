@@ -10,6 +10,7 @@ import com.example.mapper.TResumeBaseInfoMapper;
 import com.example.req.SaveResumeReq;
 import com.example.resp.ChatSessionResp;
 import com.example.resp.EmployeeStatusResp;
+import com.example.resp.ResumeDetailResp;
 import com.example.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -65,6 +66,9 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
 
     @Autowired
     private TImMessageService tImMessageService;
+
+    @Autowired
+    private TResumeBaseInfoService tResumeBaseInfoService;
 
     @Value("${upload.resumeFilePath}")
     private String resumeFilePath;
@@ -420,6 +424,43 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
             tImMessageService.save(tMessage);
         }
 
+    }
+
+    @Override
+    public ResumeDetailResp getResumeDetail() {
+        // 查询当前那用户
+        TUser tUser = tUserService.getById(StpUtil.getLoginId().toString());
+        // 查询当前用户基本信息
+        TResumeBaseInfo tResumeBaseInfo = tResumeBaseInfoService
+                .getOne(new LambdaQueryWrapper<TResumeBaseInfo>()
+                        .eq(TResumeBaseInfo::getUserId, tUser.getUserId()));
+        if (null == tResumeBaseInfo) {
+            throw new BusinessException(10005, "用户没有填写简历");
+        }
+        // 查询雇佣者信息
+        TEmployee tEmployee = tEmployeeService.getOne(new LambdaQueryWrapper<TEmployee>()
+                .eq(TEmployee::getUserId, tUser.getUserId()));
+        // 查询工作信息
+        List<TResumeWork> tResumeWorkList = tResumeWorkService.list(new LambdaQueryWrapper<TResumeWork>()
+                .eq(TResumeWork::getResumeId, tResumeBaseInfo.getResumeId()));
+        // 获取教育信息
+        List<TResumeEducation> tResumeEducationList = tResumeEducationService.list(new LambdaQueryWrapper<TResumeEducation>()
+                .eq(TResumeEducation::getResumeId, tResumeBaseInfo.getResumeId()));
+        // 获取项目信息
+        List<TResumeProject> tResumeProjectList = tResumeProjectService.list(new LambdaQueryWrapper<TResumeProject>()
+                .eq(TResumeProject::getResumeId, tResumeBaseInfo.getResumeId()));
+        // 获取兴趣职位信息
+        List<TResumeInterestJob> tResumeInterestJobList = tResumeInterestJobService.list(new LambdaQueryWrapper<TResumeInterestJob>()
+                .eq(TResumeInterestJob::getResumeId, tResumeBaseInfo.getResumeId()));
+        return ResumeDetailResp.builder()
+                .user(tUser)
+                .employee(tEmployee)
+                .baseInfo(tResumeBaseInfo)
+                .educations(tResumeEducationList)
+                .works(tResumeWorkList)
+                .projects(tResumeProjectList)
+                .interestJobs(tResumeInterestJobList)
+                .build();
     }
 
 

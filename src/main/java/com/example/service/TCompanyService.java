@@ -10,6 +10,7 @@ import com.example.req.HrJoinCompanyReq;
 import com.example.req.SavePositionReq;
 import com.example.resp.GetJobListResp;
 import com.example.resp.HrInfoResp;
+import com.example.resp.PositionDetailResp;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -37,4 +38,6 @@ public interface TCompanyService extends IService<TCompany>{
     void auditCompany(String companyId,String status,String reason);
 
     List<GetJobListResp> getJobList(GetJobListReq getJobListReq);
+
+    PositionDetailResp getPositionDetail(String positionId);
 }

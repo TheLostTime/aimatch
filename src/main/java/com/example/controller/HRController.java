@@ -8,6 +8,7 @@ import com.example.req.HrActivateReq;
 import com.example.req.HrJoinCompanyReq;
 import com.example.req.SavePositionReq;
 import com.example.resp.HrInfoResp;
+import com.example.resp.PositionDetailResp;
 import com.example.service.DeepSeekService;
 import com.example.service.TCompanyService;
 import com.example.service.THrService;
@@ -113,6 +114,15 @@ public class HRController {
         }
         return ResponseResult.success(true);
     }
+
+    @ApiOperation(value = "查询岗位详情", notes = "", httpMethod = "POST")
+    @SaCheckLogin
+    @PostMapping("/position/detail")
+    public ResponseResult<PositionDetailResp> getPositionDetail(@RequestParam("positionId") String positionId) {
+        PositionDetailResp positionDetailResp = companyService.getPositionDetail(positionId);
+        return ResponseResult.success(positionDetailResp);
+    }
+
 
     @ApiOperation(value = "下线岗位", notes = "", httpMethod = "POST")
     @SaCheckLogin
