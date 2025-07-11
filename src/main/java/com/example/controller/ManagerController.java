@@ -58,8 +58,9 @@ public class ManagerController {
     @ApiOperation(value = "查询岗位列表", notes = "", httpMethod = "GET")
     @SaCheckLogin
     @GetMapping("/position/list")
-    public ResponseResult<List<TPosition>> queryPositionList() {
-        List<TPosition> tPositionList = positionService.queryPositionList();
+    public ResponseResult<List<TPosition>> queryPositionList(
+            @RequestParam(value = "positionStatus",required = false) String positionStatus) {
+        List<TPosition> tPositionList = positionService.queryPositionList(positionStatus);
         return ResponseResult.success(tPositionList);
     }
 

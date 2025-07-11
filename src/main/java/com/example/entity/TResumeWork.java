@@ -10,7 +10,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
     * 求职者工作经历表
@@ -18,6 +20,8 @@ import lombok.Data;
 @ApiModel(value="com-example-entity-TResumeWork")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @TableName(value = "t_resume_work")
 public class TResumeWork implements Serializable {
 

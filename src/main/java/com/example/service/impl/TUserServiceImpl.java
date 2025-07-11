@@ -57,7 +57,7 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         }
 
         // 执行登录操作并获取token
-        StpUtil.login(dbUser.getUserId());
+        StpUtil.login(dbUser.getUserId(),dbUser.getUserType());
         String token = StpUtil.getTokenValue();
         StpUtil.getSession().set("userInfo", dbUser);
 

@@ -1,6 +1,6 @@
 package com.example.resp;
 
-
+import com.example.entity.*;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,19 +9,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@ApiModel(value="ResumeItem")
+@ApiModel(value="TalentListResp")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResumeItem {
-
-    private ResumeMark resumeMark;
-    private BaseInfo baseInfo;
-    private List<WorkExperience> work;
-    private List<Education> education;
-    private List<InterestJob> interestJobList;
-
-
-
+public class TalentListResp {
+    private TEmployee tEmployee;
+    private THrMarkResume tHrMarkResume;
 }

@@ -1,10 +1,7 @@
 package com.example.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
-import com.example.entity.ResponseResult;
-import com.example.entity.TEmployeeResumeFile;
-import com.example.entity.TEmployeeSaveJob;
-import com.example.entity.TResumeBaseInfo;
+import com.example.entity.*;
 import com.example.req.SaveJobReq;
 import com.example.req.SaveResumeReq;
 import com.example.resp.ChatSessionResp;
@@ -45,6 +42,9 @@ public class EmployeeController {
 
     @Autowired
     private THrMarkResumeService tHrMarkResumeService;
+
+    @Autowired
+    private TImMessageService tImMessageService;
 
 
 
@@ -102,11 +102,6 @@ public class EmployeeController {
         ResumeDetailResp resumeDetailResp = tResumeBaseInfoService.getResumeDetail();
         return ResponseResult.success(resumeDetailResp);
     }
-
-
-
-
-
 
     @ApiOperation(value = "收藏/取消收藏职位", notes = "", httpMethod = "POST")
     @SaCheckLogin
@@ -176,6 +171,16 @@ public class EmployeeController {
             @RequestParam(value = "resumeStatus", required = false) String resumeStatus) {
         List<ChatSessionResp> chatSessionResp = tHrMarkResumeService.chatSessionList(positionId,name,resumeStatus);
         return ResponseResult.success(chatSessionResp);
+    }
+
+    @ApiOperation(value = "查询聊天记录", notes = "", httpMethod = "GET")
+    @SaCheckLogin
+    @GetMapping("/im/chat-session/record")
+    public ResponseResult<List<TImMessage>> chatSessionRecode(
+            @RequestParam(value = "positionId", required = true) String positionId,
+            @RequestParam(value = "resumeId", required = true) String resumeId) {
+        List<TImMessage> TImMessageList = tImMessageService.chatSessionList(positionId,resumeId);
+        return ResponseResult.success(TImMessageList);
     }
 
 

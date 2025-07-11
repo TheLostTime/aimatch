@@ -1,5 +1,6 @@
 package com.example.resp;
 
+import com.example.entity.*;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResumeListResp {
-    private List<ResumeItem> data;
+    private String resumeId;
+    private THrMarkResume tHrMarkResume;
+    private TUser tUser;
+    private TResumeBaseInfo tResumeBaseInfo;
+    private List<TResumeWork> works;
+    private List<TResumeEducation> educations;
+    private List<TResumeInterestJob> interestJobs;
 }

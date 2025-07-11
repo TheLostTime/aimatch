@@ -67,9 +67,6 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
     @Autowired
     private TImMessageService tImMessageService;
 
-    @Autowired
-    private TResumeBaseInfoService tResumeBaseInfoService;
-
     @Value("${upload.resumeFilePath}")
     private String resumeFilePath;
 
@@ -431,7 +428,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
         // 查询当前那用户
         TUser tUser = tUserService.getById(StpUtil.getLoginId().toString());
         // 查询当前用户基本信息
-        TResumeBaseInfo tResumeBaseInfo = tResumeBaseInfoService
+        TResumeBaseInfo tResumeBaseInfo = this
                 .getOne(new LambdaQueryWrapper<TResumeBaseInfo>()
                         .eq(TResumeBaseInfo::getUserId, tUser.getUserId()));
         if (null == tResumeBaseInfo) {

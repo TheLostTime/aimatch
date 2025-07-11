@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@ApiModel(value="EmployeeStatusResp")
+@ApiModel(value="GetJobListResp")
 @Data
 @Builder
 @AllArgsConstructor
