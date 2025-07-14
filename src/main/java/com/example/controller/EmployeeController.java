@@ -1,6 +1,8 @@
 package com.example.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.annotation.SaMode;
 import com.example.entity.*;
 import com.example.req.SaveJobReq;
 import com.example.req.SaveResumeReq;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Api(value = "求职者", tags = {"求职者"})
@@ -95,6 +98,13 @@ public class EmployeeController {
         return ResponseResult.success(resumeFiles);
     }
 
+    @ApiOperation(value = "下载简历", notes = "", httpMethod = "GET")
+    @SaCheckLogin
+    @GetMapping("/download/file")
+    public void downloadResumeFile(@RequestParam String fileId, HttpServletResponse response) {
+        tResumeBaseInfoService.downloadResumeFile(fileId, response);
+    }
+
     @ApiOperation(value = "查询简历详情 ", notes = "", httpMethod = "GET")
     @SaCheckLogin
     @GetMapping("/resume/detail")
@@ -137,7 +147,7 @@ public class EmployeeController {
     }
 
     @ApiOperation(value = "求职者发起打招呼", notes = "", httpMethod = "POST")
-    @SaCheckLogin
+    @SaCheckRole(value = {"0"})
     @PostMapping("/im/new-message")
     public ResponseResult<String> imNewMessage(@RequestParam("positionId") String positionId,
                                                @RequestParam("resumeId") String resumeId) {

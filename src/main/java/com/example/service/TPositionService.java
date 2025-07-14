@@ -19,4 +19,8 @@ public interface TPositionService extends IService<TPosition>{
     void markResume(String resumeId,String positionId,String status);
 
     List<TalentListResp> getTalentList(String positionId, String resumeStatus);
+
+    void checkSayHello();
+
+    void checkDownload();
 }

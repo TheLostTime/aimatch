@@ -15,7 +15,7 @@ import lombok.Data;
 /**
     * HR付费权限额度使用累计表
     */
-@ApiModel(value="com-example-entity-THrPaidPermisionsUseDetail")
+@ApiModel(value="THrPaidPermisionsUseDetail")
 @Data
 @AllArgsConstructor
 @Builder

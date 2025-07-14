@@ -73,14 +73,13 @@
         from
         (
             select z.* from t_hr_mark_resume z
-            <where>
-                <if test="userId != null">
-                    (z.hr_user_id = #{userId} or z.employee_user_id = #{userId})
-                </if>
-                <if test="resumeStatus != null">
-                    and z.resume_status in (#{resumeStatus})
-                </if>
-            </where>
+            where z.resume_status is not null
+            <if test="userId != null">
+                and (z.hr_user_id = #{userId} or z.employee_user_id = #{userId})
+            </if>
+            <if test="resumeStatus != null">
+                and z.resume_status in (#{resumeStatus})
+            </if>
         ) a
         left join
         (

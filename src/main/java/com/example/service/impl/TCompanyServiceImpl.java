@@ -237,6 +237,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
     }
 
     @Override
+    @Transactional
     public void offlinePosition(String positionId) {
         // 查询当前岗位
         TPosition tPosition = tPositionService.getById(positionId);
@@ -248,9 +249,16 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
         }
         tPositionMapper.updateById(TPosition.builder()
                 .positionId(positionId)
-                .positionStatus(POSITION_STATUS_OFFLINE)
+                .positionStatus(POSITION_STATUS_DRAFT)
                 .updateTime(DateUtil.date())
                 .build());
+
+        THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = tHrPaidPermisionsUseDetailService
+                .getById(tPosition.getUserId());
+        // 岗位累计额度+1
+        tHrPaidPermisionsUseDetail.setUsedPositionNum(tHrPaidPermisionsUseDetail.getUsedPositionNum()+1);
+        tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
+
     }
 
 
@@ -292,14 +300,15 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
             throw new BusinessException(10009,"已使用岗位数量已达到上限");
         }
 
+        // 将付费权限岗位使用情况-1
+        tHrPaidPermisionsUseDetail.setUsedPositionNum(tHrPaidPermisionsUseDetail.getUsedPositionNum()-1);
+        tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
+
         // 更新岗位状态为待审核
         tPosition.setPositionStatus(POSITION_STATUS_AUDIT);
         tPosition.setUpdateTime(DateUtil.date());
         tPositionMapper.updateById(tPosition);
 
-        // 将付费权限岗位使用情况-1
-        tHrPaidPermisionsUseDetail.setUsedPositionNum(tHrPaidPermisionsUseDetail.getUsedPositionNum()-1);
-        tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
 
     }
 

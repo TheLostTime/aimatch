@@ -49,7 +49,7 @@ public class TPosition implements Serializable {
      * 岗位发布状态0-草稿1-审核中2-在线3-驳回
      */
     @TableField(value = "position_status")
-    @ApiModelProperty(value="岗位发布状态0-草稿1-审核中2-在线3-驳回")
+    @ApiModelProperty(value="岗位发布状态0-草稿(下线变草稿)1-审核中2-在线3-驳回")
     private Integer positionStatus;
 
     /**

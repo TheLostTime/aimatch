@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.entity.THrMarkResume;
+import com.example.entity.THrPaidPermisionsUseDetail;
 import com.example.entity.THrVip;
 import com.example.entity.TPosition;
 import com.example.exception.BusinessException;
@@ -14,9 +15,7 @@ import com.example.mapper.TPositionMapper;
 import com.example.req.ResumeListReq;
 import com.example.resp.ResumeListResp;
 import com.example.resp.TalentListResp;
-import com.example.service.THrMarkResumeService;
-import com.example.service.THrVipService;
-import com.example.service.TPositionService;
+import com.example.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +37,9 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
 
     @Autowired
     private THrMarkResumeMapper tHrMarkResumeMapper;
+
+    @Autowired
+    private THrPaidPermisionsUseDetailService tHrPaidPermisionsUseDetailService;
 
 
     @Override
@@ -74,6 +76,11 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
                     .updateTime(DateUtil.date())
                     .reason(reason)
                     .build());
+            THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = tHrPaidPermisionsUseDetailService
+                    .getById(tPosition.getUserId());
+            // 岗位累计额度+1
+            tHrPaidPermisionsUseDetail.setUsedPositionNum(tHrPaidPermisionsUseDetail.getUsedPositionNum()+1);
+            tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
         }
     }
 
@@ -113,5 +120,31 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
         List<TalentListResp> talentListRespList = tHrMarkResumeMapper
                 .getTalentList(positionId, resumeStatus, StpUtil.getLoginId().toString());
         return talentListRespList;
+    }
+
+    @Override
+    public void checkSayHello() {
+        // 查询用户使用权限
+        THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = tHrPaidPermisionsUseDetailService
+                .getById(StpUtil.getLoginId().toString());
+        if (null == tHrPaidPermisionsUseDetail) {
+            throw new BusinessException(10023,"未开通vip权限，没有使用额度");
+        }
+        if (tHrPaidPermisionsUseDetail.getUsedSayHello() <= 0) {
+            throw new BusinessException(10024,"已使用打招呼数量已达到上限");
+        }
+    }
+
+    @Override
+    public void checkDownload() {
+        // 查询用户使用权限
+        THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = tHrPaidPermisionsUseDetailService
+                .getById(StpUtil.getLoginId().toString());
+        if (null == tHrPaidPermisionsUseDetail) {
+            throw new BusinessException(10023,"未开通vip权限，没有使用额度");
+        }
+        if (tHrPaidPermisionsUseDetail.getUsedDownloadNum() <= 0) {
+            throw new BusinessException(10025,"已使用下载数量已达到上限");
+        }
     }
 }

@@ -48,7 +48,7 @@ public class Knife4jConfig {
     }
 
     private ApiInfo apiInfo() {
-        log.info("http://localhost:8080/doc.html");
+        log.info("http://localhost:8088/doc.html");
         return new ApiInfoBuilder()
                 .title("Knife4j RESTful APIs")
                 .description("Knife4j API文档")

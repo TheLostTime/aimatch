@@ -22,7 +22,7 @@ public interface Constants {
     int POSITION_STATUS_AUDIT = 1;
     int POSITION_STATUS_ONLINE = 2;
     int POSITION_STATUS_REJECT = 3;
-    int POSITION_STATUS_OFFLINE = 4;
+    //int POSITION_STATUS_OFFLINE = 4;
 
     String COMPANY_STATUS_NO = "NO";
     String COMPANY_STATUS_YES = "YES";

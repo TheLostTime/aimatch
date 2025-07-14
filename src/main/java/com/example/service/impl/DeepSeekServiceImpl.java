@@ -116,9 +116,13 @@ public class DeepSeekServiceImpl implements DeepSeekService {
 
         // 构建请求体
         Map<String, Object> requestBody = new HashMap<>();
+        Map<String, String> userMessage = new HashMap<>();
+        userMessage.put("role", "user");
+        userMessage.put("content", content);
         requestBody.put("model", "deepseek-chat");
         requestBody.put("messages", new Object[]{
-                Map.of("role", "user", "content", content)
+                //Map.of("role", "user", "content", content)
+                userMessage
         });
         requestBody.put("stream", true);
 

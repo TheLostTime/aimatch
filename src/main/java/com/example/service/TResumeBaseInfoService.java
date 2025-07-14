@@ -5,12 +5,11 @@ import com.example.entity.TResumeBaseInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.req.GetJobListReq;
 import com.example.req.SaveResumeReq;
-import com.example.resp.ChatSessionResp;
-import com.example.resp.EmployeeStatusResp;
-import com.example.resp.GetJobListResp;
-import com.example.resp.ResumeDetailResp;
+import com.example.resp.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface TResumeBaseInfoService extends IService<TResumeBaseInfo>{
@@ -32,4 +31,10 @@ public interface TResumeBaseInfoService extends IService<TResumeBaseInfo>{
     void createMessage(String positionId, String resumeId, String message, String messageType);
 
     ResumeDetailResp getResumeDetail();
+
+    ResumeDetailHrResp getResumeDetailHr(String resumeId,String positionId);
+
+    void hrSaveResume(String resumeId,String positionId);
+
+    void downloadResumeFile(String fileId, HttpServletResponse response);
 }

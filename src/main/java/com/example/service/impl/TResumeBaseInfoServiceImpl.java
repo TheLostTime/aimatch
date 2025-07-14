@@ -8,8 +8,8 @@ import com.example.entity.*;
 import com.example.exception.BusinessException;
 import com.example.mapper.TResumeBaseInfoMapper;
 import com.example.req.SaveResumeReq;
-import com.example.resp.ChatSessionResp;
 import com.example.resp.EmployeeStatusResp;
+import com.example.resp.ResumeDetailHrResp;
 import com.example.resp.ResumeDetailResp;
 import com.example.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +67,9 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
 
     @Autowired
     private TImMessageService tImMessageService;
+
+    @Autowired
+    private THrPaidPermisionsUseDetailService tHrPaidPermisionsUseDetailService;
 
     @Value("${upload.resumeFilePath}")
     private String resumeFilePath;
@@ -302,8 +306,14 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
             tHrMarkResumeService.save(tHrMarkResume);
             return RESUME_STATUS_NEW_MESSAGE;
         } else {
-            // 啥也不做
-            return null;
+            if (null == tHrMarkResumeLast.getResumeStatus()) {
+                tHrMarkResumeLast.setResumeStatus(RESUME_STATUS_NEW_MESSAGE);
+                tHrMarkResumeService.updateById(tHrMarkResumeLast);
+                return RESUME_STATUS_NEW_MESSAGE;
+            } else {
+                // 啥也不做
+                return null;
+            }
         }
     }
 
@@ -317,11 +327,20 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
         // 查询用户
         TUser tUser = tUserService.getById(StpUtil.getLoginId().toString());
         if (messageType.equals(MESSAGE_TYPE_HR_SAY_HELLO)) {
+            // hr打招呼累计额度-1
+            THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = tHrPaidPermisionsUseDetailService
+                    .getById(StpUtil.getLoginId().toString());
+            if (tHrPaidPermisionsUseDetail.getUsedSayHello() <= 0) {
+                throw new BusinessException(10005, "HR已没有打招呼额度");
+            }
+            tHrPaidPermisionsUseDetail.setUsedSayHello(tHrPaidPermisionsUseDetail.getUsedSayHello()-1);
+            tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
+
             if (!tUser.getUserType().equals(USER_TYPE_HR) && !tUser.getUserType().equals(USER_TYPE_INTRODUCE)) {
                 throw new BusinessException(10005, "非招聘者不能打招呼");
             }
             // HR发起打招呼
-            if (null != tHrMarkResume) {
+            if (null != tHrMarkResume && null != tHrMarkResume.getResumeStatus()) {
                 throw new BusinessException(10005, "HR已经打过招呼");
             }
             // 查询简历获取userId
@@ -329,17 +348,22 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
             if (null == tResumeBaseInfo) {
                 throw new BusinessException(10005, "简历不存在");
             }
-            tHrMarkResume = THrMarkResume.builder()
-                    .resumeId(resumeId)
-                    .resumeStatus(RESUME_STATUS_SAY_HELLO)
-                    .hrUserId(StpUtil.getLoginId().toString())
-                    .createTime(DateUtil.date())
-                    .employeeUserId(tResumeBaseInfo.getUserId())
-                    .positionId(positionId)
-                    .saveFlag(false)
-                    .updateTime(DateUtil.date())
-                    .build();
-            tHrMarkResumeService.save(tHrMarkResume);
+            if (null == tHrMarkResume) {
+                tHrMarkResume = THrMarkResume.builder()
+                        .resumeId(resumeId)
+                        .resumeStatus(RESUME_STATUS_SAY_HELLO)
+                        .hrUserId(StpUtil.getLoginId().toString())
+                        .createTime(DateUtil.date())
+                        .employeeUserId(tResumeBaseInfo.getUserId())
+                        .positionId(positionId)
+                        .saveFlag(false)
+                        .updateTime(DateUtil.date())
+                        .build();
+                tHrMarkResumeService.save(tHrMarkResume);
+            } else {
+                tHrMarkResume.setResumeStatus(RESUME_STATUS_SAY_HELLO);
+                tHrMarkResumeService.updateById(tHrMarkResume);
+            }
 
             // 保存消息
             TImMessage tMessage = TImMessage.builder()
@@ -352,7 +376,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
                     .createTime(DateUtil.date())
                     .build();
             tImMessageService.save(tMessage);
-            // TODO 记录累计打招呼次数
+
 
         }
         if (messageType.equals(MESSAGE_TYPE_NEW_MESSAGE)){
@@ -360,7 +384,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
                 throw new BusinessException(10005, "非求职者不能发送此类消息");
             }
             // 求职者发消息
-            if (null == tHrMarkResume) {
+            if (null == tHrMarkResume || null == tHrMarkResume.getResumeStatus()) {
                 throw new BusinessException(10005, "求职者还没打过招呼");
             }
 
@@ -387,7 +411,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
         }
 
         if (messageType.equals(MESSAGE_TYPE_NORMAL)) {
-            if (null == tHrMarkResume) {
+            if (null == tHrMarkResume || null == tHrMarkResume.getResumeStatus()) {
                 throw new BusinessException(10005, "当前消息发送者还没打过招呼");
             }
             // 有可能求职者，有可能是招聘者,所以当前状态只能是打招呼或者新消息
@@ -425,7 +449,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
 
     @Override
     public ResumeDetailResp getResumeDetail() {
-        // 查询当前那用户
+        // 查询当前用户
         TUser tUser = tUserService.getById(StpUtil.getLoginId().toString());
         // 查询当前用户基本信息
         TResumeBaseInfo tResumeBaseInfo = this
@@ -460,5 +484,135 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
                 .build();
     }
 
+    @Override
+    public ResumeDetailHrResp getResumeDetailHr(String resumeId,String positionId) {
+        boolean overViewResumeFlag = false;
+        THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = tHrPaidPermisionsUseDetailService
+                .getById(StpUtil.getLoginId().toString());
+        if (null == tHrPaidPermisionsUseDetail) {
+            throw new BusinessException(10005, "付费权限使用详情不存在");
+        }
+        if (tHrPaidPermisionsUseDetail.getUsedViewResume() <= 0) {
+            overViewResumeFlag = true;
+        } else {
+            // 人才市场查看简历累计额度-1
+            tHrPaidPermisionsUseDetail.setUsedViewResume(tHrPaidPermisionsUseDetail.getUsedPositionNum()-1);
+            tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
+        }
+        // 查询THrMarkResume
+        THrMarkResume tHrMarkResume = tHrMarkResumeService.getOne(new LambdaQueryWrapper<THrMarkResume>()
+                .eq(THrMarkResume::getResumeId, resumeId)
+                .eq(THrMarkResume::getPositionId, positionId));
 
+        // 查询雇佣者基本信息
+        TResumeBaseInfo tResumeBaseInfo = this
+                .getOne(new LambdaQueryWrapper<TResumeBaseInfo>()
+                        .eq(TResumeBaseInfo::getUserId, tHrMarkResume.getEmployeeUserId()));
+        // 查询雇佣者信息
+        TEmployee tEmployee = tEmployeeService.getOne(new LambdaQueryWrapper<TEmployee>()
+                .eq(TEmployee::getUserId, tHrMarkResume.getEmployeeUserId()));
+        // 查询工作信息
+        List<TResumeWork> tResumeWorkList = tResumeWorkService.list(new LambdaQueryWrapper<TResumeWork>()
+                .eq(TResumeWork::getResumeId, tResumeBaseInfo.getResumeId()));
+        // 获取教育信息
+        List<TResumeEducation> tResumeEducationList = tResumeEducationService.list(new LambdaQueryWrapper<TResumeEducation>()
+                .eq(TResumeEducation::getResumeId, tResumeBaseInfo.getResumeId()));
+        // 获取项目信息
+        List<TResumeProject> tResumeProjectList = tResumeProjectService.list(new LambdaQueryWrapper<TResumeProject>()
+                .eq(TResumeProject::getResumeId, tResumeBaseInfo.getResumeId()));
+        // 获取兴趣职位信息
+        List<TResumeInterestJob> tResumeInterestJobList = tResumeInterestJobService.list(new LambdaQueryWrapper<TResumeInterestJob>()
+                .eq(TResumeInterestJob::getResumeId, tResumeBaseInfo.getResumeId()));
+
+        // 查询雇佣者注册信息
+        TUser tUser = tUserService.getById(tEmployee.getUserId());
+        tUser.setPassword(null);
+
+        return ResumeDetailHrResp.builder()
+                .baseInfo(tResumeBaseInfo)
+                .employee(tEmployee)
+                .educations(tResumeEducationList)
+                .works(tResumeWorkList)
+                .projects(tResumeProjectList)
+                .interestJobs(tResumeInterestJobList)
+                .hrMarkResume(tHrMarkResume)
+                .overViewResumeFlag(overViewResumeFlag)
+                .user(tUser)
+                .build();
+    }
+
+    @Override
+    public void hrSaveResume(String resumeId,String positionId) {
+        THrMarkResume tHrMarkResumes = tHrMarkResumeService.getOne(new LambdaQueryWrapper<THrMarkResume>()
+                .eq(THrMarkResume::getResumeId, resumeId)
+                .eq(THrMarkResume::getPositionId, positionId)
+                .eq(THrMarkResume::getHrUserId, StpUtil.getLoginId().toString()));
+        if (null == tHrMarkResumes) {
+            // 查询简历详情
+            TResumeBaseInfo tResumeBaseInfo = this.getById(resumeId);
+            // 插入一条记录
+            tHrMarkResumeService.save(THrMarkResume.builder()
+                    .resumeId(resumeId)
+                    .positionId(positionId)
+                    .saveFlag(true)
+                    .employeeUserId(tResumeBaseInfo.getUserId())
+                    .hrUserId(StpUtil.getLoginId().toString())
+                    .resumeStatus(null)
+                    .updateTime(DateUtil.date())
+                    .createTime(DateUtil.date())
+                    .build());
+        } else {
+            tHrMarkResumes.setSaveFlag(true);
+            tHrMarkResumeService.updateById(tHrMarkResumes);
+        }
+    }
+
+    @Override
+    public void downloadResumeFile(String fileId, HttpServletResponse response) {
+        // 获取当前用户
+        TUser tUser = tUserService.getById(StpUtil.getLoginId().toString());
+        if (tUser.getUserType().equals(USER_TYPE_HR) || tUser.getUserType().equals(USER_TYPE_INTRODUCE)) {
+            // 校验是否还有权限
+            THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = tHrPaidPermisionsUseDetailService
+                    .getById(tUser.getUserId());
+            if (null == tHrPaidPermisionsUseDetail) {
+                throw new BusinessException(10005, "不是vip");
+            }
+            if (tHrPaidPermisionsUseDetail.getUsedDownloadNum() <= 0) {
+                throw new BusinessException(10005, "今日下载权限已用完");
+            }
+            // 下载简历累计额度-1
+            tHrPaidPermisionsUseDetail.setUsedDownloadNum(tHrPaidPermisionsUseDetail.getUsedDownloadNum()-1);
+            tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
+        }
+        TEmployeeResumeFile tEmployeeResumeFile = tEmployeeResumeFileService.getOne(new LambdaQueryWrapper<TEmployeeResumeFile>()
+                .eq(TEmployeeResumeFile::getFileId, fileId));
+        if (null == tEmployeeResumeFile) {
+            throw new BusinessException(10005, "文件不存在");
+        }
+        String path = tEmployeeResumeFile.getPath();
+        String fileName = path.substring(path.lastIndexOf(File.separator)+1);
+
+        try {
+            response.setCharacterEncoding("UTF-8");
+            //设置内容类型
+            response.setHeader("Content-Type", "application/octet-stream");
+            //设置文件名，是解决中文乱码的关键
+            response.setHeader("Content-Disposition", String.format("attachment;filename=\"%s\"", URLEncoder.encode(fileName,"UTF-8")));
+            //将文件取出，并写到response
+            FileInputStream fileInputStream = new FileInputStream(path);
+            OutputStream outputStream = response.getOutputStream();
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = fileInputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, length);
+            }
+            fileInputStream.close();
+            outputStream.flush();
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(10005, "文件下载失败");
+        }
+    }
 }
