@@ -13,9 +13,9 @@ spring:
     pathmatch:
       matching-strategy : ant_path_matcher
   # Redis配置
-  redis:
-    host: 192.168.64.128
-    port: 6379
+#  redis:
+#    host: 192.168.64.128
+#    port: 6379
   # Jackson配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss  # 设置日期格式

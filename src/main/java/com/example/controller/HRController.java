@@ -1,15 +1,14 @@
 package com.example.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.stp.StpUtil;
 import com.example.entity.ResponseResult;
-import com.example.req.HrActivateReq;
-import com.example.req.HrJoinCompanyReq;
-import com.example.req.SavePositionReq;
+import com.example.entity.TPosition;
+import com.example.entity.TVipPackage;
+import com.example.req.*;
 import com.example.resp.HrInfoResp;
 import com.example.resp.PositionDetailResp;
-import com.example.service.DeepSeekService;
-import com.example.service.TCompanyService;
-import com.example.service.THrService;
+import com.example.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -22,7 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 
-import java.util.Map;
+import javax.validation.Valid;
+import java.util.List;
 
 @Api(value = "HR", tags = {"HR相关"})
 @RestController
@@ -38,10 +38,11 @@ public class HRController {
     @Autowired
     private THrService thrService;
 
+    @Autowired
+    private TPositionService tPositionService;
 
     @Autowired
     private DeepSeekService deepSeekService;
-
 
     @ApiOperation(value = "hr个人信息+加入公司", notes = "", httpMethod = "POST")
     @SaCheckLogin
@@ -66,8 +67,6 @@ public class HRController {
         HrInfoResp hrInfo = companyService.getHrStatus();
         return ResponseResult.success(hrInfo);
     }
-
-
 
     @SaCheckLogin
     @PostMapping("/enterprise/certification/apply")
@@ -129,16 +128,19 @@ public class HRController {
         return ResponseResult.success(true);
     }
 
+    @ApiOperation(value = "查询vip套餐", notes = "", httpMethod = "GET")
+    @SaCheckLogin
+    @GetMapping("/vip/package")
+    public ResponseResult<List<TVipPackage>> getVipPackage() {
+        List<TVipPackage> vipPackages = companyService.getVipPackage();
+        return ResponseResult.success(vipPackages);
+    }
 
     @ApiOperation(value = "HR开通vip", notes = "", httpMethod = "POST")
     @SaCheckLogin
     @PostMapping("/vip/activate")
     public ResponseResult<?> activateVip(@RequestBody HrActivateReq hrActivateReq) {
-        try {
-            companyService.activateVip(hrActivateReq);
-        } catch (Exception e) {
-            return ResponseResult.error(e.getMessage());
-        }
+        companyService.activateVip(hrActivateReq);
         return ResponseResult.success(true);
     }
 
@@ -155,18 +157,28 @@ public class HRController {
         return ResponseResult.success(true);
     }
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "body", dataType = "Map<String, Object>", name = "request", value = "{\"content\":\"\"}", required = true)
-    })
-    @ApiOperation(value = "HR发起大模型对话（生成岗位描述）", notes = "", httpMethod = "POST")
+    @ApiOperation(value = "HR发起大模型对话", notes = "生成岗位描述|或者生成ai简历优势,当前对话是一次性，不保留上下文", httpMethod = "POST")
     @PostMapping(value = "/chat/completions", produces = "text/event-stream;charset=UTF-8")
-    public Flux<String> chat(@RequestBody Map<String, Object> request) {
-        String content = (String) request.get("content");
-        return deepSeekService.chatFlux(content);
+    @SaCheckLogin
+    public Flux<String> chatCompletions(@RequestBody @Valid ChatReq chatReq) {
+        return deepSeekService.chatFlux(chatReq.getContent(),false, null,StpUtil.getSession());
     }
 
-
-
-
+    @ApiOperation(value = "笔试", notes = "第一次调用startExamFlag=true开启考试，后续startExamFlag=false", httpMethod = "POST")
+    @PostMapping(value = "/chat/exam", produces = "text/event-stream;charset=UTF-8")
+    @SaCheckLogin
+    public Flux<String> chatExam(@RequestBody @Valid ChatExamReq chatExamReq) {
+        TPosition tPosition = tPositionService.getById(chatExamReq.getPositionId());
+        if (chatExamReq.getStartExamFlag()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("现在假设你是个面试官，我是面试者，你要面试一个岗位，强制要求每轮问一个，不要一次性出完所有题目，等我回答完成后问下一个，对我的回答不用做出评价，等所有问题问完后，生成最终得分，你要向我提" + chatExamReq.getExamNum() +"个的面试问题，满分100分。笔试要求如下：");
+            sb.append(tPosition.getPositionDescription());
+            chatExamReq.setContent(sb.toString());
+        } else {
+            // 将回答内容进行改造
+            chatExamReq.setContent(chatExamReq.getContent() + "我的答案是：" + chatExamReq.getContent() + "。继续下一题");
+        }
+        return deepSeekService.chatFluxExam(true, StpUtil.getSession(),chatExamReq,StpUtil.getLoginId().toString());
+    }
 
 }

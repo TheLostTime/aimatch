@@ -10,6 +10,7 @@ import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
     * VIP套餐表
@@ -17,6 +18,7 @@ import lombok.Data;
 @ApiModel(value="TVipPackage")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @TableName(value = "t_vip_package")
 public class TVipPackage implements Serializable {

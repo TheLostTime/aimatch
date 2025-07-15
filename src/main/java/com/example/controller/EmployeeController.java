@@ -24,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static com.example.constant.Constants.USER_TYPE_EMPLOYEE;
+
 @Api(value = "求职者", tags = {"求职者"})
 @RestController
 @RequestMapping("/v1/employee")
@@ -147,7 +149,7 @@ public class EmployeeController {
     }
 
     @ApiOperation(value = "求职者发起打招呼", notes = "", httpMethod = "POST")
-    @SaCheckRole(value = {"0"})
+    @SaCheckRole(value = {USER_TYPE_EMPLOYEE})
     @PostMapping("/im/new-message")
     public ResponseResult<String> imNewMessage(@RequestParam("positionId") String positionId,
                                                @RequestParam("resumeId") String resumeId) {
@@ -192,17 +194,5 @@ public class EmployeeController {
         List<TImMessage> TImMessageList = tImMessageService.chatSessionList(positionId,resumeId);
         return ResponseResult.success(TImMessageList);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

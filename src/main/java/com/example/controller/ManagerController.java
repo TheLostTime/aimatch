@@ -1,6 +1,8 @@
 package com.example.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.annotation.SaMode;
 import com.example.entity.ResponseResult;
 import com.example.entity.TCompany;
 import com.example.entity.TPosition;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.constant.Constants.USER_TYPE_INTRODUCE;
 
 @Api(value = "管理员后台", tags = {"管理员后台"})
 @RestController
@@ -46,7 +50,7 @@ public class ManagerController {
     }
 
     @ApiOperation(value = "企业审核", notes = "", httpMethod = "POST")
-    @SaCheckLogin
+    @SaCheckRole(value = {USER_TYPE_INTRODUCE})
     @PostMapping("/company/audit")
     public ResponseResult<?> auditCompany(@RequestParam("companyId") String companyId,
                                           @RequestParam("status") String status,
@@ -73,7 +77,7 @@ public class ManagerController {
     }
 
     @ApiOperation(value = "岗位审核", notes = "", httpMethod = "POST")
-    @SaCheckLogin
+    @SaCheckRole(value = {USER_TYPE_INTRODUCE})
     @PostMapping("/position/audit")
     public ResponseResult<?> auditPosition(@RequestParam("positionId") String positionId,
                                           @RequestParam("status") Integer status,

@@ -208,6 +208,11 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
     }
 
     @Override
+    public List<TVipPackage> getVipPackage() {
+        return tVipPackageMapper.selectList(null);
+    }
+
+    @Override
     @Transactional
     public void savePosition(SavePositionReq savePositionReq) {
         String positionId = savePositionReq.getPosition().getPositionId();

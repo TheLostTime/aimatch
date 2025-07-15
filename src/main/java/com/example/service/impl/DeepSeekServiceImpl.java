@@ -1,16 +1,29 @@
 package com.example.service.impl;
 
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson2.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.example.entity.THrMarkResume;
+import com.example.req.ChatExamReq;
 import com.example.service.DeepSeekService;
+import com.example.service.THrMarkResumeService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +33,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@Slf4j
 public class DeepSeekServiceImpl implements DeepSeekService {
 
     private static final Logger logger = LoggerFactory.getLogger(DeepSeekService.class);
@@ -29,6 +43,9 @@ public class DeepSeekServiceImpl implements DeepSeekService {
 
     @Value("${deepseek.api-key}")
     private String apiKey;
+
+    @Autowired
+    private THrMarkResumeService tHrMarkResumeService;
 
     private final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(20, TimeUnit.SECONDS) // 连接超时 10 秒
@@ -112,21 +129,26 @@ public class DeepSeekServiceImpl implements DeepSeekService {
     }
 
     @Override
-    public Flux<String> chatFlux(String content) {
-
+    public Flux<String> chatFlux(String content, Boolean needSaveContext, String contextName, SaSession session) {
+        // 获取当前用户的对话上下文
+        List<Map<String, String>> context = new ArrayList<>();
+        if (needSaveContext) {
+            context = session.get(contextName, new ArrayList<>());
+        }
         // 构建请求体
         Map<String, Object> requestBody = new HashMap<>();
         Map<String, String> userMessage = new HashMap<>();
         userMessage.put("role", "user");
         userMessage.put("content", content);
         requestBody.put("model", "deepseek-chat");
-        requestBody.put("messages", new Object[]{
-                //Map.of("role", "user", "content", content)
-                userMessage
-        });
+        context.add(userMessage);
+        requestBody.put("messages", context);
         requestBody.put("stream", true);
 
+        // 存储完整的助手回复
+        StringBuilder fullAssistantResponse = new StringBuilder();
         // 调用DeepSeek API并处理流式响应
+        List<Map<String, String>> finalContext = context;
         return webClient.post()
                 .uri(apiUrl)
                 .headers(h -> h.setBearerAuth(apiKey))
@@ -134,17 +156,184 @@ public class DeepSeekServiceImpl implements DeepSeekService {
                 .body(BodyInserters.fromValue(requestBody))
                 .retrieve()
                 .bodyToFlux(String.class)
-                .map(chunk -> {
-                    // 解析SSE格式的响应
-//                    if (chunk.startsWith("data: ")) {
-//                        chunk = chunk.substring(6);
-//                    }
-//                    if (chunk.equals("[DONE]")) {
-//                        // 更新上下文存储
-//                        contextStore.put(contextId, fullPrompt + "\n\n" + chunk);
-//                        return "";
-//                    }
-                    return chunk;
+                .doOnNext(chunk -> {
+                    // 处理流式响应块
+                    if (chunk != null && !chunk.equals("[DONE]")) {
+                        // 解析数据块并提取内容
+                        String contentChunk = extractContentFromChunk(chunk);
+                        if (contentChunk != null) {
+                            fullAssistantResponse.append(contentChunk);
+                        }
+                    }
+                })
+                .doOnComplete(() -> {
+                    // 当流完成时保存完整上下文
+                    if (needSaveContext && contextName != null) {
+                        // 添加助手回复到上下文
+                        if (fullAssistantResponse.length() > 0) {
+                            Map<String, String> assistantMessage = new HashMap<>();
+                            assistantMessage.put("role", "assistant");
+                            assistantMessage.put("content", fullAssistantResponse.toString());
+                            finalContext.add(assistantMessage);
+                            // 保存完整上下文
+                            log.info("保存完整上下文：{}", fullAssistantResponse);
+                            session.set(contextName, finalContext);
+                        }
+                    }
+                })
+                .onErrorResume(e -> {
+                    log.error("Error while processing chat stream: {}", e.getMessage(), e);
+                    return Flux.empty();
                 });
+    }
+
+    @Override
+    public Flux<String> chatFluxExam(Boolean needSaveContext, SaSession session, ChatExamReq chatExamReq,String loginId) {
+        // 获取当前用户的对话上下文
+        List<Map<String, String>> context = new ArrayList<>();
+        String contextName = chatExamReq.getExamId();
+        if (needSaveContext) {
+            context = session.get(contextName, new ArrayList<>());
+        }
+        // 构建请求体
+        Map<String, Object> requestBody = new HashMap<>();
+        Map<String, String> userMessage = new HashMap<>();
+        userMessage.put("role", "user");
+        userMessage.put("content", chatExamReq.getContent());
+        requestBody.put("model", "deepseek-chat");
+        context.add(userMessage);
+        requestBody.put("messages", context);
+        requestBody.put("stream", true);
+
+        // 存储完整的助手回复
+        StringBuilder fullAssistantResponse = new StringBuilder();
+        // 调用DeepSeek API并处理流式响应
+        List<Map<String, String>> finalContext = context;
+        return webClient.post()
+                .uri(apiUrl)
+                .headers(h -> h.setBearerAuth(apiKey))
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(requestBody))
+                .retrieve()
+                .bodyToFlux(String.class)
+                .doOnNext(chunk -> {
+                    // 处理流式响应块
+                    if (chunk != null && !chunk.equals("[DONE]")) {
+                        // 解析数据块并提取内容
+                        String contentChunk = extractContentFromChunk(chunk);
+                        if (contentChunk != null) {
+                            fullAssistantResponse.append(contentChunk);
+                        }
+                    }
+                })
+                .doOnComplete(() -> {
+                    // 当流完成时保存完整上下文
+                    if (needSaveContext && contextName != null) {
+                        // 添加助手回复到上下文
+                        if (fullAssistantResponse.length() > 0) {
+                            Map<String, String> assistantMessage = new HashMap<>();
+                            assistantMessage.put("role", "assistant");
+                            assistantMessage.put("content", fullAssistantResponse.toString());
+                            finalContext.add(assistantMessage);
+                            // 保存完整上下文
+                            log.info("保存完整上下文：{}", fullAssistantResponse);
+                            session.set(contextName, finalContext);
+                            // 判断是否是最后一道题结果
+                            List<Map<String, String>> message = session.get(contextName, new ArrayList<>());
+                            if (message.size() == (chatExamReq.getExamNum()+ 1) * 2 ) {
+                                String lastMessage = message.get(message.size() - 1).get("content");
+                                if (StringUtils.isNotEmpty(lastMessage)) {
+                                    int score = extractScore(lastMessage);
+                                    if (score != -1) {
+                                        // 查询t_hr_mark_resume
+                                        THrMarkResume tHrMarkResume = tHrMarkResumeService.getOne(new LambdaQueryWrapper<THrMarkResume>()
+                                                .eq(THrMarkResume::getEmployeeUserId, loginId)
+                                                .eq(THrMarkResume::getPositionId, chatExamReq.getPositionId()));
+                                        tHrMarkResume.setTestScores(score + "");
+                                        tHrMarkResume.setUpdateTime(DateUtil.date());
+                                        tHrMarkResumeService.updateById(tHrMarkResume);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+                .onErrorResume(e -> {
+                    log.error("Error while processing chat stream: {}", e.getMessage(), e);
+                    return Flux.empty();
+                });
+    }
+
+    private String extractContentFromChunk(String chunk) {
+        // 处理SSE格式的数据: data: {"choices":[{"delta":{"content":"chunk"}}]}
+        try {
+            // 使用Jackson解析JSON
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(chunk);
+
+            // 提取 content 字段
+            JsonNode choicesNode = root.get("choices");
+            if (choicesNode != null && choicesNode.isArray() && choicesNode.size() > 0) {
+                JsonNode deltaNode = choicesNode.get(0).get("delta");
+                if (deltaNode != null) {
+                    JsonNode contentNode = deltaNode.get("content");
+                    if (contentNode != null && contentNode.isTextual()) {
+                        return contentNode.asText();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Failed to parse content chunk: {}", e.getMessage());
+        }
+        return null;
+    }
+
+    public int extractScore(String text) {
+        // 处理旧格式："最终得分：XX"
+        String oldPrefix = "最终得分：";
+        int oldStartIndex = text.indexOf(oldPrefix);
+
+        if (oldStartIndex != -1) {
+            oldStartIndex += oldPrefix.length();
+            int oldEndIndex = oldStartIndex;
+
+            while (oldEndIndex < text.length() && Character.isDigit(text.charAt(oldEndIndex))) {
+                oldEndIndex++;
+            }
+
+            if (oldStartIndex != oldEndIndex) {
+                try {
+                    return Integer.parseInt(text.substring(oldStartIndex, oldEndIndex));
+                } catch (NumberFormatException e) {
+                    // 继续检查新格式
+                }
+            }
+        }
+
+        // 处理新格式："总分：XX/100"
+        String newPrefix = "总分：";
+        int newStartIndex = text.indexOf(newPrefix);
+
+        if (newStartIndex != -1) {
+            newStartIndex += newPrefix.length();
+            int newEndIndex = newStartIndex;
+
+            while (newEndIndex < text.length() &&
+                    (Character.isDigit(text.charAt(newEndIndex)) || text.charAt(newEndIndex) == '/')) {
+                newEndIndex++;
+            }
+
+            String scorePart = text.substring(newStartIndex, newEndIndex);
+            // 提取斜杠前的数字部分
+            String[] parts = scorePart.split("/");
+            if (parts.length > 0) {
+                try {
+                    return Integer.parseInt(parts[0].trim());
+                } catch (NumberFormatException e) {
+                    return -1;
+                }
+            }
+        }
+        return -1;
     }
 }
