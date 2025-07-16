@@ -84,11 +84,16 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
     @Override
     public void joinCompany(HrJoinCompanyReq hrJoinCompany) {
         // 查看旗下是否有公司了
-        SaSession saSession = StpUtil.getSession();
-        TUser userInfo = (TUser) saSession.get("userInfo");
+        TUser userInfo = tUserService.getById(StpUtil.getLoginId().toString());
         THr tHr = tHrService.getById(userInfo.getUserId());
         if (null!= tHr && StringUtils.isNotEmpty(tHr.getCompanyId())) {
             throw new BusinessException(10001,"您已经加入公司了");
+        }
+
+        if (null != hrJoinCompany.getAvatar()) {
+            // 查询当前用户
+            userInfo.setAvatar(FileToDbUtil.fileToStr(hrJoinCompany.getAvatar()));
+            tUserService.saveOrUpdate(userInfo);
         }
 
         // 1. 公司信息录入
@@ -96,7 +101,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .companyName(hrJoinCompany.getCompanyName())
                 .industry(hrJoinCompany.getIndustry())
                 .scale(hrJoinCompany.getScale())
-                .enterpriseCertified("NO")
+                .enterpriseCertified(COMPANY_STATUS_WAITING)
                 .enterpriseLicense("")
                 .incumbencyCertificate("")
                 .build();
@@ -114,7 +119,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .realName(2)  // 未实名认证
                 .build();
 
-        tHrService.save(tHr2);
+        tHrService.saveOrUpdate(tHr2);
     }
 
     @Override
@@ -133,7 +138,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .build();
         TCompany tCompany = this.getById(tHr.getCompanyId());
         if (null != tCompany) {
-            hrInfo.setEnterpriseCertified(tCompany.getEnterpriseCertified().equals("YES")?"YES":"NO");
+            hrInfo.setEnterpriseCertified(tCompany.getEnterpriseCertified());
         }
         return hrInfo;
     }

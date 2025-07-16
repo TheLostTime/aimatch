@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @ApiModel(value="HrJoinCompanyReq")
 @Data
@@ -13,6 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HrJoinCompanyReq {
+
+    @ApiModelProperty(value="头像")
+    private MultipartFile avatar;
 
     @ApiModelProperty(value="HR名称")
     private String hrName;

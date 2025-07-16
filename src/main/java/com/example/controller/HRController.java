@@ -44,10 +44,11 @@ public class HRController {
     @Autowired
     private DeepSeekService deepSeekService;
 
+
     @ApiOperation(value = "hr个人信息+加入公司", notes = "", httpMethod = "POST")
     @SaCheckLogin
     @PostMapping("/company/join")
-    public ResponseResult<?> join(@RequestBody HrJoinCompanyReq hrJoinCompany) {
+    public ResponseResult<?> join(@ModelAttribute HrJoinCompanyReq hrJoinCompany) {
         companyService.joinCompany(hrJoinCompany);
         return ResponseResult.success("成功加入公司");
     }
