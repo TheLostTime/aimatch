@@ -12,6 +12,7 @@ import com.example.exception.BusinessException;
 import com.example.mapper.THrMapper;
 import com.example.mapper.THrMarkResumeMapper;
 import com.example.mapper.TPositionMapper;
+import com.example.req.AuditPositionReq;
 import com.example.req.ResumeListReq;
 import com.example.resp.ResumeListResp;
 import com.example.resp.TalentListResp;
@@ -51,7 +52,10 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
     }
 
     @Override
-    public void auditPosition(String positionId, Integer status, String reason) {
+    public void auditPosition(AuditPositionReq auditPositionReq) {
+        String positionId = auditPositionReq.getPositionId();
+        Integer status = auditPositionReq.getStatus();
+        String reason = auditPositionReq.getReason();
         // 查询当前岗位
         TPosition tPosition = baseMapper.selectById(positionId);
         if (null == tPosition) {

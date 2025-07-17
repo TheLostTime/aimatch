@@ -6,6 +6,8 @@ import cn.dev33.satoken.annotation.SaMode;
 import com.example.entity.ResponseResult;
 import com.example.entity.TCompany;
 import com.example.entity.TPosition;
+import com.example.req.AuditCompanyReq;
+import com.example.req.AuditPositionReq;
 import com.example.service.TCompanyService;
 import com.example.service.TPositionService;
 import io.swagger.annotations.Api;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.constant.Constants.USER_TYPE_INTRODUCE;
+import static com.example.constant.Constants.USER_TYPE_OPERATION;
 
 @Api(value = "管理员后台", tags = {"管理员后台"})
 @RestController
@@ -50,12 +53,10 @@ public class ManagerController {
     }
 
     @ApiOperation(value = "企业审核", notes = "", httpMethod = "POST")
-    @SaCheckRole(value = {USER_TYPE_INTRODUCE})
+    @SaCheckRole(value = {USER_TYPE_OPERATION})
     @PostMapping("/company/audit")
-    public ResponseResult<?> auditCompany(@RequestParam("companyId") String companyId,
-                                          @RequestParam("status") String status,
-                                          @RequestParam(value = "reason" ,required = false) String reason) {
-        companyService.auditCompany(companyId,status,reason);
+    public ResponseResult<?> auditCompany(@RequestBody AuditCompanyReq auditCompanyReq) {
+        companyService.auditCompany(auditCompanyReq);
         return ResponseResult.success();
     }
 
@@ -77,17 +78,10 @@ public class ManagerController {
     }
 
     @ApiOperation(value = "岗位审核", notes = "", httpMethod = "POST")
-    @SaCheckRole(value = {USER_TYPE_INTRODUCE})
+    @SaCheckRole(value = {USER_TYPE_OPERATION})
     @PostMapping("/position/audit")
-    public ResponseResult<?> auditPosition(@RequestParam("positionId") String positionId,
-                                          @RequestParam("status") Integer status,
-                                          @RequestParam(value = "reason" ,required = false) String reason) {
-        positionService.auditPosition(positionId,status,reason);
+    public ResponseResult<?> auditPosition(@RequestBody AuditPositionReq auditPosition) {
+        positionService.auditPosition(auditPosition);
         return ResponseResult.success();
     }
-
-
-
-
-
-}    
+}

@@ -12,6 +12,9 @@
     <result column="enterprise_license" jdbcType="LONGVARCHAR" property="enterpriseLicense" />
     <result column="incumbency_certificate" jdbcType="LONGVARCHAR" property="incumbencyCertificate" />
     <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+
 
   </resultMap>
   <sql id="Base_Column_List">
@@ -24,6 +27,6 @@
     company_id, `name`, industry, `scale`, enterprise_certified,reason
   </sql>
   <select id="queryCompanyList" resultType="com.example.entity.TCompany">
-    select  <include refid="Base_Column_List2"/> from t_company
+    select  *  from t_company
   </select>
 </mapper>

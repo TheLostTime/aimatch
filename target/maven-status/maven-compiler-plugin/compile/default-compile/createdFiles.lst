@@ -33,6 +33,7 @@ com\example\entity\TUser$TUserBuilder.class
 com\example\controller\HRController.class
 com\example\req\SaveJobReq$SaveJobReqBuilder.class
 com\example\req\SaveResumeReq$SaveResumeReqBuilder.class
+com\example\req\AuditCompanyReq$AuditCompanyReqBuilder.class
 com\example\resp\TalentListResp.class
 com\example\service\TUserService.class
 com\example\entity\TPositionToolbox.class
@@ -43,6 +44,7 @@ com\example\mapper\THrPaidPermisionsUseDetailMapper.class
 com\example\entity\TResumeInterestJob.class
 com\example\entity\TCompany.class
 com\example\entity\TResumeWork.class
+com\example\req\AuditPositionReq.class
 com\example\service\TPositionToolboxService.class
 com\example\resp\ResumeDetailHrResp$ResumeDetailHrRespBuilder.class
 com\example\req\HrJoinCompanyReq.class
@@ -65,6 +67,7 @@ com\example\exception\BusinessException.class
 com\example\service\DeepSeekService.class
 com\example\req\ChatReq.class
 com\example\resp\ResumeDetailResp$ResumeDetailRespBuilder.class
+com\example\req\AuditCompanyReq.class
 com\example\controller\ManagerController.class
 com\example\service\TVipPackageService.class
 com\example\service\THrPaidPermisionsUseDetailService.class
@@ -111,6 +114,7 @@ com\example\service\THrMarkResumeService.class
 com\example\resp\EmployeeStatusResp.class
 com\example\service\impl\TPositionKeyWordServiceImpl.class
 com\example\mapper\TEmployeeVipMapper.class
+com\example\req\AuditPositionReq$AuditPositionReqBuilder.class
 com\example\req\HrActivateReq.class
 com\example\resp\GetSaveJobListResp.class
 com\example\service\impl\TResumeEducationServiceImpl.class

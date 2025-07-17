@@ -61,6 +61,7 @@ D:\指标建设\AIMatch\aimatch\src\main\java\com\example\constant\StatusCode.ja
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\resp\HrInfoResp.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\mapper\TPositionToolboxMapper.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\config\MyStpInterface.java
+D:\指标建设\AIMatch\aimatch\src\main\java\com\example\req\AuditPositionReq.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\impl\TEmployeeVipServiceImpl.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\req\HrJoinCompanyReq.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\entity\TEmployeeVip.java
@@ -101,6 +102,7 @@ D:\指标建设\AIMatch\aimatch\src\main\java\com\example\entity\ResponseResult.
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\resp\ChatSessionResp.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\TEmployeeVipService.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\impl\TUserServiceImpl.java
+D:\指标建设\AIMatch\aimatch\src\main\java\com\example\req\AuditCompanyReq.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\entity\TResumeWork.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\impl\TPositionServiceImpl.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\TPositionKeyWordService.java

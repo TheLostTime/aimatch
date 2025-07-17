@@ -48,9 +48,9 @@ public class HRController {
     @ApiOperation(value = "hr个人信息+加入公司", notes = "", httpMethod = "POST")
     @SaCheckLogin
     @PostMapping("/company/join")
-    public ResponseResult<?> join(@ModelAttribute HrJoinCompanyReq hrJoinCompany) {
-        companyService.joinCompany(hrJoinCompany);
-        return ResponseResult.success("成功加入公司");
+    public ResponseResult<String> join(@ModelAttribute HrJoinCompanyReq hrJoinCompany) {
+        String companyId = companyService.joinCompany(hrJoinCompany);
+        return ResponseResult.success(companyId);
     }
 
     @ApiOperation(value = "个人实名认证", notes = "", httpMethod = "GET")

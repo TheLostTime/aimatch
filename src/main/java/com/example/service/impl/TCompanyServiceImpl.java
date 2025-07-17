@@ -7,10 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.entity.*;
 import com.example.exception.BusinessException;
 import com.example.mapper.*;
-import com.example.req.GetJobListReq;
-import com.example.req.HrActivateReq;
-import com.example.req.HrJoinCompanyReq;
-import com.example.req.SavePositionReq;
+import com.example.req.*;
 import com.example.resp.GetJobListResp;
 import com.example.resp.HrInfoResp;
 import com.example.resp.PositionDetailResp;
@@ -82,7 +79,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
 
 
     @Override
-    public void joinCompany(HrJoinCompanyReq hrJoinCompany) {
+    public String joinCompany(HrJoinCompanyReq hrJoinCompany) {
         // 查看旗下是否有公司了
         TUser userInfo = tUserService.getById(StpUtil.getLoginId().toString());
         THr tHr = tHrService.getById(userInfo.getUserId());
@@ -104,6 +101,8 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .enterpriseCertified(COMPANY_STATUS_WAITING)
                 .enterpriseLicense("")
                 .incumbencyCertificate("")
+                .createTime(DateUtil.date())
+                .creator(hrJoinCompany.getHrName())
                 .build();
 
         this.save(tCompany);
@@ -120,6 +119,8 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .build();
 
         tHrService.saveOrUpdate(tHr2);
+
+        return tCompany.getCompanyId();
     }
 
     @Override
@@ -139,6 +140,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
         TCompany tCompany = this.getById(tHr.getCompanyId());
         if (null != tCompany) {
             hrInfo.setEnterpriseCertified(tCompany.getEnterpriseCertified());
+            hrInfo.setCompany(tCompany);
         }
         return hrInfo;
     }
@@ -169,24 +171,24 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
     }
 
     @Override
-    public void auditCompany(String companyId,String status,String reason) {
+    public void auditCompany(AuditCompanyReq auditCompanyReq) {
         // 查询公司信息
-        TCompany tCompany = tCompanyMapper.selectById(companyId);
+        TCompany tCompany = tCompanyMapper.selectById(auditCompanyReq.getCompanyId());
         if (!COMPANY_STATUS_WAITING.equals(tCompany.getEnterpriseCertified())) {
             throw new BusinessException(10013,"公司状态不是待审核");
         }
-        if (status.equals(COMPANY_STATUS_PASS)) {
+        if (auditCompanyReq.getStatus().equals(COMPANY_STATUS_PASS)) {
             tCompanyMapper.updateById(TCompany.builder()
-                    .companyId(companyId)
+                    .companyId(auditCompanyReq.getCompanyId())
                     .enterpriseCertified(COMPANY_STATUS_PASS)
                     .build());
             return;
         }
-        if (status.equals(COMPANY_STATUS_FAIL)) {
+        if (auditCompanyReq.getStatus().equals(COMPANY_STATUS_FAIL)) {
             tCompanyMapper.updateById(TCompany.builder()
-                    .companyId(companyId)
+                    .companyId(auditCompanyReq.getCompanyId())
                     .enterpriseCertified(COMPANY_STATUS_FAIL)
-                    .reason(reason)
+                    .reason(auditCompanyReq.getReason())
                     .build());
         }
     }

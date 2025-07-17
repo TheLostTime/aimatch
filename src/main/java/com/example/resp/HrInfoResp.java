@@ -1,6 +1,7 @@
 package com.example.resp;
 
 
+import com.example.entity.TCompany;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,10 @@ public class HrInfoResp {
 
     @ApiModelProperty(value="是否企业认证YES、NO")
     private String enterpriseCertified;
+
+    @ApiModelProperty(value="公司信息")
+    private TCompany company;
+
 
     @ApiModelProperty(value="NO-非vip、NORMAL--普通vip、HIGH-豪华vip")
     private String vipType;

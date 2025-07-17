@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -71,6 +73,20 @@ public class TCompany implements Serializable {
     @TableField(value = "reason")
     @ApiModelProperty(value="审核未通过理由")
     private String reason;
+
+    /**
+     * 创建时间（UTC时间，包含时分秒毫秒）
+     */
+    @TableField(value = "create_time")
+    @ApiModelProperty(value="创建时间（UTC时间，包含时分秒毫秒）")
+    private Date createTime;
+
+    /**
+     * 创建时间（UTC时间，包含时分秒毫秒）
+     */
+    @TableField(value = "creator")
+    @ApiModelProperty(value="创健人")
+    private String creator;
 
     private static final long serialVersionUID = 1L;
 }
