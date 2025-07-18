@@ -40,4 +40,6 @@ public interface TCompanyService extends IService<TCompany>{
     PositionDetailResp getPositionDetail(String positionId);
 
     List<TVipPackage> getVipPackage();
+
+    void deletePosition(String positionId);
 }

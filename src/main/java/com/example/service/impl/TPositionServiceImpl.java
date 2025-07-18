@@ -14,6 +14,7 @@ import com.example.mapper.THrMarkResumeMapper;
 import com.example.mapper.TPositionMapper;
 import com.example.req.AuditPositionReq;
 import com.example.req.ResumeListReq;
+import com.example.resp.PositionListResp;
 import com.example.resp.ResumeListResp;
 import com.example.resp.TalentListResp;
 import com.example.service.*;
@@ -44,11 +45,11 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
 
 
     @Override
-    public List<TPosition> queryPositionList(String positionStatus) {
+    public List<PositionListResp> queryPositionList(String positionStatus) {
         // 查询所有岗位(自己的)
-        return baseMapper.selectList( new LambdaQueryWrapper<TPosition>()
-                .eq(TPosition::getPositionStatus, positionStatus)
-                .eq(TPosition::getUserId, StpUtil.getLoginId().toString()));
+        String userId = StpUtil.getLoginId().toString();
+        List<PositionListResp> positionListResp = baseMapper.selectPositionList(positionStatus,userId);
+        return positionListResp;
     }
 
     @Override

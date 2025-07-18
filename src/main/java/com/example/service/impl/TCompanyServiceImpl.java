@@ -3,6 +3,7 @@ package com.example.service.impl;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.entity.*;
 import com.example.exception.BusinessException;
@@ -125,8 +126,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
 
     @Override
     public HrInfoResp getHrStatus() {
-        SaSession saSession = StpUtil.getSession();
-        TUser userInfo = (TUser) saSession.get("userInfo");
+        TUser userInfo = tUserService.getById(StpUtil.getLoginId().toString());
         THr tHr = tHrService.getById(userInfo.getUserId());
         HrInfoResp hrInfo = HrInfoResp.builder()
                 .userId(tHr.getUserId())
@@ -136,6 +136,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .realNameAuthed(tHr.getRealName()==1?"YES":"NO")
                 .enterpriseCertified("NO")
                 .vipType(tHr.getVipType())
+                .avatar(userInfo.getAvatar())
                 .build();
         TCompany tCompany = this.getById(tHr.getCompanyId());
         if (null != tCompany) {
@@ -221,6 +222,17 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
 
     @Override
     @Transactional
+    public void deletePosition(String positionId) {
+        // 删除岗位
+        tPositionKeyWordMapper.delete(new LambdaQueryWrapper<TPositionKeyWord>()
+                .eq(TPositionKeyWord::getPositionId, positionId));
+        tPositionToolboxMapper.delete(new LambdaQueryWrapper<TPositionToolbox>()
+                .eq(TPositionToolbox::getPositionId, positionId));
+        tPositionMapper.deleteById(positionId);
+    }
+
+    @Override
+    @Transactional
     public void savePosition(SavePositionReq savePositionReq) {
         String positionId = savePositionReq.getPosition().getPositionId();
         savePositionReq.getPosition().setUserId(StpUtil.getLoginId().toString());
@@ -288,7 +300,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
         }
         // 校验是否是会员
         THrVip tHrVip = tHrVipService.getById(StpUtil.getLoginId().toString());
-        if (null == tHrVip || !(tHrVip.getVipType().equals("HIGH") || tHrVip.getVipType().equals("NORMAL"))) {
+        if (null == tHrVip || !(VIP_HIGH.equals(tHrVip.getVipType()) || VIP_NORMAL.equals(tHrVip.getVipType()))) {
             throw new BusinessException(10004,"会员才能发布岗位");
         }
         // 查询岗位

@@ -1,19 +1,16 @@
 package com.example.schedule;
 
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
-import com.example.entity.THrPaidPermisions;
-import com.example.entity.THrPaidPermisionsUseDetail;
-import com.example.entity.TPosition;
+import com.example.entity.*;
 import com.example.mapper.TPositionMapper;
-import com.example.service.TCompanyService;
-import com.example.service.THrPaidPermisionsService;
-import com.example.service.THrPaidPermisionsUseDetailService;
+import com.example.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.example.constant.Constants.VIP_EXPIRED;
 
 @Component
 public class Timer {
@@ -29,6 +26,15 @@ public class Timer {
 
     @Autowired
     private THrPaidPermisionsService tHrPaidPermisionsService;
+
+    @Autowired
+    private THrVipService tHrVipService;
+
+    @Autowired
+    private THrService tHrService;
+
+    @Autowired
+    private TEmployeeVipService tEmployeeVipService;
 
     public final static int offlineDay = 30;
 
@@ -64,5 +70,38 @@ public class Timer {
             tHrPaidPermisionsUseDetailService.updateById(detail);
         });
     }
-    
+
+
+    /**
+     * vip到期
+     */
+    @Scheduled(cron = "0 17 14 * * ?")
+    public void updateVip() {
+        // expire_time 到期时间小于当前时间
+        List<THrVip> tHrVipList = tHrVipService.lambdaQuery().lt(THrVip::getExpireTime, DateUtil.date()).list();
+        tHrVipList.forEach(tHrVip -> {
+            tHrVip.setVipType(VIP_EXPIRED);
+            tHrVipService.updateById(tHrVip);
+
+            // 更新THr表vip_type字段
+            THr tHr = tHrService.getById(tHrVip.getUserId());
+            tHr.setVipType(VIP_EXPIRED);
+            tHrService.updateById(tHr);
+
+            // 清空使用权限
+            THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = tHrPaidPermisionsUseDetailService.getById(tHrVip.getUserId());
+            tHrPaidPermisionsUseDetail.setUsedPositionNum(0);
+            tHrPaidPermisionsUseDetail.setUsedViewResume(0);
+            tHrPaidPermisionsUseDetail.setUsedSayHello(0);
+            tHrPaidPermisionsUseDetail.setUsedDownloadNum(0);
+            tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
+        });
+
+        // 更新求职者vip，expire_time 到期时间小于当前时间
+        List<TEmployeeVip> tEmployeeVipList = tEmployeeVipService.lambdaQuery().lt(TEmployeeVip::getExpireTime, DateUtil.date()).list();
+        tEmployeeVipList.forEach(tEmployeeVip -> {
+            tEmployeeVip.setVipType(VIP_EXPIRED);
+            tEmployeeVipService.updateById(tEmployeeVip);
+        });
+    }
 }

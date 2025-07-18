@@ -109,6 +109,7 @@ D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\TPositionKeyWo
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\entity\TPositionToolbox.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\impl\TResumeEducationServiceImpl.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\entity\TVipPackage.java
+D:\指标建设\AIMatch\aimatch\src\main\java\com\example\resp\PositionListResp.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\impl\TResumeInterestJobServiceImpl.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\THrService.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\mapper\TEmployeeSaveJobMapper.java

@@ -101,6 +101,7 @@ com\example\resp\ResumeListResp$ResumeListRespBuilder.class
 com\example\service\impl\TResumeProjectServiceImpl.class
 com\example\config\WebMvcConfig.class
 com\example\req\SaveJobReq.class
+com\example\resp\PositionListResp$PositionListRespBuilder.class
 com\example\mapper\TResumeInterestJobMapper.class
 com\example\resp\ChatSessionResp$ChatSessionRespBuilder.class
 com\example\entity\THrVip.class
@@ -162,3 +163,4 @@ com\example\entity\ResponseResult.class
 com\example\service\impl\DeepSeekServiceImpl.class
 com\example\config\Knife4jConfig.class
 com\example\entity\THrPaidPermisions$THrPaidPermisionsBuilder.class
+com\example\resp\PositionListResp.class

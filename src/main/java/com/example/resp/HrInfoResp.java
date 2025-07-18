@@ -19,6 +19,9 @@ public class HrInfoResp {
     @ApiModelProperty(value="用户ID")
     private String userId;
 
+    @ApiModelProperty(value="头像(二进制文件转字符串存储)")
+    private String avatar;
+
     @ApiModelProperty(value="HR名称")
     private String name;
 

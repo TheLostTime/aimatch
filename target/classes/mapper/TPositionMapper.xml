@@ -30,33 +30,30 @@
     <id property="positionId" column="position_id"/>
     <!-- 映射 t_position 到 tPosition 属性 -->
     <association property="tPosition" resultMap="com.example.mapper.TPositionMapper.BaseResultMap"/>
-
     <!-- 映射 t_user 到 tUser 属性 -->
     <association property="tUser" resultMap="com.example.mapper.TUserMapper.BaseResultMap"/>
-
     <!-- 映射 t_company 到 tCompany 属性 -->
     <association property="tCompany" resultMap="com.example.mapper.TCompanyMapper.BaseResultMap"/>
-
-
     <!-- 映射 t_hr 到 tHr 属性 -->
     <association property="tHr" resultMap="com.example.mapper.THrMapper.BaseResultMap"/>
-
-
     <!-- 映射 t_position_toolbox 到 tPositionToolbox 属性 -->
     <association property="tPositionToolbox" resultMap="com.example.mapper.TPositionToolboxMapper.BaseResultMap2"/>
-
     <!-- 映射 t_position_key_word 到 keyWords 属性 -->
     <collection property="keyWords"  ofType="com.example.entity.TPositionKeyWord"
     resultMap="com.example.mapper.TPositionKeyWordMapper.BaseResultMap"/>
-
   </resultMap>
 
-  <sql id="Base_Column_List">
+  <resultMap id="BaseResultMap3" type="com.example.resp.PositionListResp">
+    <result column="newResumeNum" jdbcType="INTEGER" property="newResumeNum"/>
+    <association property="tPosition" resultMap="com.example.mapper.TPositionMapper.BaseResultMap"/>
+  </resultMap>
+
+<sql id="Base_Column_List">
     <!--@mbg.generated-->
-    position_id, position_type, position_status, work_type, position_name, position_description, 
-    job_category, degree_lower_limit, experience_lower_limit, salary_lower_limit, salary_upper_limit, 
-    salary_month, work_place, is_oversea, oversea_remainder, position_num,updateTime,reason
-  </sql>
+    a.position_id, a.position_type, a.position_status, a.work_type, a.position_name, a.position_description,
+    a.job_category, a.degree_lower_limit, a.experience_lower_limit, a.salary_lower_limit, a.salary_upper_limit,
+    a.salary_month, a.work_place, a.is_oversea, a.oversea_remainder, a.position_num, a.update_time
+</sql>
 
   <select id="queryOfflinePosition" resultMap="BaseResultMap">
         select  * from t_position where
@@ -124,6 +121,23 @@
                 and a.position_type = #{positionType}
             </if>
         </where>
+  </select>
+  <select id="selectPositionList" resultMap="BaseResultMap3">
+    SELECT
+        <include refid="Base_Column_List" />,
+        COUNT(b.position_id) AS newResumeNum
+    FROM
+        t_position a
+    LEFT JOIN
+        t_hr_mark_resume b ON a.position_id = b.position_id and b.hr_user_id = #{userId} AND b.resume_status = 'new_message'
+    <where>
+        a.user_id = #{userId}
+        <if test="positionStatus != null and positionStatus != ''">
+            and a.position_status = #{positionStatus}
+        </if>
+    </where>
+    GROUP BY
+        <include refid="Base_Column_List" />
   </select>
 
 </mapper>

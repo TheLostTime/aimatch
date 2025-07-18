@@ -4,6 +4,7 @@ import com.example.entity.TPosition;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.req.AuditPositionReq;
 import com.example.req.ResumeListReq;
+import com.example.resp.PositionListResp;
 import com.example.resp.ResumeListResp;
 import com.example.resp.TalentListResp;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 public interface TPositionService extends IService<TPosition>{
 
-    List<TPosition> queryPositionList(String positionStatus);
+    List<PositionListResp> queryPositionList(String positionStatus);
 
     void auditPosition(AuditPositionReq auditPositionReq);
 

@@ -8,6 +8,7 @@ import com.example.entity.TVipPackage;
 import com.example.req.*;
 import com.example.resp.HrInfoResp;
 import com.example.resp.PositionDetailResp;
+import com.example.resp.PositionListResp;
 import com.example.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -108,12 +109,21 @@ public class HRController {
         return ResponseResult.success(true);
     }
 
-    @ApiOperation(value = "查询岗位详情", notes = "", httpMethod = "POST")
+    @ApiOperation(value = "查询岗位详情", notes = "", httpMethod = "GET")
     @SaCheckLogin
-    @PostMapping("/position/detail")
+    @GetMapping("/position/detail")
     public ResponseResult<PositionDetailResp> getPositionDetail(@RequestParam("positionId") String positionId) {
         PositionDetailResp positionDetailResp = companyService.getPositionDetail(positionId);
         return ResponseResult.success(positionDetailResp);
+    }
+
+    @ApiOperation(value = "查询岗位列表", notes = "", httpMethod = "GET")
+    @SaCheckLogin
+    @GetMapping("/position/list")
+    public ResponseResult<List<PositionListResp>> queryPositionList(
+            @RequestParam(value = "positionStatus",required = false) String positionStatus) {
+        List<PositionListResp> tPositionList = tPositionService.queryPositionList(positionStatus);
+        return ResponseResult.success(tPositionList);
     }
 
 
@@ -121,13 +131,18 @@ public class HRController {
     @SaCheckLogin
     @PostMapping("/position/offline")
     public ResponseResult<?> offlinePosition(@RequestParam("positionId") String positionId) {
-        try {
-            companyService.offlinePosition(positionId);
-        } catch (Exception e) {
-            return ResponseResult.error(e.getMessage());
-        }
+        companyService.offlinePosition(positionId);
         return ResponseResult.success(true);
     }
+
+    @ApiOperation(value = "删除岗位", notes = "", httpMethod = "POST")
+    @SaCheckLogin
+    @PostMapping("/position/delete")
+    public ResponseResult<?> deletePosition(@RequestParam("positionId") String positionId) {
+        companyService.deletePosition(positionId);
+        return ResponseResult.success(true);
+    }
+
 
     @ApiOperation(value = "查询vip套餐", notes = "", httpMethod = "GET")
     @SaCheckLogin
@@ -149,12 +164,7 @@ public class HRController {
     @SaCheckLogin
     @PostMapping("/vip/upgrade")
     public ResponseResult<?> upgradeVip(@RequestBody HrActivateReq hrActivateReq) {
-        try {
-            companyService.upgradeVip(hrActivateReq);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseResult.error(e.getMessage());
-        }
+        companyService.upgradeVip(hrActivateReq);
         return ResponseResult.success(true);
     }
 

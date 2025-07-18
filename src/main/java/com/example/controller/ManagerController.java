@@ -3,15 +3,19 @@ package com.example.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.annotation.SaMode;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.entity.ResponseResult;
 import com.example.entity.TCompany;
 import com.example.entity.TPosition;
 import com.example.req.AuditCompanyReq;
 import com.example.req.AuditPositionReq;
+import com.example.resp.PositionListResp;
 import com.example.service.TCompanyService;
 import com.example.service.TPositionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +69,11 @@ public class ManagerController {
     @GetMapping("/position/list")
     public ResponseResult<List<TPosition>> queryPositionList(
             @RequestParam(value = "positionStatus",required = false) String positionStatus) {
-        List<TPosition> tPositionList = positionService.queryPositionList(positionStatus);
+        LambdaQueryWrapper<TPosition> queryWrapper = new LambdaQueryWrapper<>(TPosition.class);
+        if (StringUtils.isNotBlank(positionStatus)) {
+            queryWrapper.eq(TPosition::getPositionStatus, positionStatus);
+        }
+        List<TPosition> tPositionList = positionService.list(queryWrapper);
         return ResponseResult.success(tPositionList);
     }
 
