@@ -37,4 +37,6 @@ public interface TResumeBaseInfoService extends IService<TResumeBaseInfo>{
     void hrSaveResume(String resumeId,String positionId);
 
     void downloadResumeFile(String fileId, HttpServletResponse response);
+
+    void hrCancelResume(String resumeId, String positionId);
 }

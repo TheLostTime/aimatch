@@ -25,4 +25,6 @@ public interface TPositionService extends IService<TPosition>{
     void checkSayHello();
 
     void checkDownload();
+
+    void cancelMark(String resumeId, String positionId);
 }

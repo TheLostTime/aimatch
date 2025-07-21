@@ -27,7 +27,7 @@ public interface TCompanyService extends IService<TCompany>{
 
     void upgradeVip(HrActivateReq hrActivateReq);
 
-    void savePosition(SavePositionReq savePositionReq);
+    String savePosition(SavePositionReq savePositionReq);
 
     void offlinePosition(String positionId);
 

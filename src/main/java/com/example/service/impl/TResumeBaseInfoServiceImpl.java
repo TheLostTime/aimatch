@@ -615,4 +615,17 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
             throw new BusinessException(10005, "文件下载失败");
         }
     }
+
+    @Override
+    public void hrCancelResume(String resumeId, String positionId) {
+        THrMarkResume tHrMarkResumes = tHrMarkResumeService.getOne(new LambdaQueryWrapper<THrMarkResume>()
+                .eq(THrMarkResume::getResumeId, resumeId)
+                .eq(THrMarkResume::getPositionId, positionId)
+                .eq(THrMarkResume::getHrUserId, StpUtil.getLoginId().toString()));
+        if (null == tHrMarkResumes) {
+            throw new BusinessException(10005, "没有收藏");
+        }
+        tHrMarkResumes.setSaveFlag(false);
+        tHrMarkResumeService.updateById(tHrMarkResumes);
+    }
 }

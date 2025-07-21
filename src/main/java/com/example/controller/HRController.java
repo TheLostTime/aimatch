@@ -87,13 +87,9 @@ public class HRController {
     @ApiOperation(value = "岗位保存草稿", notes = "", httpMethod = "POST")
     @SaCheckLogin
     @PostMapping("/position/save")
-    public ResponseResult<?> savePosition(@RequestBody SavePositionReq savePositionReq) {
-        try {
-            companyService.savePosition(savePositionReq);
-        } catch (Exception e) {
-            return ResponseResult.error(e.getMessage());
-        }
-        return ResponseResult.success(true);
+    public ResponseResult<String> savePosition(@RequestBody SavePositionReq savePositionReq) {
+        String positionId = companyService.savePosition(savePositionReq);
+        return ResponseResult.success(positionId);
     }
 
 
@@ -101,11 +97,7 @@ public class HRController {
     @SaCheckLogin
     @PostMapping("/position/publish")
     public ResponseResult<?> publishPosition(@RequestParam("positionId") String positionId) {
-        try {
-            companyService.publishPosition(positionId);
-        } catch (Exception e) {
-            return ResponseResult.error(e.getMessage());
-        }
+        companyService.publishPosition(positionId);
         return ResponseResult.success(true);
     }
 

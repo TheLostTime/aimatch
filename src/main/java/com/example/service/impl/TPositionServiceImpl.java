@@ -112,11 +112,32 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
         if (null == tHrMarkResume) {
             throw new BusinessException(10021,"该简历还未被收藏");
         }
+        // 处于沟通中才能标记下一个状态
+        if (!tHrMarkResume.getResumeStatus().equals(RESUME_STATUS_COMMUNICATING)) {
+            throw new BusinessException(10023,"只有处于沟通中的人才能标记下一个状态约面或者不合适");
+        }
         // 设置状态
         if (!status.equals(RESUME_STATUS_INTERVIEW) && !status.equals(RESUME_STATUS_NOT_SUIT)) {
             throw new BusinessException(10022,"状态错误");
         }
         tHrMarkResume.setResumeStatus(status);
+        tHrMarkResumeService.updateById(tHrMarkResume);
+    }
+
+    @Override
+    public void cancelMark(String resumeId, String positionId) {
+        // 查询简历标记
+        THrMarkResume tHrMarkResume = tHrMarkResumeService.getOne(new LambdaQueryWrapper<THrMarkResume>()
+                .eq(THrMarkResume::getPositionId, positionId)
+                .eq(THrMarkResume::getResumeId, resumeId));
+        if (null == tHrMarkResume) {
+            throw new BusinessException(10021,"该简历还未被收藏");
+        }
+        String status = tHrMarkResume.getResumeStatus();
+        if (!status.equals(RESUME_STATUS_INTERVIEW) && !status.equals(RESUME_STATUS_NOT_SUIT)) {
+            throw new BusinessException(10022,"状态错误");
+        }
+        tHrMarkResume.setResumeStatus(RESUME_STATUS_COMMUNICATING);
         tHrMarkResumeService.updateById(tHrMarkResume);
     }
 
@@ -152,4 +173,6 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
             throw new BusinessException(10025,"已使用下载数量已达到上限");
         }
     }
+
+
 }

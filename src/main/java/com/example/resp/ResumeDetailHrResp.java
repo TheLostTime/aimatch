@@ -2,6 +2,7 @@ package com.example.resp;
 
 import com.example.entity.*;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ResumeDetailHrResp {
 
+    @ApiModelProperty(value="超额标记")
     private Boolean overViewResumeFlag;
 
     private THrMarkResume hrMarkResume;

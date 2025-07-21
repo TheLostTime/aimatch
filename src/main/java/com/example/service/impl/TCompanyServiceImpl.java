@@ -233,10 +233,12 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
 
     @Override
     @Transactional
-    public void savePosition(SavePositionReq savePositionReq) {
+    public String savePosition(SavePositionReq savePositionReq) {
         String positionId = savePositionReq.getPosition().getPositionId();
         savePositionReq.getPosition().setUserId(StpUtil.getLoginId().toString());
         savePositionReq.getPosition().setUpdateTime(DateUtil.date());
+        savePositionReq.getPosition().setPositionStatus(POSITION_STATUS_DRAFT);
+
         if (StringUtils.isNotEmpty(positionId)) {
             log.info("修改岗位...");
             tPositionMapper.updateById(savePositionReq.getPosition());
@@ -246,6 +248,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
             if (null != savePositionReq.getToolbox()) {
                 tPositionToolboxMapper.updateById(savePositionReq.getToolbox());
             }
+            return positionId;
         } else {
             log.info("保存岗位...");
             tPositionMapper.insert(savePositionReq.getPosition());
@@ -257,6 +260,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 savePositionReq.getToolbox().setPositionId(savePositionReq.getPosition().getPositionId());
                 tPositionToolboxMapper.insert(savePositionReq.getToolbox());
             }
+            return savePositionReq.getPosition().getPositionId();
         }
     }
 

@@ -66,6 +66,15 @@ public class EmployeeMarketController {
         tPositionService.markResume(resumeId,positionId,status);
         return ResponseResult.success(true);
     }
+    @ApiOperation(value = "取消简历标记为不合适或者约面试", notes = "将状态设置为communicating(取消约面或者取消不合适状态设置为沟通中)", httpMethod = "POST")
+    @SaCheckRole(value = {"1", "2"}, mode = SaMode.OR)
+    @PostMapping("/resume/cancelMark")
+    public ResponseResult<Boolean> cancelMark(@RequestParam("resumeId") String resumeId,
+                                              @RequestParam("positionId") String positionId) {
+        tPositionService.cancelMark(resumeId,positionId);
+        return ResponseResult.success(true);
+    }
+
 
     @ApiOperation(value = "校验HR是否主动发起打招呼", notes = "", httpMethod = "GET")
     @SaCheckRole(value = {"1", "2"}, mode = SaMode.OR)
@@ -99,6 +108,15 @@ public class EmployeeMarketController {
     public ResponseResult<Boolean> hrSaveResume(@RequestParam("resumeId") String resumeId,
                                                 @RequestParam("positionId") String positionId) {
         tResumeBaseInfoService.hrSaveResume(resumeId,positionId);
+        return ResponseResult.success(true);
+    }
+
+    @ApiOperation(value = "HR取消收藏简历 ", notes = "", httpMethod = "POST")
+    @SaCheckRole(value = {"1", "2"}, mode = SaMode.OR)
+    @GetMapping("/resume/cancel")
+    public ResponseResult<Boolean> hrCancelResume(@RequestParam("resumeId") String resumeId,
+                                                @RequestParam("positionId") String positionId) {
+        tResumeBaseInfoService.hrCancelResume(resumeId,positionId);
         return ResponseResult.success(true);
     }
 
