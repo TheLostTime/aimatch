@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.req.SaveJobReq;
 import com.example.resp.GetSaveJobListResp;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,11 @@ public class TEmployeeSaveJobServiceImpl extends ServiceImpl<TEmployeeSaveJobMap
 
     @Override
     public TEmployeeSaveJob getSaveJobStatus(String positionId) {
-        return this.lambdaQuery()
-                .eq(TEmployeeSaveJob::getPositionId, positionId)
-                .eq(TEmployeeSaveJob::getEmployeeUserId, StpUtil.getLoginId().toString())
-                .one();
+        TEmployeeSaveJob tEmployeeSaveJob = this.getOne(new LambdaQueryWrapper<TEmployeeSaveJob>()
+                        .eq(TEmployeeSaveJob::getPositionId, positionId)
+                .eq(TEmployeeSaveJob::getEmployeeUserId, StpUtil.getLoginId().toString()));
+        return tEmployeeSaveJob;
+
     }
 
     @Override

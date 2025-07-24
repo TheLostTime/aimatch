@@ -43,14 +43,9 @@
     resultMap="com.example.mapper.TPositionKeyWordMapper.BaseResultMap"/>
   </resultMap>
 
-  <resultMap id="BaseResultMap3" type="com.example.resp.PositionListResp">
-    <result column="newResumeNum" jdbcType="INTEGER" property="newResumeNum"/>
-    <association property="tPosition" resultMap="com.example.mapper.TPositionMapper.BaseResultMap"/>
-  </resultMap>
-
 <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    a.position_id, a.position_type, a.position_status, a.work_type, a.position_name, a.position_description,
+    a.position_id, a.user_id,a.position_type, a.position_status, a.work_type, a.position_name, a.position_description,
     a.job_category, a.degree_lower_limit, a.experience_lower_limit, a.salary_lower_limit, a.salary_upper_limit,
     a.salary_month, a.work_place, a.is_oversea, a.oversea_remainder, a.position_num, a.update_time
 </sql>
@@ -122,14 +117,15 @@
             </if>
         </where>
   </select>
-  <select id="selectPositionList" resultMap="BaseResultMap3">
+  <select id="selectPositionList" resultType="com.example.resp.PositionListResp">
     SELECT
         <include refid="Base_Column_List" />,
         COUNT(b.position_id) AS newResumeNum
     FROM
         t_position a
     LEFT JOIN
-        t_hr_mark_resume b ON a.position_id = b.position_id and b.hr_user_id = #{userId} AND b.resume_status = 'new_message'
+        t_hr_mark_resume b ON a.position_id = b.position_id and b.hr_user_id = #{userId}
+        AND b.resume_status = 'new_message'
     <where>
         a.user_id = #{userId}
         <if test="positionStatus != null and positionStatus != ''">
@@ -138,6 +134,28 @@
     </where>
     GROUP BY
         <include refid="Base_Column_List" />
+    order by a.update_time desc
+  </select>
+
+  <select id="queryPositionManageList" resultType="com.example.resp.QueryPositionManageResp">
+        select
+        a.position_id,
+        a.position_type ,
+        a.position_name,
+        a.position_status,
+        a.update_time,
+        a.job_category,
+        c.company_name,
+        b.name as hr_name
+        from t_position a
+        left join t_hr b on a.user_id = b.user_id
+        left join t_company c on b.company_id = c.company_id
+        <where>
+            <if test="positionStatus != null and positionStatus != ''">
+                and a.position_status = #{positionStatus}
+            </if>
+        </where>
+        order by a.update_time desc
   </select>
 
 </mapper>

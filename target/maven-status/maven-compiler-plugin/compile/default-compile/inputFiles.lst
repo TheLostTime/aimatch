@@ -25,6 +25,7 @@ D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\impl\THrServic
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\resp\ResumeListResp.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\mapper\TResumeWorkMapper.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\resp\EmployeeStatusResp.java
+D:\指标建设\AIMatch\aimatch\src\main\java\com\example\resp\QueryPositionManageResp.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\mapper\TImMessageMapper.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\TImMessageService.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\impl\TEmployeeResumeFileServiceImpl.java

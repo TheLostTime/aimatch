@@ -2,20 +2,16 @@ package com.example.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
-import cn.dev33.satoken.annotation.SaMode;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.entity.ResponseResult;
 import com.example.entity.TCompany;
 import com.example.entity.TPosition;
 import com.example.req.AuditCompanyReq;
 import com.example.req.AuditPositionReq;
-import com.example.resp.PositionListResp;
+import com.example.resp.QueryPositionManageResp;
 import com.example.service.TCompanyService;
 import com.example.service.TPositionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.constant.Constants.USER_TYPE_INTRODUCE;
 import static com.example.constant.Constants.USER_TYPE_OPERATION;
 
 @Api(value = "管理员后台", tags = {"管理员后台"})
@@ -41,7 +36,7 @@ public class ManagerController {
 
 
     @ApiOperation(value = "查询所有企业列表", notes = "", httpMethod = "GET")
-    @SaCheckLogin
+//    @SaCheckLogin
     @GetMapping("/company/list")
     public ResponseResult<List<TCompany>> queryCompanyList() {
         List<TCompany> companyList = companyService.queryCompanyList();
@@ -67,13 +62,9 @@ public class ManagerController {
     @ApiOperation(value = "查询岗位列表", notes = "", httpMethod = "GET")
     @SaCheckLogin
     @GetMapping("/position/list")
-    public ResponseResult<List<TPosition>> queryPositionList(
+    public ResponseResult<List<QueryPositionManageResp>> queryPositionManageList(
             @RequestParam(value = "positionStatus",required = false) String positionStatus) {
-        LambdaQueryWrapper<TPosition> queryWrapper = new LambdaQueryWrapper<>(TPosition.class);
-        if (StringUtils.isNotBlank(positionStatus)) {
-            queryWrapper.eq(TPosition::getPositionStatus, positionStatus);
-        }
-        List<TPosition> tPositionList = positionService.list(queryWrapper);
+        List<QueryPositionManageResp> tPositionList = positionService.queryPositionManageList(positionStatus);
         return ResponseResult.success(tPositionList);
     }
 

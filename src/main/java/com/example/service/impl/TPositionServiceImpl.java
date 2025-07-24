@@ -15,6 +15,7 @@ import com.example.mapper.TPositionMapper;
 import com.example.req.AuditPositionReq;
 import com.example.req.ResumeListReq;
 import com.example.resp.PositionListResp;
+import com.example.resp.QueryPositionManageResp;
 import com.example.resp.ResumeListResp;
 import com.example.resp.TalentListResp;
 import com.example.service.*;
@@ -139,6 +140,11 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
         }
         tHrMarkResume.setResumeStatus(RESUME_STATUS_COMMUNICATING);
         tHrMarkResumeService.updateById(tHrMarkResume);
+    }
+
+    @Override
+    public List<QueryPositionManageResp> queryPositionManageList(String positionStatus) {
+        return this.baseMapper.queryPositionManageList(positionStatus);
     }
 
     @Override

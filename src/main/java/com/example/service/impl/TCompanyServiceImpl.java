@@ -207,11 +207,18 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
         if (null == tPosition) {
             throw new BusinessException(10014,"岗位不存在");
         }
+
+        // 查询岗位关键词
+        List<TPositionKeyWord> tPositionKeyWordList = tPositionKeyWordMapper
+                .selectList(new LambdaQueryWrapper<TPositionKeyWord>()
+                        .eq(TPositionKeyWord::getPositionId, positionId));
+
         // 根据岗位ID查询工具箱信息
         TPositionToolbox tPositionToolbox = tPositionToolboxMapper.selectById(positionId);
         return PositionDetailResp.builder()
                 .tPosition(tPosition)
                 .tPositionToolbox(tPositionToolbox)
+                .tPositionKeyWord(tPositionKeyWordList)
                 .build();
     }
 
@@ -241,21 +248,32 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
 
         if (StringUtils.isNotEmpty(positionId)) {
             log.info("修改岗位...");
+            savePositionReq.getPosition().setUpdateTime(DateUtil.date());
             tPositionMapper.updateById(savePositionReq.getPosition());
-            savePositionReq.getKeyWords().forEach(item->{
-                tPositionKeyWordMapper.updateById(item);
-            });
+            if (null != savePositionReq.getKeyWords()) {
+                // 删除原来的关键词
+                tPositionKeyWordMapper.delete(new LambdaQueryWrapper<TPositionKeyWord>()
+                        .eq(TPositionKeyWord::getPositionId, positionId));
+                savePositionReq.getKeyWords().forEach(item->{
+                    item.setPositionId(savePositionReq.getPosition().getPositionId());
+                    tPositionKeyWordMapper.insert(item);
+                });
+            }
             if (null != savePositionReq.getToolbox()) {
+                savePositionReq.getToolbox().setPositionId(savePositionReq.getPosition().getPositionId());
                 tPositionToolboxMapper.updateById(savePositionReq.getToolbox());
             }
             return positionId;
         } else {
             log.info("保存岗位...");
+            savePositionReq.getPosition().setUpdateTime(DateUtil.date());
             tPositionMapper.insert(savePositionReq.getPosition());
-            savePositionReq.getKeyWords().forEach(item->{
-                item.setPositionId(savePositionReq.getPosition().getPositionId());
-                tPositionKeyWordMapper.insert(item);
-            });
+            if (null != savePositionReq.getKeyWords()) {
+                savePositionReq.getKeyWords().forEach(item->{
+                    item.setPositionId(savePositionReq.getPosition().getPositionId());
+                    tPositionKeyWordMapper.insert(item);
+                });
+            }
             if (null != savePositionReq.getToolbox()) {
                 savePositionReq.getToolbox().setPositionId(savePositionReq.getPosition().getPositionId());
                 tPositionToolboxMapper.insert(savePositionReq.getToolbox());

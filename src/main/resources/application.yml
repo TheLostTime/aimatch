@@ -5,10 +5,13 @@ server:
 # 数据库配置
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.64.128:3306/aimatch?useSSL=false&serverTimezone=UTC
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://192.168.64.128:3306/aimatch?useSSL=false&serverTimezone=UTC
+#    username: root
+#    password: wk18477948wk
+    url: jdbc:mysql://112.124.5.159:3306/aimatch?useSSL=false&serverTimezone=UTC
     username: root
-    password: wk18477948wk
+    password: 9e2aa8929e516ab0
   mvc:
     pathmatch:
       matching-strategy : ant_path_matcher

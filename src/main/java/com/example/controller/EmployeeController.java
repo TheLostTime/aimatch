@@ -126,7 +126,7 @@ public class EmployeeController {
     @ApiOperation(value = "查询收藏状态", notes = "", httpMethod = "GET")
     @SaCheckLogin
     @GetMapping("/job/save/status")
-    public ResponseResult<?> getSaveJobStatus(@RequestParam("positionId") String positionId) {
+    public ResponseResult<TEmployeeSaveJob> getSaveJobStatus(@RequestParam("positionId") String positionId) {
         TEmployeeSaveJob tEmployeeSaveJob = tEmployeeSaveJobService.getSaveJobStatus(positionId);
         return ResponseResult.success(tEmployeeSaveJob);
     }

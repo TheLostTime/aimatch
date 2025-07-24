@@ -473,6 +473,11 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
         // 获取兴趣职位信息
         List<TResumeInterestJob> tResumeInterestJobList = tResumeInterestJobService.list(new LambdaQueryWrapper<TResumeInterestJob>()
                 .eq(TResumeInterestJob::getResumeId, tResumeBaseInfo.getResumeId()));
+
+        // 获取简历附件
+        List<TEmployeeResumeFile> tEmployeeResumeFileList = tEmployeeResumeFileService.list(new LambdaQueryWrapper<TEmployeeResumeFile>()
+                .eq(TEmployeeResumeFile::getUserId, tUser.getUserId()));
+
         return ResumeDetailResp.builder()
                 .user(tUser)
                 .employee(tEmployee)

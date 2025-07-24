@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.req.AuditPositionReq;
 import com.example.req.ResumeListReq;
 import com.example.resp.PositionListResp;
+import com.example.resp.QueryPositionManageResp;
 import com.example.resp.ResumeListResp;
 import com.example.resp.TalentListResp;
 
@@ -27,4 +28,6 @@ public interface TPositionService extends IService<TPosition>{
     void checkDownload();
 
     void cancelMark(String resumeId, String positionId);
+
+    List<QueryPositionManageResp> queryPositionManageList(String positionStatus);
 }

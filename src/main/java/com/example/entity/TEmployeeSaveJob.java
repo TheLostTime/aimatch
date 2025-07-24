@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 /**
     * 求职者收藏职位表
     */
-@ApiModel(value="com-example-entity-TEmployeeSaveJob")
+@ApiModel(value="TEmployeeSaveJob")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

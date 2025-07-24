@@ -8,6 +8,7 @@ com\example\controller\EmployeeController.class
 com\example\service\impl\TUserServiceImpl.class
 com\example\service\THrPaidPermisionsService.class
 com\example\AimatchApplication.class
+com\example\resp\QueryPositionManageResp$QueryPositionManageRespBuilder.class
 com\example\entity\TPositionKeyWord.class
 com\example\service\impl\THrServiceImpl.class
 com\example\service\TPositionKeyWordService.class
@@ -48,6 +49,7 @@ com\example\req\AuditPositionReq.class
 com\example\service\TPositionToolboxService.class
 com\example\resp\ResumeDetailHrResp$ResumeDetailHrRespBuilder.class
 com\example\req\HrJoinCompanyReq.class
+com\example\resp\QueryPositionManageResp.class
 com\example\req\HrJoinCompanyReq$HrJoinCompanyReqBuilder.class
 com\example\service\impl\TPositionToolboxServiceImpl.class
 com\example\service\TImMessageService.class
