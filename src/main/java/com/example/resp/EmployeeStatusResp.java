@@ -1,5 +1,6 @@
 package com.example.resp;
 
+import com.example.entity.TEmployee;
 import com.example.entity.TEmployeeVip;
 import com.example.entity.TResumeInterestJob;
 import com.example.entity.TUser;
@@ -21,8 +22,13 @@ public class EmployeeStatusResp {
 
     private TUser tUser;
 
+    private TEmployee tEmployee;
+
     private List<TResumeInterestJob> tResumeInterestJob;
 
     @ApiModelProperty(value="vip类型")
     private String vipType;
+
+    @ApiModelProperty(value="简历ID")
+    private String resumeId;
 }

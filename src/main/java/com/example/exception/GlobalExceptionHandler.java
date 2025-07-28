@@ -18,13 +18,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(cn.dev33.satoken.exception.NotLoginException.class)
     public ResponseResult<?> handleNotLoginException(NotLoginException e) {
         logger.error("用户未登录或Token无效: {}", e.getMessage(), e);
-        return ResponseResult.error("用户未登录或Token无效");
+        return ResponseResult.error(90001,"用户未登录或Token无效");
     }
 
     @ExceptionHandler(cn.dev33.satoken.exception.NotRoleException.class)
     public ResponseResult<?> handleNotLoginException(NotRoleException e) {
         logger.error("用户未登录或角色受限: {}", e.getMessage(), e);
-        return ResponseResult.error("用户未登录或角色受限");
+        return ResponseResult.error(90002,"用户未登录或角色受限");
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

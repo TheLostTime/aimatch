@@ -213,12 +213,26 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .selectList(new LambdaQueryWrapper<TPositionKeyWord>()
                         .eq(TPositionKeyWord::getPositionId, positionId));
 
+        // 查询user信息
+        TUser tUser = tUserService.getById(tPosition.getUserId());
+
+        // 查询HR信息
+        THr thr = tHrService.getById(tPosition.getUserId());
+
+        // 查询公司信息
+        TCompany tCompany = tCompanyMapper.selectById(thr.getCompanyId());
+
+
         // 根据岗位ID查询工具箱信息
         TPositionToolbox tPositionToolbox = tPositionToolboxMapper.selectById(positionId);
         return PositionDetailResp.builder()
                 .tPosition(tPosition)
                 .tPositionToolbox(tPositionToolbox)
                 .tPositionKeyWord(tPositionKeyWordList)
+                .hrAvatar(tUser.getAvatar())
+                .hrName(thr.getName())
+                .companyName(tCompany.getCompanyName())
+                .title(thr.getTitle())
                 .build();
     }
 

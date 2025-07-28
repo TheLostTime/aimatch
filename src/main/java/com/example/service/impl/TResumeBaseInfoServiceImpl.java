@@ -189,6 +189,11 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
         tUser.setPassword(null);
         employeeStatusResp.setTUser(tUser);
 
+        // 查询求职者信息
+        TEmployee tEmployee = tEmployeeService.getById(userId);
+        if (null != tEmployee) {
+            employeeStatusResp.setTEmployee(tEmployee);
+        }
         // 查询vip信息
         TEmployeeVip employeeVip = tEmployeeVipService.getById(userId);
         if (null != employeeVip && employeeVip.getVipType().equals(VIP_NORMAL)) {
@@ -207,12 +212,22 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
             List<TResumeInterestJob> resumeInterestJobs = tResumeInterestJobService.list(new LambdaQueryWrapper<TResumeInterestJob>()
                     .eq(TResumeInterestJob::getResumeId, tResumeBaseInfo.getResumeId()));
             employeeStatusResp.setTResumeInterestJob(resumeInterestJobs);
+
+            employeeStatusResp.setResumeId(tResumeBaseInfo.getResumeId());
         }
         return employeeStatusResp;
     }
 
     @Override
     public void uploadResumeFile(MultipartFile resumeFile,String saveFileName) {
+        // 查询是否有简历附件
+        TEmployeeResumeFile hasTEmployeeResumeFile = tEmployeeResumeFileService.getOne(
+                new LambdaQueryWrapper<TEmployeeResumeFile>()
+                        .eq(TEmployeeResumeFile::getUserId, StpUtil.getLoginId().toString()));
+        if (null != hasTEmployeeResumeFile) {
+            throw new BusinessException(10050, "已存在简历附件");
+        }
+
         if (resumeFile != null) {
             // 文件格式
             String fileNameExt =  FilenameUtils.getExtension(resumeFile.getOriginalFilename());

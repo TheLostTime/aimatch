@@ -25,6 +25,10 @@ spring:
     time-zone: GMT+8  # 设置时区
     serialization:
       write-dates-as-timestamps: false  # 禁止将日期序列化为时间戳，使用上面配置的格式
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 # MyBatis配置
 mybatis-plus:
