@@ -50,10 +50,10 @@ public class TImMessage implements Serializable {
     private String userId;
 
     /**
-     * 用户身份类型：1-求职者、2-HR、3-内推人
+     * 用户身份类型：0-求职者、1-HR、2-内推人
      */
     @TableField(value = "user_type")
-    @ApiModelProperty(value="用户身份类型：1-求职者、2-HR、3-内推人")
+    @ApiModelProperty(value="用户身份类型：0-求职者、1-HR、2-内推人")
     private String userType;
 
     /**

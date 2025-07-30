@@ -20,7 +20,7 @@
     <resultMap id="BaseResultMap2" type="com.example.entity.TEmployee">
     <!--@mbg.generated-->
     <!--@Table t_employee-->
-    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="employee_name" jdbcType="VARCHAR" property="name" />
     <result column="gender" jdbcType="VARCHAR" property="gender" />
     <result column="identity" jdbcType="INTEGER" property="identity" />
     <result column="birth_date" jdbcType="VARCHAR" property="birthDate" />

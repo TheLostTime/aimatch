@@ -22,4 +22,5 @@ public class ResumeListResp {
     private List<TResumeWork> works;
     private List<TResumeEducation> educations;
     private List<TResumeInterestJob> interestJobs;
+    private TEmployee tEmployee;
 }

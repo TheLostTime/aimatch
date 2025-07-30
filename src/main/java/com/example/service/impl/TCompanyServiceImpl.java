@@ -390,7 +390,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .beginTime(currentDate)
                 .expireTime(futureDate)
                 .build();
-        tHrVipService.save(tHrVip);
+        tHrVipService.saveOrUpdate(tHrVip);
 
         // 将t_hr表vip_type字段更新为hrActivateReq.getVipType()
         tHrMapper.updateById(THr.builder()
@@ -413,7 +413,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .viewResume(tVipPackage.getViewResume())
                 .userId(StpUtil.getLoginId().toString())
                 .build();
-        tHrPaidPermisionsService.save(tHrPaidPermisions);
+        tHrPaidPermisionsService.saveOrUpdate(tHrPaidPermisions);
 
         // 4.初始化权限使用情况
         THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = THrPaidPermisionsUseDetail.builder()
@@ -425,7 +425,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .createTime(currentDate)
                 .updateTime(currentDate)
                 .build();
-        tHrPaidPermisionsUseDetailService.save(tHrPaidPermisionsUseDetail);
+        tHrPaidPermisionsUseDetailService.saveOrUpdate(tHrPaidPermisionsUseDetail);
     }
 
     @Override
@@ -443,6 +443,12 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
                 .vipType(hrActivateReq.getVipType())
                 .build()
         );
+
+        // 将hr表冗余字段同步更新
+        tHrMapper.updateById(THr.builder()
+                .userId(StpUtil.getLoginId().toString())
+                .vipType(hrActivateReq.getVipType())
+                .build());
 
         // 2.根据vip_type和spec查询套餐规格
         TVipPackage tVipPackage = tVipPackageMapper.queryPackage(hrActivateReq);

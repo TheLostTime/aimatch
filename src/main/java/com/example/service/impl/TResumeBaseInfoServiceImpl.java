@@ -274,16 +274,25 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
     }
 
     @Override
-    public List<TEmployeeResumeFile> getResumeFile() {
+    public List<TEmployeeResumeFile> getResumeFile(String resumeId) {
+        String userId = StpUtil.getLoginId().toString();
+        if (StringUtils.isNotEmpty(userId)) {
+            // 查询简历信息
+            TResumeBaseInfo tResumeBaseInfo = this.getById(resumeId);
+            if (null == tResumeBaseInfo) {
+                throw new BusinessException(10023, "未找到该简历");
+            }
+            userId = tResumeBaseInfo.getUserId();
+        }
         return tEmployeeResumeFileService.list(new LambdaQueryWrapper<TEmployeeResumeFile>()
-                .eq(TEmployeeResumeFile::getUserId, StpUtil.getLoginId().toString()));
+                .eq(TEmployeeResumeFile::getUserId, userId));
     }
 
     @Override
     public void activateVip(String vipType, String spec) {
         // 查询是否已经激活过vip
         TEmployeeVip tEmployeeVipLast = tEmployeeVipService.getById(StpUtil.getLoginId().toString());
-        if (null != tEmployeeVipLast) {
+        if (null != tEmployeeVipLast && tEmployeeVipLast.getVipType().equals(VIP_NORMAL)) {
             throw new BusinessException(10007, "您已经激活过vip");
         }
         TEmployeeVip tEmployeeVip =  TEmployeeVip.builder()
@@ -292,10 +301,11 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
                 .expireTime(DateUtil.offsetDay(DateUtil.date(), Integer.parseInt(spec)))
                 .userId(StpUtil.getLoginId().toString())
                 .build();
-        tEmployeeVipService.save(tEmployeeVip);
+        tEmployeeVipService.saveOrUpdate(tEmployeeVip);
     }
 
     @Override
+    @Transactional
     public String imNewMessage(String positionId, String resumeId) {
         //查询t_hr_mark_resume表，看是否有记录
         THrMarkResume tHrMarkResumeLast = tHrMarkResumeService.getOne(new LambdaQueryWrapper<THrMarkResume>()
@@ -319,11 +329,39 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
                     .updateTime(DateUtil.date())
                     .build();
             tHrMarkResumeService.save(tHrMarkResume);
+
+            // 查询用户 类型
+            TUser tUser = tUserService.getById(StpUtil.getLoginId().toString());
+
+            // 保存消息
+            TImMessage tMessage = TImMessage.builder()
+                    .message("你好，我对这个岗位很感兴趣!")
+                    .messageIndex(1)
+                    .positionId(positionId)
+                    .resumeId(resumeId)
+                    .userId(StpUtil.getLoginId().toString())
+                    .userType(tUser.getUserType())
+                    .createTime(DateUtil.date())
+                    .build();
+            tImMessageService.save(tMessage);
+
             return RESUME_STATUS_NEW_MESSAGE;
         } else {
             if (null == tHrMarkResumeLast.getResumeStatus()) {
                 tHrMarkResumeLast.setResumeStatus(RESUME_STATUS_NEW_MESSAGE);
                 tHrMarkResumeService.updateById(tHrMarkResumeLast);
+
+                TUser tUser = tUserService.getById(StpUtil.getLoginId().toString());
+                TImMessage tMessage = TImMessage.builder()
+                        .message("你好，我对这个岗位很感兴趣!")
+                        .messageIndex(1)
+                        .positionId(positionId)
+                        .resumeId(resumeId)
+                        .userId(StpUtil.getLoginId().toString())
+                        .userType(tUser.getUserType())
+                        .createTime(DateUtil.date())
+                        .build();
+                tImMessageService.save(tMessage);
                 return RESUME_STATUS_NEW_MESSAGE;
             } else {
                 // 啥也不做
@@ -463,9 +501,15 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
     }
 
     @Override
-    public ResumeDetailResp getResumeDetail() {
+    public ResumeDetailResp getResumeDetail(String resumeId) {
+        String userId = StpUtil.getLoginId().toString();
+        if (StringUtils.isNotEmpty(resumeId)) {
+            // 查询基本信息
+            TResumeBaseInfo tResumeBaseInfo = this.getById(resumeId);
+            userId = tResumeBaseInfo.getUserId();
+        }
         // 查询当前用户
-        TUser tUser = tUserService.getById(StpUtil.getLoginId().toString());
+        TUser tUser = tUserService.getById(userId);
         // 查询当前用户基本信息
         TResumeBaseInfo tResumeBaseInfo = this
                 .getOne(new LambdaQueryWrapper<TResumeBaseInfo>()

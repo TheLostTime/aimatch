@@ -104,7 +104,7 @@ public class EmployeeMarketController {
 
     @ApiOperation(value = "HR收藏简历 ", notes = "", httpMethod = "POST")
     @SaCheckRole(value = {"1", "2"}, mode = SaMode.OR)
-    @GetMapping("/resume/save")
+    @PostMapping("/resume/save")
     public ResponseResult<Boolean> hrSaveResume(@RequestParam("resumeId") String resumeId,
                                                 @RequestParam("positionId") String positionId) {
         tResumeBaseInfoService.hrSaveResume(resumeId,positionId);

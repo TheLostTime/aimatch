@@ -17,6 +17,12 @@ import java.util.List;
 @NoArgsConstructor
 public class ChatSessionResp {
 
+    @ApiModelProperty(value = "简历ID")
+    private String resumeId;
+
+    @ApiModelProperty(value = "岗位ID")
+    private String positionId;
+
     @ApiModelProperty(value = "聊天关系")
     private THrMarkResume tHrMarkResume;
 

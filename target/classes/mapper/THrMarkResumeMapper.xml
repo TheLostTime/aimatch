@@ -22,6 +22,8 @@
 
 
    <resultMap id="BaseResultMap2" type="com.example.resp.ChatSessionResp">
+    <id property="resumeId" column="resume_id"/>
+    <id property="positionId" column="position_id"/>
     <association property="tHrMarkResume" resultMap="com.example.mapper.THrMarkResumeMapper.BaseResultMap"/>
     <association property="tUserEmployee" resultMap="com.example.mapper.TUserMapper.BaseResultEmployeeMap"/>
     <association property="tUserHr" resultMap="com.example.mapper.TUserMapper.BaseResultHrMap"/>
@@ -38,6 +40,7 @@
     <association property="tHrMarkResume" resultMap="com.example.mapper.THrMarkResumeMapper.BaseResultMap"/>
     <association property="tUser" resultMap="com.example.mapper.TUserMapper.BaseResultMap"/>
     <association property="tResumeBaseInfo" resultMap="com.example.mapper.TResumeBaseInfoMapper.BaseResultMap"/>
+    <association property="tEmployee" resultMap="com.example.mapper.TEmployeeMapper.BaseResultMap2"/>
     <collection property="works"  ofType="com.example.entity.TResumeWork"
     resultMap="com.example.mapper.TResumeWorkMapper.BaseResultMap"/>
     <collection property="educations"  ofType="com.example.entity.TResumeEducation"
@@ -47,8 +50,13 @@
   </resultMap>
 
    <resultMap id="BaseResultMap4" type="com.example.resp.TalentListResp">
+    <id property="resumeId" column="resume_id"/>
+    <id property="positionId" column="position_id"/>
+    <association property="tPosition" resultMap="com.example.mapper.TPositionMapper.BaseResultMap"/>
     <association property="tHrMarkResume" resultMap="com.example.mapper.THrMarkResumeMapper.BaseResultMap"/>
     <association property="tEmployee" resultMap="com.example.mapper.TEmployeeMapper.BaseResultMap"/>
+     <collection property="educations"  ofType="com.example.entity.TResumeEducation"
+    resultMap="com.example.mapper.TResumeEducationMapper.BaseResultMap"/>
   </resultMap>
 
 
@@ -65,7 +73,7 @@
         g.account as hr_account
         </if>
         <if test='userType == "1" or userType == "2"'>
-        e.name as employee_name,e.gender,
+        e.name as employee_name,e.gender,e.age,e.work_experience,
         h.user_type as employee_user_type,
         h.avatar as employee_avatar,
         h.account as employee_account
@@ -87,7 +95,7 @@
              inner join
             (
                 select position_id,resume_id,max(message_index) as maxIndex from t_im_message m3
-                group by user_id,position_id,resume_id
+                group by position_id,resume_id
             ) m2
             on  m1.position_id = m2.position_id
             and m1.resume_id = m2.resume_id
@@ -122,12 +130,14 @@
             on a.employee_user_id = e.user_id
             inner join t_user h on a.employee_user_id = h.user_id
         </if>
+        where a.resume_status is not null
   </select>
 
   <select id="getResumeList" resultMap="BaseResultMap3">
         select
         a.resume_id,
         b.*,
+        b1.name as employee_name,b1.age,b1.gender,b1.work_experience,
         c.user_id,c.account,c.avatar,
         d.*,
         e.*,
@@ -169,6 +179,7 @@
            )
         ) a
         inner join t_resume_base_info b on a.resume_id = b.resume_id
+        inner join t_employee b1 on b.user_id = b1.user_id
         inner join t_user c on b.user_id = c.user_id
         left join t_resume_work d on a.resume_id = d.resume_id
         left join t_resume_education e on a.resume_id = e.resume_id
@@ -177,9 +188,11 @@
   </select>
 
   <select id="getTalentList" resultMap="BaseResultMap4">
-        select a.*,c.* from t_hr_mark_resume a
+        select a.resume_id,a.position_id,a.*,c.*,d.*,f.* from t_hr_mark_resume a
         inner join t_resume_base_info b on a.resume_id = b.resume_id
         inner join t_employee c on b.user_id = c.user_id
+        left join t_position f on a.position_id = f.position_id
+        left join t_resume_education d on a.resume_id = d.resume_id
         where a.hr_user_id = #{userId}
         <if test="positionId != null">
             and a.position_id = #{positionId}
@@ -187,5 +200,6 @@
         <if test="resumeStatus != null">
         and a.resume_status = #{resumeStatus}
         </if>
+        order by a.update_time desc
   </select>
 </mapper>

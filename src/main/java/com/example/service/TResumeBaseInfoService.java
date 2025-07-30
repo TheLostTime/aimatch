@@ -22,7 +22,7 @@ public interface TResumeBaseInfoService extends IService<TResumeBaseInfo>{
 
     void deleteResumeFile(String fileId);
 
-    List<TEmployeeResumeFile> getResumeFile();
+    List<TEmployeeResumeFile> getResumeFile(String resumeId);
 
     void activateVip(String vipType, String spec);
 
@@ -30,7 +30,7 @@ public interface TResumeBaseInfoService extends IService<TResumeBaseInfo>{
 
     void createMessage(String positionId, String resumeId, String message, String messageType);
 
-    ResumeDetailResp getResumeDetail();
+    ResumeDetailResp getResumeDetail(String resumeId);
 
     ResumeDetailHrResp getResumeDetailHr(String resumeId,String positionId);
 

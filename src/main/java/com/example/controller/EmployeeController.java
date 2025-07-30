@@ -92,11 +92,15 @@ public class EmployeeController {
         return ResponseResult.success(true);
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "resumeId", value = "")
+    })
     @ApiOperation(value = "查询个人所有附件简历", notes = "", httpMethod = "GET")
     @SaCheckLogin
     @GetMapping("/resume/file")
-    public ResponseResult<List<TEmployeeResumeFile>> getResumeFile() {
-        List<TEmployeeResumeFile> resumeFiles = tResumeBaseInfoService.getResumeFile();
+    public ResponseResult<List<TEmployeeResumeFile>> getResumeFile(
+            @RequestParam(required = false,value = "resumeId") String resumeId) {
+        List<TEmployeeResumeFile> resumeFiles = tResumeBaseInfoService.getResumeFile(resumeId);
         return ResponseResult.success(resumeFiles);
     }
 
@@ -110,8 +114,9 @@ public class EmployeeController {
     @ApiOperation(value = "查询简历详情 ", notes = "", httpMethod = "GET")
     @SaCheckLogin
     @GetMapping("/resume/detail")
-    public ResponseResult<ResumeDetailResp> getResumeDetail() {
-        ResumeDetailResp resumeDetailResp = tResumeBaseInfoService.getResumeDetail();
+    public ResponseResult<ResumeDetailResp> getResumeDetail(
+            @RequestParam(required = false,value = "resumeId") String resumeId) {
+        ResumeDetailResp resumeDetailResp = tResumeBaseInfoService.getResumeDetail(resumeId);
         return ResponseResult.success(resumeDetailResp);
     }
 
