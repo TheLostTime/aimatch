@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.entity.TUser;
 import com.example.resp.ChatSessionResp;
 import com.example.resp.ResumeDetailResp;
@@ -30,5 +31,10 @@ public class THrMarkResumeServiceImpl extends ServiceImpl<THrMarkResumeMapper, T
         List<ChatSessionResp> chatSessionRespList = this.getBaseMapper()
                 .chatSessionList(positionId, hrName, resumeStatus,userId,tUser.getUserType());
         return chatSessionRespList;
+    }
+
+    @Override
+    public void updateTHrMarkResume(THrMarkResume tHrMarkResume) {
+        this.getBaseMapper().updateTHrMarkResume(tHrMarkResume);
     }
 }

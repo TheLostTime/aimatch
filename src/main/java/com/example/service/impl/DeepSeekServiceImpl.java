@@ -251,7 +251,7 @@ public class DeepSeekServiceImpl implements DeepSeekService {
                                                 .eq(THrMarkResume::getPositionId, chatExamReq.getPositionId()));
                                         tHrMarkResume.setTestScores(score + "");
                                         tHrMarkResume.setUpdateTime(DateUtil.date());
-                                        tHrMarkResumeService.updateById(tHrMarkResume);
+                                        tHrMarkResumeService.updateTHrMarkResume(tHrMarkResume);
                                     }
                                 }
                             }
@@ -329,6 +329,35 @@ public class DeepSeekServiceImpl implements DeepSeekService {
             if (parts.length > 0) {
                 try {
                     return Integer.parseInt(parts[0].trim());
+                } catch (NumberFormatException e) {
+                    return -1;
+                }
+            }
+        }
+
+        // 处理新格式2："得分：XX / 100"（支持数字与斜杠间的空格）
+        String newPrefix2 = "得分：";
+        int newStartIndex2 = text.indexOf(newPrefix2);
+
+        if (newStartIndex2 != -1) {
+            newStartIndex2 += newPrefix2.length();
+            int newEndIndex2 = newStartIndex2;
+
+            // 允许数字、空格和斜杠
+            while (newEndIndex2 < text.length() &&
+                    (Character.isDigit(text.charAt(newEndIndex2)) ||
+                            text.charAt(newEndIndex2) == '/' ||
+                            Character.isWhitespace(text.charAt(newEndIndex2)))) {
+                newEndIndex2++;
+            }
+
+            String scorePart2 = text.substring(newStartIndex2, newEndIndex2);
+            // 提取斜杠前的数字部分，先移除所有空格
+            String cleaned = scorePart2.replaceAll("\\s+", "");
+            String[] parts2 = cleaned.split("/");
+            if (parts2.length > 0) {
+                try {
+                    return Integer.parseInt(parts2[0].trim());
                 } catch (NumberFormatException e) {
                     return -1;
                 }

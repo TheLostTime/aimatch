@@ -5,7 +5,7 @@
     <!--@mbg.generated-->
     <!--@Table t_hr_mark_resume-->
     <id column="position_id" jdbcType="VARCHAR" property="positionId" />
-    <id column="resume_id" jdbcType="VARCHAR" property="resumeId" />
+    <result column="resume_id" jdbcType="VARCHAR" property="resumeId" />
     <result column="hr_user_id" jdbcType="VARCHAR" property="hrUserId" />
     <result column="employee_user_id" jdbcType="VARCHAR" property="employeeUserId" />
     <result column="save_flag" jdbcType="BOOLEAN" property="saveFlag" />
@@ -202,4 +202,30 @@
         </if>
         order by a.update_time desc
   </select>
+  <update id="updateTHrMarkResume">
+        UPDATE t_hr_mark_resume
+    <set>
+        <if test="hrUserId != null">
+           hr_user_id = #{hrUserId},
+        </if>
+        <if test="employeeUserId != null">
+            employee_user_id = #{employeeUserId},
+        </if>
+        <if test="saveFlag != null">
+            save_flag = #{saveFlag},
+        </if>
+        <if test="resumeStatus != null">
+            resume_status = #{resumeStatus},
+        </if>
+        <if test="testScores != null">
+            test_scores = #{testScores},
+        </if>
+        <if test="updateTime != null">
+            update_time = #{updateTime},
+        </if>
+    </set>
+    WHERE
+        position_id = #{positionId}
+        AND resume_id = #{resumeId}
+  </update>
 </mapper>

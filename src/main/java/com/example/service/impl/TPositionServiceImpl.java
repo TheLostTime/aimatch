@@ -122,7 +122,7 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
             throw new BusinessException(10022,"状态错误");
         }
         tHrMarkResume.setResumeStatus(status);
-        tHrMarkResumeService.updateById(tHrMarkResume);
+        tHrMarkResumeService.updateTHrMarkResume(tHrMarkResume);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
             throw new BusinessException(10022,"状态错误");
         }
         tHrMarkResume.setResumeStatus(RESUME_STATUS_COMMUNICATING);
-        tHrMarkResumeService.updateById(tHrMarkResume);
+        tHrMarkResumeService.updateTHrMarkResume(tHrMarkResume);
     }
 
     @Override

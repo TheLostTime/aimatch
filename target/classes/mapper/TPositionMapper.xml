@@ -63,7 +63,7 @@
                a.degree_lower_limit, a.experience_lower_limit, a.salary_lower_limit,
                a.salary_upper_limit, a.salary_month, a.work_place, a.is_oversea,
                a.oversea_remainder, a.position_num, a.update_time, a.reason,
-               b.user_type, b.account, b.avatar,
+               b.user_type, b.account,
                d.name, d.title, d.company_id, d.vip_type, d.real_name,
                c.company_id, c.company_name, c.industry, c.scale, c.enterprise_certified,
                e.ai_examiner, e.ai_examiner_desc, e.oversea_remainder,
@@ -78,10 +78,10 @@
         left join t_company c on d.company_id = c.company_id
         left join t_position_toolbox e on a.position_id = e.position_id
         left join t_position_key_word f on a.position_id = f.position_id
-        <where>
+        where a.position_status = 2
             <!-- 岗位关键词精确匹配 -->
             <if test="keyWord != null and keyWord != ''">
-                 EXISTS (
+                and EXISTS (
                     SELECT 1
                     FROM t_position_key_word k
                     WHERE k.position_id = a.position_id
@@ -115,7 +115,6 @@
             <if test="positionType != null and positionType != ''">
                 and a.position_type = #{positionType}
             </if>
-        </where>
   </select>
   <select id="selectPositionList" resultType="com.example.resp.PositionListResp">
     SELECT

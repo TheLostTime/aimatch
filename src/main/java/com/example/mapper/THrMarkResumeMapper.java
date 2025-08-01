@@ -22,4 +22,6 @@ public interface THrMarkResumeMapper extends BaseMapper<THrMarkResume> {
     List<TalentListResp> getTalentList(@Param("positionId") String positionId,
                                        @Param("resumeStatus") String resumeStatus,
                                        @Param("userId") String userId);
+
+    void updateTHrMarkResume(THrMarkResume tHrMarkResume);
 }

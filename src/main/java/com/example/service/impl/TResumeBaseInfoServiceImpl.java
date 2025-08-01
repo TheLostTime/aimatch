@@ -3,6 +3,7 @@ package com.example.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.entity.*;
 import com.example.exception.BusinessException;
@@ -276,7 +277,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
     @Override
     public List<TEmployeeResumeFile> getResumeFile(String resumeId) {
         String userId = StpUtil.getLoginId().toString();
-        if (StringUtils.isNotEmpty(userId)) {
+        if (StringUtils.isNotEmpty(resumeId)) {
             // 查询简历信息
             TResumeBaseInfo tResumeBaseInfo = this.getById(resumeId);
             if (null == tResumeBaseInfo) {
@@ -349,7 +350,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
         } else {
             if (null == tHrMarkResumeLast.getResumeStatus()) {
                 tHrMarkResumeLast.setResumeStatus(RESUME_STATUS_NEW_MESSAGE);
-                tHrMarkResumeService.updateById(tHrMarkResumeLast);
+                tHrMarkResumeService.updateTHrMarkResume(tHrMarkResumeLast);
 
                 TUser tUser = tUserService.getById(StpUtil.getLoginId().toString());
                 TImMessage tMessage = TImMessage.builder()
@@ -415,7 +416,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
                 tHrMarkResumeService.save(tHrMarkResume);
             } else {
                 tHrMarkResume.setResumeStatus(RESUME_STATUS_SAY_HELLO);
-                tHrMarkResumeService.updateById(tHrMarkResume);
+                 tHrMarkResumeService.updateTHrMarkResume(tHrMarkResume);
             }
 
             // 保存消息
@@ -448,7 +449,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
 
             // 更新状态为沟通
             tHrMarkResume.setResumeStatus(RESUME_STATUS_COMMUNICATING);
-            tHrMarkResumeService.updateById(tHrMarkResume);
+            tHrMarkResumeService.updateTHrMarkResume(tHrMarkResume);
 
             // 插入消息
             TImMessage tMessage = TImMessage.builder()
@@ -472,7 +473,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
                     RESUME_STATUS_SAY_HELLO.equals(tHrMarkResume.getResumeStatus())) {
                 // 更新表状态为沟通
                 tHrMarkResume.setResumeStatus(RESUME_STATUS_COMMUNICATING);
-                tHrMarkResumeService.updateById(tHrMarkResume);
+                tHrMarkResumeService.updateTHrMarkResume(tHrMarkResume);
             }
 
             // 获取最大messageIndex消息
@@ -627,7 +628,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
                     .build());
         } else {
             tHrMarkResumes.setSaveFlag(true);
-            tHrMarkResumeService.updateById(tHrMarkResumes);
+            tHrMarkResumeService.updateTHrMarkResume(tHrMarkResumes);
         }
     }
 
@@ -690,6 +691,6 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
             throw new BusinessException(10005, "没有收藏");
         }
         tHrMarkResumes.setSaveFlag(false);
-        tHrMarkResumeService.updateById(tHrMarkResumes);
+        tHrMarkResumeService.updateTHrMarkResume(tHrMarkResumes);
     }
 }

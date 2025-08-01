@@ -102,7 +102,7 @@ public class HRController {
     }
 
     @ApiOperation(value = "查询岗位详情", notes = "", httpMethod = "GET")
-    @SaCheckLogin
+//    @SaCheckLogin
     @GetMapping("/position/detail")
     public ResponseResult<PositionDetailResp> getPositionDetail(@RequestParam("positionId") String positionId) {
         PositionDetailResp positionDetailResp = companyService.getPositionDetail(positionId);
@@ -174,7 +174,7 @@ public class HRController {
         TPosition tPosition = tPositionService.getById(chatExamReq.getPositionId());
         if (chatExamReq.getStartExamFlag()) {
             StringBuilder sb = new StringBuilder();
-            sb.append("现在假设你是个面试官，我是面试者，你要面试一个岗位，强制要求每轮问一个，不要一次性出完所有题目，等我回答完成后问下一个，对我的回答不用做出评价，等所有问题问完后，生成最终得分，你要向我提" + chatExamReq.getExamNum() +"个的面试问题，满分100分。笔试要求如下：");
+            sb.append("现在假设你是个面试官，我是面试者，你要面试一个岗位，强制要求每轮问一个，不要一次性出完所有题目，等我回答完成后问下一个，对我的回答不用做出评价，等所有问题问完后，生成最终得分，最终结果返回简单明了，你要向我提" + chatExamReq.getExamNum() +"个的面试问题，满分100分。笔试要求如下：");
             sb.append(tPosition.getPositionDescription());
             chatExamReq.setContent(sb.toString());
         } else {

@@ -13,4 +13,5 @@ public interface THrMarkResumeService extends IService<THrMarkResume> {
 
     List<ChatSessionResp> chatSessionList(String positionId, String name,String resumeStatus);
 
+    void updateTHrMarkResume(THrMarkResume tHrMarkResume);
 }

@@ -1,9 +1,6 @@
 package com.example.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -33,7 +30,7 @@ public class THrMarkResume implements Serializable {
     /**
      * 简历id
      */
-    @TableField(value = "resume_id")
+    @TableField(value = "resume_id",updateStrategy = FieldStrategy.IGNORED)
     @ApiModelProperty(value="简历id")
     private String resumeId;
 

@@ -3,20 +3,30 @@ package com.example.service.impl;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.entity.THr;
 import com.example.entity.TUser;
+import com.example.exception.BusinessException;
 import com.example.mapper.TUserMapper;
+import com.example.service.THrService;
 import com.example.service.TUserService;
 import com.example.util.FileToDbUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import static com.example.constant.Constants.*;
 
 @Service
 @Slf4j
 public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements TUserService{
     private static final Logger logger = LoggerFactory.getLogger(TUserServiceImpl.class);
+
+    @Autowired
+    private THrService tHrService;
 
     @Override
     public TUser findByUsername(String account) {
@@ -30,6 +40,7 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
     }
 
     @Override
+    @Transactional
     public void registerUser(TUser user) {
         if (null != findByUsername(user.getAccount())) {
             logger.error("用户名已存在: {}", user.getAccount());
@@ -37,6 +48,11 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         }
         user.setPassword(SaSecureUtil.sha256(user.getPassword()));
         int result = baseMapper.insert(user);
+
+        if (user.getUserType().equals(USER_TYPE_HR) || user.getUserType().equals(USER_TYPE_INTRODUCE)) {
+            // 插入hr表
+            tHrService.save(THr.builder().vipType(VIP_NO).userId(user.getUserId()).realName(2).build());
+        }
         if (result != 1) {
             logger.error("用户注册失败: {}", user.getAccount());
             throw new RuntimeException("用户注册失败");
@@ -48,12 +64,18 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
     public String login(TUser user) {
         TUser dbUser = findByUsername(user.getAccount());
         if (null == dbUser) {
-            throw new IllegalArgumentException("用户不存在 ");
+            throw new BusinessException("用户不存！");
         }
+
         // 验证密码是否匹配
         if (!SaSecureUtil.sha256(user.getPassword()).equals(dbUser.getPassword())) {
             logger.error("密码错误: {}", user.getAccount());
-            throw new IllegalArgumentException("用户名或密码错误");
+            throw new BusinessException("用户名或密码错误");
+        }
+
+        // 验证用户类型
+        if(!user.getUserType().equals(dbUser.getUserType())) {
+            throw new BusinessException("请选择正确的入口");
         }
 
         // 执行登录操作并获取token

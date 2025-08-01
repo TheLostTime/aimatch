@@ -215,6 +215,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
 
         // 查询user信息
         TUser tUser = tUserService.getById(tPosition.getUserId());
+        tUser.setPassword(null);
 
         // 查询HR信息
         THr thr = tHrService.getById(tPosition.getUserId());

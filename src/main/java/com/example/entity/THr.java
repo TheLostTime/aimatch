@@ -56,7 +56,7 @@ public class THr implements Serializable {
 
     @TableField(value = "real_name")
     @ApiModelProperty(value="是否实名认证1是2否")
-    private int realName;
+    private Integer realName;
 
     private static final long serialVersionUID = 1L;
 }
