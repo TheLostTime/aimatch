@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseResult<?> handleMethodException(HttpRequestMethodNotSupportedException e) {
-        logger.error("调用方式出错", e.getMessage(), e);
+        logger.error("调用方式出错: {}", e.getMessage(), e);
         return ResponseResult.error("调用方式出错");
     }
 
