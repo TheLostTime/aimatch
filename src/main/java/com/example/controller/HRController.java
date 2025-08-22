@@ -1,6 +1,8 @@
 package com.example.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.annotation.SaMode;
 import cn.dev33.satoken.stp.StpUtil;
 import com.example.entity.ResponseResult;
 import com.example.entity.TPosition;
@@ -9,6 +11,7 @@ import com.example.req.*;
 import com.example.resp.HrInfoResp;
 import com.example.resp.PositionDetailResp;
 import com.example.resp.PositionListResp;
+import com.example.resp.RecommendResumeResp;
 import com.example.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -77,7 +80,7 @@ public class HRController {
             @ApiImplicitParam(paramType = "form", dataType = "file", name = "enterpriseLicenseFile", value = "", required = false),
             @ApiImplicitParam(paramType = "form", dataType = "file", name = "incumbencyCertificateFile", value = "", required = false)
     })
-    public ResponseResult<?> applyCertification(@RequestPart @RequestParam("enterpriseLicenseFile") MultipartFile enterpriseLicenseFile,
+    public ResponseResult<?> applyCertification(@RequestPart @RequestParam(value = "enterpriseLicenseFile",required = false) MultipartFile enterpriseLicenseFile,
                                                 @RequestPart @RequestParam("incumbencyCertificateFile") MultipartFile incumbencyCertificateFile) {
         companyService.applyCertification(enterpriseLicenseFile, incumbencyCertificateFile);
         return ResponseResult.success();
@@ -116,6 +119,16 @@ public class HRController {
             @RequestParam(value = "positionStatus",required = false) String positionStatus) {
         List<PositionListResp> tPositionList = tPositionService.queryPositionList(positionStatus);
         return ResponseResult.success(tPositionList);
+    }
+
+    @ApiOperation(value = "HR获取与岗位匹配的人的简历列表", notes = "", httpMethod = "GET")
+    @SaCheckLogin
+    @GetMapping("/employee/recommend")
+    public ResponseResult<List<RecommendResumeResp>> recommendResumeList(
+            @RequestParam("positionId") String positionId,
+            @RequestParam(value = "size",required = false) Integer size) {
+        List<RecommendResumeResp> recommendResumeRespList = tPositionService.recommendResumeList(positionId,size);
+        return ResponseResult.success(recommendResumeRespList);
     }
 
 

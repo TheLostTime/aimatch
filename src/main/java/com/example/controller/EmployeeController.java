@@ -200,4 +200,13 @@ public class EmployeeController {
         return ResponseResult.success(TImMessageList);
     }
 
+    @ApiOperation(value = "交卷(ai判分失败情况)", notes = "", httpMethod = "POST")
+    @SaCheckRole(value = {USER_TYPE_EMPLOYEE})
+    @PostMapping("/hand/paper")
+    public ResponseResult<Boolean> handePaper(@RequestParam("positionId") String positionId,
+                                               @RequestParam("resumeId") String resumeId) {
+        tHrMarkResumeService.handePaper(positionId,resumeId);
+        return ResponseResult.success(true);
+    }
+
 }

@@ -16,6 +16,7 @@ D:\指标建设\AIMatch\aimatch\src\main\java\com\example\mapper\TEmployeeMapper
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\req\ChatExamReq.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\entity\THrVip.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\impl\DeepSeekServiceImpl.java
+D:\指标建设\AIMatch\aimatch\src\main\java\com\example\resp\RecommendResumeResp.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\impl\THrVipServiceImpl.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\schedule\Timer.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\mapper\THrMarkResumeMapper.java

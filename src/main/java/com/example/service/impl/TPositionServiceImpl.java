@@ -14,10 +14,7 @@ import com.example.mapper.THrMarkResumeMapper;
 import com.example.mapper.TPositionMapper;
 import com.example.req.AuditPositionReq;
 import com.example.req.ResumeListReq;
-import com.example.resp.PositionListResp;
-import com.example.resp.QueryPositionManageResp;
-import com.example.resp.ResumeListResp;
-import com.example.resp.TalentListResp;
+import com.example.resp.*;
 import com.example.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -145,6 +142,15 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
     @Override
     public List<QueryPositionManageResp> queryPositionManageList(String positionStatus) {
         return this.baseMapper.queryPositionManageList(positionStatus);
+    }
+
+    @Override
+    public List<RecommendResumeResp> recommendResumeList(String positionId,Integer size) {
+        List<RecommendResumeResp> recommendResumeRespList = this.baseMapper.queryRecommendResumeList(positionId,size);
+        recommendResumeRespList.forEach(recommendResumeResp -> {
+            recommendResumeResp.setPositionId(positionId);
+        });
+        return recommendResumeRespList;
     }
 
     @Override

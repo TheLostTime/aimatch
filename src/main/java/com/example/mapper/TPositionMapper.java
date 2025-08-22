@@ -6,6 +6,7 @@ import com.example.req.GetJobListReq;
 import com.example.resp.GetJobListResp;
 import com.example.resp.PositionListResp;
 import com.example.resp.QueryPositionManageResp;
+import com.example.resp.RecommendResumeResp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,4 +20,7 @@ public interface TPositionMapper extends BaseMapper<TPosition> {
                                               @Param("userId") String userId);
 
     List<QueryPositionManageResp> queryPositionManageList(@Param("positionStatus") String positionStatus);
+
+    List<RecommendResumeResp> queryRecommendResumeList(@Param("positionId") String positionId,
+                                                       @Param("size") Integer size);
 }

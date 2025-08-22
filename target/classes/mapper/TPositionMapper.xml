@@ -72,13 +72,9 @@
                e.experience_upper_limit as tool_experience_upper_limit, e.age_lower_limit,
                e.age_upper_limit,e.college, e.major, e.gender, e.residentia_address,
                f.id, f.key_word
-        from t_position a
-        left join t_user b on a.user_id = b.user_id
-        left join t_hr d on a.user_id = d.user_id
-        left join t_company c on d.company_id = c.company_id
-        left join t_position_toolbox e on a.position_id = e.position_id
-        left join t_position_key_word f on a.position_id = f.position_id
-        where a.position_status = 2
+        from (
+            select * from t_position
+            where position_status = 2
             <!-- 岗位关键词精确匹配 -->
             <if test="keyWord != null and keyWord != ''">
                 and EXISTS (
@@ -89,32 +85,48 @@
                  )
             </if>
             <if test="scale != null and scale != ''">
-                and c.scale = #{scale}
+                and EXISTS (
+                    select 1
+                    from t_hr m1
+                    inner join t_company m2 on m1.company_id = m2.company_id
+                    where m1.user_id = a.user_id
+                    and m2.scale = #{scale}
+                )
             </if>
             <if test="positionName != null and positionName != ''">
-                and a.position_name like concat('%',#{positionName},'%')
+                and position_name like concat('%',#{positionName},'%')
             </if>
             <if test="workType != null and workType != ''">
-                and a.work_type = #{workType}
+                and work_type = #{workType}
             </if>
             <if test="salaryLowerLimit != null">
-                and a.salary_lower_limit &gt;= #{salaryLowerLimit}
+                and salary_lower_limit &gt;= #{salaryLowerLimit}
             </if>
             <if test="salaryUpperLimit != null">
-                and a.salary_upper_limit &lt;= #{salaryUpperLimit}
+                and salary_upper_limit &lt;= #{salaryUpperLimit}
             </if>
             <if test="experienceLowerLimit != null">
-                and a.experience_lower_limit &gt;= #{experienceLowerLimit}
+                and experience_lower_limit &gt;= #{experienceLowerLimit}
             </if>
             <if test="degreeLowerLimit != null">
-                and a.degree_lower_limit &gt;= #{degreeLowerLimit}
+                and degree_lower_limit &gt;= #{degreeLowerLimit}
             </if>
             <if test="jobCategory != null and jobCategory != ''">
-                and a.job_category = #{jobCategory}
+                and job_category = #{jobCategory}
             </if>
             <if test="positionType != null and positionType != ''">
-                and a.position_type = #{positionType}
+                and position_type = #{positionType}
             </if>
+            order by update_time desc
+            <if test="currentPage != null and pageSize != null">
+                limit ${(currentPage-1) * pageSize}, #{pageSize}
+            </if>) a
+        left join t_user b on a.user_id = b.user_id
+        left join t_hr d on a.user_id = d.user_id
+        left join t_company c on d.company_id = c.company_id
+        left join t_position_toolbox e on a.position_id = e.position_id
+        left join t_position_key_word f on a.position_id = f.position_id
+        order by a.update_time desc
   </select>
   <select id="selectPositionList" resultType="com.example.resp.PositionListResp">
     SELECT
@@ -155,6 +167,29 @@
             </if>
         </where>
         order by a.update_time desc
+  </select>
+  <select id="queryRecommendResumeList" resultType="com.example.resp.RecommendResumeResp">
+        select
+        m1.resume_id,
+        m2.name,m2.gender,m2.birth_date,
+        m3.degree,m3.major,
+        m4.test_scores
+        from
+        (
+            select * from t_resume_base_info  where resume_id in (
+            select distinct(b.resume_id) from t_position a
+            left join t_resume_interest_job b
+            on a.job_category = b.job_category
+            and (a.position_name like concat('%',b.position_name,'%') or b.position_name like concat('%',a.position_name,'%'))
+            where a.position_id = #{positionId})
+        )m1
+        left join t_employee m2 on m1.user_id = m2.user_id
+        left join (select * from t_resume_education where education_index = 1) m3 on m1.resume_id = m3.resume_id
+        left join t_hr_mark_resume m4 on m1.resume_id = m4.resume_id and m4.position_id = #{positionId}
+        order by m4.test_scores desc
+        <if test="size != null">
+            limit #{size}
+        </if>
   </select>
 
 </mapper>

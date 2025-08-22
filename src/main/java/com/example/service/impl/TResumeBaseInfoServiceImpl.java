@@ -561,7 +561,7 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
             overViewResumeFlag = true;
         } else {
             // 人才市场查看简历累计额度-1
-            tHrPaidPermisionsUseDetail.setUsedViewResume(tHrPaidPermisionsUseDetail.getUsedPositionNum()-1);
+            tHrPaidPermisionsUseDetail.setUsedViewResume(tHrPaidPermisionsUseDetail.getUsedViewResume()-1);
             tHrPaidPermisionsUseDetailService.updateById(tHrPaidPermisionsUseDetail);
         }
         // 查询THrMarkResume
@@ -572,10 +572,10 @@ public class TResumeBaseInfoServiceImpl extends ServiceImpl<TResumeBaseInfoMappe
         // 查询雇佣者基本信息
         TResumeBaseInfo tResumeBaseInfo = this
                 .getOne(new LambdaQueryWrapper<TResumeBaseInfo>()
-                        .eq(TResumeBaseInfo::getUserId, tHrMarkResume.getEmployeeUserId()));
+                        .eq(TResumeBaseInfo::getResumeId, resumeId));
         // 查询雇佣者信息
         TEmployee tEmployee = tEmployeeService.getOne(new LambdaQueryWrapper<TEmployee>()
-                .eq(TEmployee::getUserId, tHrMarkResume.getEmployeeUserId()));
+                .eq(TEmployee::getUserId, tResumeBaseInfo.getUserId()));
         // 查询工作信息
         List<TResumeWork> tResumeWorkList = tResumeWorkService.list(new LambdaQueryWrapper<TResumeWork>()
                 .eq(TResumeWork::getResumeId, tResumeBaseInfo.getResumeId()));

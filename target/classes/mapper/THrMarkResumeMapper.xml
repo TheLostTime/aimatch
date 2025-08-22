@@ -184,7 +184,7 @@
         left join t_resume_work d on a.resume_id = d.resume_id
         left join t_resume_education e on a.resume_id = e.resume_id
         left join t_resume_interest_job f on a.resume_id = f.resume_id
-        inner join (select * from t_hr_mark_resume where position_id = #{positionId}) g on a.resume_id = g.resume_id
+        left join (select * from t_hr_mark_resume where position_id = #{positionId}) g on a.resume_id = g.resume_id
   </select>
 
   <select id="getTalentList" resultMap="BaseResultMap4">

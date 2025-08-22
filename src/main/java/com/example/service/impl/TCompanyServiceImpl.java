@@ -148,7 +148,10 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
 
     @Override
     public void applyCertification(MultipartFile enterpriseLicenseFile, MultipartFile incumbencyCertificateFile) {
-        String enterpriseLicense = FileToDbUtil.fileToStr(enterpriseLicenseFile);
+        String enterpriseLicense = null;
+        if (null != enterpriseLicenseFile) {
+            enterpriseLicense = FileToDbUtil.fileToStr(enterpriseLicenseFile);
+        }
         String incumbencyCertificate = FileToDbUtil.fileToStr(incumbencyCertificateFile);
         SaSession saSession = StpUtil.getSession();
         TUser userInfo = (TUser) saSession.get("userInfo");
@@ -168,6 +171,10 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
     @Override
     public List<TCompany> queryCompanyList() {
         List<TCompany> list = this.getBaseMapper().queryCompanyList();
+        list.forEach(tCompany -> {
+            tCompany.setEnterpriseLicense(null);
+            tCompany.setIncumbencyCertificate(null);
+        });
         return list;
     }
 
@@ -276,7 +283,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
             }
             if (null != savePositionReq.getToolbox()) {
                 savePositionReq.getToolbox().setPositionId(savePositionReq.getPosition().getPositionId());
-                tPositionToolboxMapper.updateById(savePositionReq.getToolbox());
+                tPositionToolboxService.saveOrUpdate(savePositionReq.getToolbox());
             }
             return positionId;
         } else {

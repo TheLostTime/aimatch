@@ -23,11 +23,12 @@
   </resultMap>
 
   <select id="getSaveJobList" resultMap="getSaveJobListMap">
-        select a.user_type, a.account, a.avatar,b.*,c.*,e.* from t_user a
+        select f.user_type, f.account, f.avatar,b.*,c.*,e.* from t_user a
         left join t_employee_save_job d on d.employee_user_id = a.user_id
         left join t_position e on d.position_id = e.position_id
         left join t_hr b on b.user_id = e.user_id
         left join t_company c on c.company_id = b.company_id
+        left join t_user f on b.user_id = f.user_id
         where a.user_id = #{userId} and d.save_flag = true
   </select>
 </mapper>

@@ -44,4 +44,11 @@ public class GetJobListReq {
     @ApiModelProperty(value = "岗位类型", example = "1", allowableValues = "0,1")
     private String positionType;
 
+    @ApiModelProperty(value = "当前页", example = "1")
+    private Integer currentPage;
+
+    @ApiModelProperty(value = "每页数量", example = "10")
+    private Integer pageSize;
+
+
 }
