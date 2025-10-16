@@ -93,7 +93,7 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
         if ("ai".equals(resumeListReq.getQueryType())
                 && (null == tHrVip || (!tHrVip.getVipType().equals(VIP_NORMAL)
                         && !tHrVip.getVipType().equals(VIP_HIGH)) )) {
-                throw new BusinessException(10020,"会员才能使用ai智能筛选");
+                throw new BusinessException(10020,"充值账户才能使用ai智能筛选");
         }
         // 查询人才列表
         resumeListReq.setHrId(StpUtil.getLoginId().toString());

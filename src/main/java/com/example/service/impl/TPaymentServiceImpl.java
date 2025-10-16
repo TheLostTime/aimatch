@@ -205,7 +205,7 @@ public class TPaymentServiceImpl extends ServiceImpl<TPaymentMapper, TPayment>
 
                 // 更新支付记录
                 TPayment payment = baseMapper.selectOne(new LambdaQueryWrapper<TPayment>()
-                        .eq(TPayment::getId, order.getId()));
+                        .eq(TPayment::getOrderId, order.getId()));
                 if (payment != null) {
                     payment.setStatus(PayConstant.PAY_STATUS_SUCCESS);
                     payment.setCallbackData(new ObjectMapper().writeValueAsString(params));

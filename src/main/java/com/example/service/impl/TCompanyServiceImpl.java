@@ -350,7 +350,7 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
         // 校验是否是会员
         THrVip tHrVip = tHrVipService.getById(StpUtil.getLoginId().toString());
         if (null == tHrVip || !(VIP_HIGH.equals(tHrVip.getVipType()) || VIP_NORMAL.equals(tHrVip.getVipType()))) {
-            throw new BusinessException(10004,"会员才能发布岗位");
+            throw new BusinessException(10004,"充值账户才能发布岗位");
         }
         // 查询岗位
         TPosition tPosition = tPositionService.getById(positionId);
