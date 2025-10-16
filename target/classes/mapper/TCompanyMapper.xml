@@ -28,5 +28,13 @@
   </sql>
   <select id="queryCompanyList" resultType="com.example.entity.TCompany">
     select  *  from t_company
+    order by create_time desc
+    <if test="currentPage != null and pageSize != null">
+        limit ${(currentPage-1) * pageSize}, #{pageSize}
+    </if>
+  </select>
+
+  <select id="queryCompanyListSize" resultType="java.lang.Integer">
+    select  count(1)  from t_company
   </select>
 </mapper>

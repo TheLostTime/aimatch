@@ -24,4 +24,8 @@ public interface THrMarkResumeMapper extends BaseMapper<THrMarkResume> {
                                        @Param("userId") String userId);
 
     void updateTHrMarkResume(THrMarkResume tHrMarkResume);
+
+    Integer queryRcNewNum(@Param("userId") String userId);
+
+    Integer queryRcMarkNum(@Param("userId") String userId);
 }

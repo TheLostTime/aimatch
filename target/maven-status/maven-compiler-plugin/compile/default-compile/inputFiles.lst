@@ -71,6 +71,7 @@ D:\指标建设\AIMatch\aimatch\src\main\java\com\example\entity\TEmployee.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\THrVipService.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\THrPaidPermisionsService.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\entity\TUser.java
+D:\指标建设\AIMatch\aimatch\src\main\java\com\example\resp\QueryCompanyResp.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\TEmployeeSaveJobService.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\req\GetJobListReq.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\mapper\TVipPackageMapper.java
@@ -91,6 +92,7 @@ D:\指标建设\AIMatch\aimatch\src\main\java\com\example\mapper\TUserMapper.jav
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\req\SavePositionReq.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\TUserService.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\mapper\THrPaidPermisionsMapper.java
+D:\指标建设\AIMatch\aimatch\src\main\java\com\example\resp\QueryPositionManageByPageResp.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\service\TResumeProjectService.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\resp\GetJobListResp.java
 D:\指标建设\AIMatch\aimatch\src\main\java\com\example\mapper\TPositionKeyWordMapper.java

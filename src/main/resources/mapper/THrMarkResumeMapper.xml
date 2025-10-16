@@ -228,4 +228,10 @@
         position_id = #{positionId}
         AND resume_id = #{resumeId}
   </update>
+  <select id="queryRcNewNum" resultType="java.lang.Integer">
+  select count(1) from t_hr_mark_resume where hr_user_id = #{userId} and resume_status = 'new_message'
+  </select>
+  <select id="queryRcMarkNum" resultType="java.lang.Integer">
+  select count(1) from t_hr_mark_resume where hr_user_id = #{userId} and save_flag = 1
+ </select>
 </mapper>

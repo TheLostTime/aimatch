@@ -9,6 +9,7 @@ import com.example.req.*;
 import com.example.resp.GetJobListResp;
 import com.example.resp.HrInfoResp;
 import com.example.resp.PositionDetailResp;
+import com.example.resp.QueryCompanyResp;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public interface TCompanyService extends IService<TCompany>{
 
     void offlinePosition(String positionId);
 
-    List<TCompany> queryCompanyList();
+    QueryCompanyResp queryCompanyList(Integer currentPage, Integer pageSize);
 
     void auditCompany(AuditCompanyReq auditCompanyReq);
 

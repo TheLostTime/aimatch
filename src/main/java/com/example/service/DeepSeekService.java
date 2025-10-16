@@ -8,5 +8,5 @@ public interface DeepSeekService {
     String chat(String message,Boolean needSaveContext,String contextName);
 
     Flux<String> chatFlux(String content, Boolean needSaveContext, String contextName, SaSession session);
-    Flux<String> chatFluxExam( Boolean needSaveContext,  SaSession session, ChatExamReq chatExamReq,String loginId);
+    Flux<String> chatFluxExam( Boolean needSaveContext,  SaSession session, ChatExamReq chatExamReq,String loginId,String hrUserId);
 }

@@ -25,7 +25,7 @@ public class TVipPackage implements Serializable {
     /**
      * 套餐记录唯一ID
      */
-    @TableId(value = "id", type = IdType.INPUT)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     @ApiModelProperty(value="套餐记录唯一ID")
     private String id;
 
@@ -84,6 +84,20 @@ public class TVipPackage implements Serializable {
     @TableField(value = "price")
     @ApiModelProperty(value="套餐价格")
     private Integer price;
+
+    /**
+     * 状态：1:上架 2:下架
+     */
+    @TableField(value = "status")
+    @ApiModelProperty(value="状态：1:上架 2:下架")
+    private Integer status;
+
+    /**
+     * 套餐名称
+     */
+    @TableField(value = "package_name")
+    @ApiModelProperty(value="套餐名称")
+    private String packageName;
 
     private static final long serialVersionUID = 1L;
 }

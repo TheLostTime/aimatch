@@ -62,5 +62,12 @@ public class THrPaidPermisions implements Serializable {
     @ApiModelProperty(value="AI生成职位描述开关，0-关闭 1-开启")
     private Integer aiGenerate;
 
+    /**
+     * 订单ID
+     */
+    @TableField(value = "order_id")
+    @ApiModelProperty(value="订单ID")
+    private String orderId;
+
     private static final long serialVersionUID = 1L;
 }

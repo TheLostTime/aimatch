@@ -26,7 +26,9 @@ public interface TPositionService extends IService<TPosition>{
 
     void cancelMark(String resumeId, String positionId);
 
-    List<QueryPositionManageResp> queryPositionManageList(String positionStatus);
+    QueryPositionManageByPageResp queryPositionManageList(String positionStatus, Integer pageNum, Integer pageSize);
 
     List<RecommendResumeResp> recommendResumeList(String positionId,Integer size);
+
+    RcAndPositionResp getVipPackage();
 }

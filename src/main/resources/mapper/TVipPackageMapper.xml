@@ -13,6 +13,9 @@
     <result column="download_num" jdbcType="INTEGER" property="downloadNum" />
     <result column="ai_generate" jdbcType="INTEGER" property="aiGenerate" />
     <result column="price" jdbcType="INTEGER" property="price" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="package_name" jdbcType="VARCHAR" property="packageName" />
+
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->

@@ -19,8 +19,16 @@ public interface TPositionMapper extends BaseMapper<TPosition> {
     List<PositionListResp> selectPositionList(@Param("positionStatus") String positionStatus,
                                               @Param("userId") String userId);
 
-    List<QueryPositionManageResp> queryPositionManageList(@Param("positionStatus") String positionStatus);
+    List<QueryPositionManageResp> queryPositionManageList(@Param("positionStatus") String positionStatus,
+                                                          @Param("currentPage") Integer currentPage,
+                                                          @Param("pageSize") Integer pageSize);
+
+    Integer queryPositionManageListSize(@Param("positionStatus") String positionStatus);
 
     List<RecommendResumeResp> queryRecommendResumeList(@Param("positionId") String positionId,
                                                        @Param("size") Integer size);
+
+    Integer queryPositionOnlineNum(@Param("userId") String userId);
+
+    Integer queryPositionOfflineNum(@Param("userId") String userId);
 }

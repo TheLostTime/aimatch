@@ -2,14 +2,17 @@ package com.example.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
-import com.example.entity.ResponseResult;
-import com.example.entity.TCompany;
-import com.example.entity.TPosition;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.example.entity.*;
 import com.example.req.AuditCompanyReq;
 import com.example.req.AuditPositionReq;
+import com.example.resp.QueryCompanyResp;
+import com.example.resp.QueryPositionManageByPageResp;
 import com.example.resp.QueryPositionManageResp;
 import com.example.service.TCompanyService;
+import com.example.service.TOrderService;
 import com.example.service.TPositionService;
+import com.example.service.TVipPackageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -34,13 +37,24 @@ public class ManagerController {
     @Autowired
     private TPositionService positionService;
 
+    @Autowired
+    private TVipPackageService tVipPackageService;
+
+    @Autowired
+    private TOrderService orderService;
+
 
     @ApiOperation(value = "查询所有企业列表", notes = "", httpMethod = "GET")
 //    @SaCheckLogin
     @GetMapping("/company/list")
-    public ResponseResult<List<TCompany>> queryCompanyList() {
-        List<TCompany> companyList = companyService.queryCompanyList();
-        return ResponseResult.success(companyList);
+    public ResponseResult<QueryCompanyResp> queryCompanyList(@RequestParam(value = "currentPage",required = false) Integer currentPage,
+                                                           @RequestParam(value = "pageSize",required = false) Integer pageSize) {
+        if (currentPage == null && pageSize == null) {
+            currentPage = 1;
+            pageSize = 10;
+        }
+        QueryCompanyResp queryCompanyResp = companyService.queryCompanyList(currentPage, pageSize);
+        return ResponseResult.success(queryCompanyResp);
     }
 
     @ApiOperation(value = "查询企业详情", notes = "", httpMethod = "GET")
@@ -62,9 +76,15 @@ public class ManagerController {
     @ApiOperation(value = "查询岗位列表", notes = "", httpMethod = "GET")
     @SaCheckLogin
     @GetMapping("/position/list")
-    public ResponseResult<List<QueryPositionManageResp>> queryPositionManageList(
-            @RequestParam(value = "positionStatus",required = false) String positionStatus) {
-        List<QueryPositionManageResp> tPositionList = positionService.queryPositionManageList(positionStatus);
+    public ResponseResult<QueryPositionManageByPageResp> queryPositionManageList(
+            @RequestParam(value = "positionStatus",required = false) String positionStatus,
+            @RequestParam(value = "currentPage",required = false) Integer currentPage,
+            @RequestParam(value = "pageSize",required = false) Integer pageSize) {
+        if (currentPage == null && pageSize == null) {
+            currentPage = 1;
+            pageSize = 10;
+        }
+        QueryPositionManageByPageResp tPositionList = positionService.queryPositionManageList(positionStatus,currentPage,pageSize);
         return ResponseResult.success(tPositionList);
     }
 
@@ -81,6 +101,44 @@ public class ManagerController {
     @PostMapping("/position/audit")
     public ResponseResult<?> auditPosition(@RequestBody AuditPositionReq auditPosition) {
         positionService.auditPosition(auditPosition);
+        return ResponseResult.success();
+    }
+
+    @ApiOperation(value = "管理员获取订单列表", notes = "", httpMethod = "GET")
+    @SaCheckRole(value = {USER_TYPE_OPERATION})
+    @GetMapping("/getOrder")
+    public ResponseResult<IPage<TOrder>> getOrder(@RequestParam(value = "pageNum",required = false) Integer pageNum,
+                                                  @RequestParam(value = "pageSize",required = false) Integer pageSize,
+                                                  @RequestParam(value = "status",required = false) Integer status) {
+        if (null == pageNum && null == pageSize) {
+            pageNum = 1;
+            pageSize = 10000;
+        }
+        IPage<TOrder> orderList = orderService.getOrder(pageNum, pageSize,status);
+        return ResponseResult.success(orderList);
+    }
+
+    @ApiOperation(value = "查询套餐包", notes = "", httpMethod = "GET")
+    @SaCheckRole(value = {USER_TYPE_OPERATION})
+    @GetMapping("/package/query")
+    public ResponseResult<List<TVipPackage>> queryPackage() {
+        List<TVipPackage> vipPackages = tVipPackageService.list();
+        return ResponseResult.success(vipPackages);
+    }
+
+    @ApiOperation(value = "修改套餐包（包括上架下架）", notes = "", httpMethod = "POST")
+    @SaCheckRole(value = {USER_TYPE_OPERATION})
+    @PostMapping("/package/update")
+    public ResponseResult<?> updatePackage(@RequestBody TVipPackage tVipPackage) {
+        tVipPackageService.updateById(tVipPackage);
+        return ResponseResult.success();
+    }
+
+    @ApiOperation(value = "新增套餐包", notes = "", httpMethod = "POST")
+    @SaCheckRole(value = {USER_TYPE_OPERATION})
+    @PostMapping("/package/save")
+    public ResponseResult<?> savePackage(@RequestBody TVipPackage tVipPackage) {
+        tVipPackageService.save(tVipPackage);
         return ResponseResult.success();
     }
 }

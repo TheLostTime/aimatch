@@ -31,6 +31,10 @@ public class GuestController {
     @GetMapping("/job/list")
     @ApiOperation(value = "查看职位列表", notes = "", httpMethod = "GET")
     public ResponseResult<List<GetJobListResp>> getJobList(@ModelAttribute GetJobListReq getJobListReq) {
+        if (null == getJobListReq.getCurrentPage() && null == getJobListReq.getPageSize()) {
+            getJobListReq.setCurrentPage(1);
+            getJobListReq.setPageSize(9);
+        }
         List<GetJobListResp> getJobListResp = tCompanyService.getJobList(getJobListReq);
         return ResponseResult.success(getJobListResp);
     }

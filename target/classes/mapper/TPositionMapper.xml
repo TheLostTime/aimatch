@@ -131,7 +131,8 @@
   <select id="selectPositionList" resultType="com.example.resp.PositionListResp">
     SELECT
         <include refid="Base_Column_List" />,
-        COUNT(b.position_id) AS newResumeNum
+        COUNT(b.position_id) AS newResumeNum,
+        min(reason) as reason
     FROM
         t_position a
     LEFT JOIN
@@ -166,8 +167,26 @@
                 and a.position_status = #{positionStatus}
             </if>
         </where>
-        order by a.update_time desc
+         order by a.update_time desc
+        <if test="currentPage != null and pageSize != null">
+                limit ${(currentPage-1) * pageSize}, #{pageSize}
+        </if>
   </select>
+
+
+  <select id="queryPositionManageListSize" resultType="java.lang.Integer">
+        select count(1)
+        from t_position a
+        left join t_hr b on a.user_id = b.user_id
+        left join t_company c on b.company_id = c.company_id
+        <where>
+            <if test="positionStatus != null and positionStatus != ''">
+                and a.position_status = #{positionStatus}
+            </if>
+        </where>
+  </select>
+
+
   <select id="queryRecommendResumeList" resultType="com.example.resp.RecommendResumeResp">
         select
         m1.resume_id,
@@ -180,7 +199,7 @@
             select distinct(b.resume_id) from t_position a
             left join t_resume_interest_job b
             on a.job_category = b.job_category
-            and (a.position_name like concat('%',b.position_name,'%') or b.position_name like concat('%',a.position_name,'%'))
+            -- and (a.position_name like concat('%',b.position_name,'%') or b.position_name like concat('%',a.position_name,'%'))
             where a.position_id = #{positionId})
         )m1
         left join t_employee m2 on m1.user_id = m2.user_id
@@ -190,6 +209,16 @@
         <if test="size != null">
             limit #{size}
         </if>
+  </select>
+
+  <select id="queryPositionOnlineNum" resultType="java.lang.Integer">
+  select count(1) from t_position where position_status = 2
+  and user_id = #{userId}
+  </select>
+
+  <select id="queryPositionOfflineNum" resultType="java.lang.Integer">
+  select count(1) from t_position where position_status != 2
+  and user_id = #{userId}
   </select>
 
 </mapper>

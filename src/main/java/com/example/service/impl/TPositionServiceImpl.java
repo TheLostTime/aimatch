@@ -111,7 +111,7 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
             throw new BusinessException(10021,"该简历还未被收藏");
         }
         // 处于沟通中才能标记下一个状态
-        if (!tHrMarkResume.getResumeStatus().equals(RESUME_STATUS_COMMUNICATING)) {
+        if (!RESUME_STATUS_COMMUNICATING.equals(tHrMarkResume.getResumeStatus())) {
             throw new BusinessException(10023,"只有处于沟通中的人才能标记下一个状态约面或者不合适");
         }
         // 设置状态
@@ -140,8 +140,14 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
     }
 
     @Override
-    public List<QueryPositionManageResp> queryPositionManageList(String positionStatus) {
-        return this.baseMapper.queryPositionManageList(positionStatus);
+    public QueryPositionManageByPageResp queryPositionManageList(String positionStatus,Integer currentPage,Integer pageSize) {
+        List<QueryPositionManageResp> queryPositionManageRespList = this.baseMapper
+                .queryPositionManageList(positionStatus,currentPage,pageSize);
+        Integer total = this.baseMapper.queryPositionManageListSize(positionStatus);
+        return QueryPositionManageByPageResp.builder()
+                .queryPositionManageRespList(queryPositionManageRespList)
+                .total(total)
+                .build();
     }
 
     @Override
@@ -151,6 +157,25 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
             recommendResumeResp.setPositionId(positionId);
         });
         return recommendResumeRespList;
+    }
+
+    @Override
+    public RcAndPositionResp getVipPackage() {
+        // 查询上线岗位数量
+        Integer positionOnlineNum = this.baseMapper.queryPositionOnlineNum(StpUtil.getLoginId().toString());
+        // 查询未上线岗位数量
+        Integer positionOfflineNum = this.baseMapper.queryPositionOfflineNum(StpUtil.getLoginId().toString());
+        // 查询新招呼人才数量
+        Integer rcNewNum = tHrMarkResumeMapper.queryRcNewNum(StpUtil.getLoginId().toString());
+        // 查询收藏人才数量
+        Integer rcMarkNum = tHrMarkResumeMapper.queryRcMarkNum(StpUtil.getLoginId().toString());
+
+        return RcAndPositionResp.builder()
+                .positionOfflineNum(positionOnlineNum)
+                .positionOnlineNum(positionOfflineNum)
+                .rcMarkNum(rcMarkNum)
+                .rcNewNum(rcNewNum)
+                .build();
     }
 
     @Override

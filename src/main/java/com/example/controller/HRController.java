@@ -5,13 +5,11 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.annotation.SaMode;
 import cn.dev33.satoken.stp.StpUtil;
 import com.example.entity.ResponseResult;
+import com.example.entity.TExam;
 import com.example.entity.TPosition;
 import com.example.entity.TVipPackage;
 import com.example.req.*;
-import com.example.resp.HrInfoResp;
-import com.example.resp.PositionDetailResp;
-import com.example.resp.PositionListResp;
-import com.example.resp.RecommendResumeResp;
+import com.example.resp.*;
 import com.example.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -48,6 +46,11 @@ public class HRController {
     @Autowired
     private DeepSeekService deepSeekService;
 
+    @Autowired
+    private THrPaidPermisionsService thrPaidPermisionsService;
+
+    @Autowired
+    private TExamService tExamService;
 
     @ApiOperation(value = "hr个人信息+加入公司", notes = "", httpMethod = "POST")
     @SaCheckLogin
@@ -187,14 +190,40 @@ public class HRController {
         TPosition tPosition = tPositionService.getById(chatExamReq.getPositionId());
         if (chatExamReq.getStartExamFlag()) {
             StringBuilder sb = new StringBuilder();
-            sb.append("现在假设你是个面试官，我是面试者，你要面试一个岗位，强制要求每轮问一个，不要一次性出完所有题目，等我回答完成后问下一个，对我的回答不用做出评价，等所有问题问完后，生成最终得分，最终结果返回简单明了，你要向我提" + chatExamReq.getExamNum() +"个的面试问题，满分100分。笔试要求如下：");
+//            sb.append("现在假设你是个面试官，我是面试者，你要面试一个岗位，强制要求每轮问一个，不要一次性出完所有题目，等我回答完成后问下一个，对我的回答不用做出评价，等所有问题问完后，生成最终得分，最终结果返回简单明了，你要向我提" + chatExamReq.getExamNum() +"个的面试问题，满分100分。笔试要求如下：");
+            sb.append("现在假设你是个面试官，我是面试者，你要面试一个岗位，强制要求每轮问一个，不要一次性出完所有题目，等我回答完成后问下一个，对我的回答不用做出评价，等所有问题问完后，生成最终得分，并分析每道题的正确答案，你要向我提" + chatExamReq.getExamNum() +"个的面试问题，满分100分。笔试要求如下：");
             sb.append(tPosition.getPositionDescription());
             chatExamReq.setContent(sb.toString());
         } else {
             // 将回答内容进行改造
             chatExamReq.setContent(chatExamReq.getContent() + "我的答案是：" + chatExamReq.getContent() + "。继续下一题");
         }
-        return deepSeekService.chatFluxExam(true, StpUtil.getSession(),chatExamReq,StpUtil.getLoginId().toString());
+        return deepSeekService.chatFluxExam(true, StpUtil.getSession(),chatExamReq,StpUtil.getLoginId().toString(),tPosition.getUserId());
+    }
+
+    @ApiOperation(value = "查询我的人才和职位数量", notes = "", httpMethod = "GET")
+    @SaCheckLogin
+    @GetMapping("/rcAndPositionNum")
+    public ResponseResult<RcAndPositionResp> getRcAndPositionNum() {
+        RcAndPositionResp rcAndPositionResp = tPositionService.getVipPackage();
+        return ResponseResult.success(rcAndPositionResp);
+    }
+
+    @ApiOperation(value = "查询我的权益", notes = "", httpMethod = "GET")
+    @SaCheckLogin
+    @GetMapping("/myPermission")
+    public ResponseResult<PermissionResp> getMyPermission() {
+        PermissionResp permissionResp = thrPaidPermisionsService.getMyPermission();
+        return ResponseResult.success(permissionResp);
+    }
+
+    @ApiOperation(value = "查询考试信息", notes = "", httpMethod = "GET")
+    @SaCheckLogin
+    @GetMapping("/getExamInfo")
+    public ResponseResult<List<TExam>> getExamIInfo(@RequestParam("positionId") String positionId,
+                                                    @RequestParam("resumeId") String resumeId) {
+        List<TExam> examList = tExamService.getExamInfo(positionId,resumeId);
+        return ResponseResult.success(examList);
     }
 
 }

@@ -96,7 +96,9 @@ com\example\controller\EmployeeController.class
 com\example\resp\QueryPositionManageResp$QueryPositionManageRespBuilder.class
 com\example\entity\TPositionKeyWord.class
 com\example\service\impl\THrServiceImpl.class
+com\example\resp\QueryCompanyResp$QueryCompanyRespBuilder.class
 com\example\service\TPositionKeyWordService.class
+com\example\resp\QueryPositionManageByPageResp$QueryPositionManageByPageRespBuilder.class
 com\example\resp\TalentListResp$TalentListRespBuilder.class
 com\example\resp\ResumeDetailResp.class
 com\example\service\impl\TImMessageServiceImpl.class
@@ -133,6 +135,7 @@ com\example\controller\AuthController.class
 com\example\entity\TResumeBaseInfo.class
 com\example\service\impl\TEmployeeResumeFileServiceImpl.class
 com\example\mapper\THrMapper.class
+com\example\resp\QueryPositionManageByPageResp.class
 com\example\entity\TVipPackage.class
 com\example\resp\ResumeListResp$ResumeListRespBuilder.class
 com\example\config\WebMvcConfig.class
@@ -144,6 +147,7 @@ com\example\service\THrMarkResumeService.class
 com\example\mapper\TEmployeeVipMapper.class
 com\example\req\HrActivateReq.class
 com\example\resp\GetSaveJobListResp$GetSaveJobListRespBuilder.class
+com\example\resp\QueryCompanyResp.class
 com\example\controller\EmployeeMarketController.class
 com\example\service\TPositionService.class
 com\example\schedule\Timer.class

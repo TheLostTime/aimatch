@@ -12,6 +12,7 @@ import com.example.req.*;
 import com.example.resp.GetJobListResp;
 import com.example.resp.HrInfoResp;
 import com.example.resp.PositionDetailResp;
+import com.example.resp.QueryCompanyResp;
 import com.example.service.*;
 import com.example.util.FileToDbUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -169,13 +170,17 @@ public class TCompanyServiceImpl extends ServiceImpl<TCompanyMapper, TCompany> i
     }
 
     @Override
-    public List<TCompany> queryCompanyList() {
-        List<TCompany> list = this.getBaseMapper().queryCompanyList();
+    public QueryCompanyResp queryCompanyList(Integer currentPage, Integer pageSize) {
+        List<TCompany> list = this.getBaseMapper().queryCompanyList(currentPage, pageSize);
         list.forEach(tCompany -> {
             tCompany.setEnterpriseLicense(null);
             tCompany.setIncumbencyCertificate(null);
         });
-        return list;
+        Integer total = this.getBaseMapper().queryCompanyListSize();
+        return QueryCompanyResp.builder()
+                .tCompanyList(list)
+                .total(total)
+                .build();
     }
 
     @Override

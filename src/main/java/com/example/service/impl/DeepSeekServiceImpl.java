@@ -6,10 +6,14 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.example.entity.TExam;
 import com.example.entity.THrMarkResume;
+import com.example.entity.TResumeBaseInfo;
 import com.example.req.ChatExamReq;
 import com.example.service.DeepSeekService;
+import com.example.service.TExamService;
 import com.example.service.THrMarkResumeService;
+import com.example.service.TResumeBaseInfoService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +48,12 @@ public class DeepSeekServiceImpl implements DeepSeekService {
 
     @Autowired
     private THrMarkResumeService tHrMarkResumeService;
+
+    @Autowired
+    private TResumeBaseInfoService tResumeBaseInfoService;
+
+    @Autowired
+    private TExamService tExamService;
 
     private final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(20, TimeUnit.SECONDS) // 连接超时 10 秒
@@ -188,7 +196,7 @@ public class DeepSeekServiceImpl implements DeepSeekService {
     }
 
     @Override
-    public Flux<String> chatFluxExam(Boolean needSaveContext, SaSession session, ChatExamReq chatExamReq,String loginId) {
+    public Flux<String> chatFluxExam(Boolean needSaveContext, SaSession session, ChatExamReq chatExamReq,String loginId,String hrUserId) {
         // 获取当前用户的对话上下文
         List<Map<String, String>> context = new ArrayList<>();
         String contextName = chatExamReq.getExamId();
@@ -241,6 +249,26 @@ public class DeepSeekServiceImpl implements DeepSeekService {
                             // 判断是否是最后一道题结果
                             List<Map<String, String>> message = session.get(contextName, new ArrayList<>());
                             if (message.size() == (chatExamReq.getExamNum()+ 1) * 2 ) {
+                                // 查询简历
+                                TResumeBaseInfo tResumeBaseInfo = tResumeBaseInfoService.getOne(new LambdaQueryWrapper<TResumeBaseInfo>()
+                                        .eq(TResumeBaseInfo::getUserId, loginId));
+                                if (null == tResumeBaseInfo) {
+                                    log.error("用户没有简历信息。。。");
+                                    return;
+                                }
+                                // 保存答题的数据,从第三条数据开始存储
+                                for (int i = 1; i < message.size(); i++) {
+                                    TExam tExam = TExam.builder()
+                                            .employeeUserId(loginId)
+                                            .hrUserId(hrUserId)
+                                            .content(message.get(i).get("content"))
+                                            .queIndex(i)
+                                            .positionId(chatExamReq.getPositionId())
+                                            .resumeId(tResumeBaseInfo.getResumeId())
+                                            .createTime(DateUtil.date())
+                                            .build();
+                                    tExamService.save(tExam);
+                                }
                                 String lastMessage = message.get(message.size() - 1).get("content");
                                 if (StringUtils.isNotEmpty(lastMessage)) {
                                     int score = extractScore(lastMessage);
@@ -249,9 +277,26 @@ public class DeepSeekServiceImpl implements DeepSeekService {
                                         THrMarkResume tHrMarkResume = tHrMarkResumeService.getOne(new LambdaQueryWrapper<THrMarkResume>()
                                                 .eq(THrMarkResume::getEmployeeUserId, loginId)
                                                 .eq(THrMarkResume::getPositionId, chatExamReq.getPositionId()));
+                                        if (null == tHrMarkResume) {
+                                            log.warn("未打过招呼...找不到tHrMarkResume..重新构建tHrMarkResume..");
+                                            tHrMarkResume = THrMarkResume.builder()
+                                                    .employeeUserId(loginId)
+                                                    .hrUserId(hrUserId)
+                                                    .resumeId(tResumeBaseInfo.getResumeId())
+                                                    .positionId(chatExamReq.getPositionId())
+                                                    .resumeStatus(null)
+                                                    .createTime(DateUtil.date())
+                                                    .updateTime(DateUtil.date())
+                                                    .testScores(score + "")
+                                                    .build();
+                                            tHrMarkResumeService.save(tHrMarkResume);
+                                            return;
+                                        }
                                         tHrMarkResume.setTestScores(score + "");
                                         tHrMarkResume.setUpdateTime(DateUtil.date());
                                         tHrMarkResumeService.updateTHrMarkResume(tHrMarkResume);
+                                    } else {
+                                        log.error("无法提取分数,请检查格式");
                                     }
                                 }
                             }

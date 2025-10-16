@@ -10,9 +10,11 @@
     <result column="say_hello" jdbcType="INTEGER" property="sayHello" />
     <result column="download_num" jdbcType="INTEGER" property="downloadNum" />
     <result column="ai_generate" jdbcType="INTEGER" property="aiGenerate" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    user_id, position_num, view_resume, say_hello, download_num, ai_generate
+    user_id, position_num, view_resume, say_hello, download_num, ai_generate,orderId
   </sql>
+
 </mapper>
