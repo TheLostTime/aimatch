@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TExamMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.entity.TExam">
+            <id property="examId" column="exam_id" jdbcType="VARCHAR"/>
+            <result property="employeeUserId" column="employee_user_id" jdbcType="VARCHAR"/>
+            <result property="hrUserId" column="hr_user_id" jdbcType="VARCHAR"/>
+            <result property="positionId" column="position_id" jdbcType="VARCHAR"/>
+            <result property="resumeId" column="resume_id" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="queIndex" column="que_index" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        exam_id,employee_user_id,hr_user_id,
+        content,que_index,
+        create_time
+    </sql>
+</mapper>

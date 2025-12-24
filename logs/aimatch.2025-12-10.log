@@ -1,0 +1,161 @@
+2025-12-10 09:14:45.340 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=15h32m11s953ms162µs901ns).
+2025-12-10 14:04:35.262 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2h10m19s372ms388µs300ns).
+2025-12-10 14:36:28.882 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-12-10 14:36:28.887 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-12-10 14:36:32.305 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+2025-12-10 14:36:32.307 [main] INFO  com.example.AimatchApplication - Starting AimatchApplication using Java 1.8.0_131 on wk with PID 7308 (D:\指标建设\AIMatch\aimatch\target\classes started by wk794 in D:\指标建设\AIMatch\aimatch)
+2025-12-10 14:36:32.308 [main] DEBUG com.example.AimatchApplication - Running with Spring Boot v2.7.15, Spring v5.3.29
+2025-12-10 14:36:32.308 [main] INFO  com.example.AimatchApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-10 14:36:33.085 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-12-10 14:36:33.087 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-12-10 14:36:33.110 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 11 ms. Found 0 Redis repository interfaces.
+2025-12-10 14:36:33.533 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8088 (http)
+2025-12-10 14:36:33.539 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8088"]
+2025-12-10 14:36:33.539 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-10 14:36:33.539 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.79]
+2025-12-10 14:36:33.666 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-10 14:36:33.666 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1322 ms
+2025-12-10 14:36:34.093 [main] WARN  c.b.m.core.metadata.TableInfoHelper - Can not find table primary key in Class: "com.example.entity.TImMessage".
+2025-12-10 14:36:34.093 [main] WARN  c.b.m.c.injector.DefaultSqlInjector - class com.example.entity.TImMessage ,Not found @TableId annotation, Cannot use Mybatis-Plus 'xxById' Method.
+2025-12-10 14:36:35.215 [main] INFO  com.example.config.Knife4jConfig - http://localhost:8088/doc.html
+2025-12-10 14:36:36.113 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8088"]
+2025-12-10 14:36:36.122 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8088 (http) with context path ''
+2025-12-10 14:36:36.239 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: file, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.241 [main] WARN  s.d.b.FormParameterSpecificationProvider - Parameter should either be a simple or a content type
+2025-12-10 14:36:36.299 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: string, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.299 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: string, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.301 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: string, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.301 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: string, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.305 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: file, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.305 [main] WARN  s.d.b.FormParameterSpecificationProvider - Parameter should either be a simple or a content type
+2025-12-10 14:36:36.305 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: string, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.332 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: string, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.372 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: string, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.373 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: string, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.373 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: string, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.426 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: file, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.426 [main] WARN  s.d.b.FormParameterSpecificationProvider - Parameter should either be a simple or a content type
+2025-12-10 14:36:36.426 [main] WARN  s.d.s.r.o.OperationImplicitParameterReader - Unable to interpret the implicit parameter configuration with dataType: file, dataTypeClass: class java.lang.Void
+2025-12-10 14:36:36.426 [main] WARN  s.d.b.FormParameterSpecificationProvider - Parameter should either be a simple or a content type
+2025-12-10 14:36:36.538 [main] INFO  com.example.AimatchApplication - Started AimatchApplication in 4.658 seconds (JVM running for 5.552)
+2025-12-10 14:36:40.231 [http-nio-8088-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-10 14:36:40.234 [http-nio-8088-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-10 14:36:40.234 [http-nio-8088-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2025-12-10 14:37:42.062 [http-nio-8088-exec-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-12-10 14:37:42.958 [http-nio-8088-exec-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-12-10 14:37:42.970 [http-nio-8088-exec-7] DEBUG c.e.m.T.getPositonInfoByReq - ==>  Preparing: select a.position_id, a.user_id, a.position_type, a.position_status, a.work_type, a.position_name, a.position_description, a.job_category, a.degree_lower_limit, a.experience_lower_limit, a.salary_lower_limit, a.salary_upper_limit, a.salary_month, a.work_place, a.is_oversea, a.oversea_remainder, a.position_num, a.update_time, a.reason, b.user_type, b.account, d.name, d.title, d.company_id, d.vip_type, d.real_name, c.company_id, c.company_name, c.industry, c.scale, c.enterprise_certified, e.ai_examiner, e.ai_examiner_desc, e.oversea_remainder, e.resume_threshold, e.degree_lower_limit as tool_degree_lower_limit, e.experience_lower_limit as tool_experience_lower_limit, e.experience_upper_limit as tool_experience_upper_limit, e.age_lower_limit, e.age_upper_limit,e.college, e.major, e.gender, e.residentia_address, f.id, f.key_word from ( select * from t_position tp where position_status = 2 and job_category = ? order by update_time desc limit 0, ? ) a left join t_user b on a.user_id = b.user_id left join t_hr d on a.user_id = d.user_id left join t_company c on d.company_id = c.company_id left join t_position_toolbox e on a.position_id = e.position_id left join t_position_key_word f on a.position_id = f.position_id order by a.update_time desc
+2025-12-10 14:37:42.986 [http-nio-8088-exec-7] DEBUG c.e.m.T.getPositonInfoByReq - ==> Parameters: 互联网/AI-互联网(String), 8(Integer)
+2025-12-10 14:37:43.098 [http-nio-8088-exec-7] DEBUG c.e.m.T.getPositonInfoByReq - <==      Total: 0
+2025-12-10 14:40:08.405 [http-nio-8088-exec-10] DEBUG c.e.m.T.getPositonInfoByReq - ==>  Preparing: select a.position_id, a.user_id, a.position_type, a.position_status, a.work_type, a.position_name, a.position_description, a.job_category, a.degree_lower_limit, a.experience_lower_limit, a.salary_lower_limit, a.salary_upper_limit, a.salary_month, a.work_place, a.is_oversea, a.oversea_remainder, a.position_num, a.update_time, a.reason, b.user_type, b.account, d.name, d.title, d.company_id, d.vip_type, d.real_name, c.company_id, c.company_name, c.industry, c.scale, c.enterprise_certified, e.ai_examiner, e.ai_examiner_desc, e.oversea_remainder, e.resume_threshold, e.degree_lower_limit as tool_degree_lower_limit, e.experience_lower_limit as tool_experience_lower_limit, e.experience_upper_limit as tool_experience_upper_limit, e.age_lower_limit, e.age_upper_limit,e.college, e.major, e.gender, e.residentia_address, f.id, f.key_word from ( select * from t_position tp where position_status = 2 and job_category = ? order by update_time desc limit 0, ? ) a left join t_user b on a.user_id = b.user_id left join t_hr d on a.user_id = d.user_id left join t_company c on d.company_id = c.company_id left join t_position_toolbox e on a.position_id = e.position_id left join t_position_key_word f on a.position_id = f.position_id order by a.update_time desc
+2025-12-10 14:40:08.406 [http-nio-8088-exec-10] DEBUG c.e.m.T.getPositonInfoByReq - ==> Parameters: 互联网/AI-互联网(String), 8(Integer)
+2025-12-10 14:40:08.511 [http-nio-8088-exec-10] DEBUG c.e.m.T.getPositonInfoByReq - <==      Total: 2
+2025-12-10 14:56:34.106 [http-nio-8088-exec-1] INFO  c.example.controller.AuthController - 接收登录请求: 3
+2025-12-10 14:56:34.113 [http-nio-8088-exec-1] INFO  c.e.service.impl.TUserServiceImpl - 查找用户: 3
+2025-12-10 14:56:34.282 [http-nio-8088-exec-1] DEBUG c.e.mapper.TUserMapper.selectList - ==>  Preparing: SELECT user_id,user_type,account,password,avatar FROM t_user WHERE (account = ?)
+2025-12-10 14:56:34.283 [http-nio-8088-exec-1] DEBUG c.e.mapper.TUserMapper.selectList - ==> Parameters: 3(String)
+2025-12-10 14:56:34.554 [http-nio-8088-exec-1] DEBUG c.e.mapper.TUserMapper.selectList - <==      Total: 1
+2025-12-10 14:56:34.569 [http-nio-8088-exec-1] ERROR c.e.exception.GlobalExceptionHandler - 业务异常: 请选择正确的入口
+com.example.exception.BusinessException: 请选择正确的入口
+	at com.example.service.impl.TUserServiceImpl.login(TUserServiceImpl.java:85)
+	at com.example.service.impl.TUserServiceImpl$$FastClassBySpringCGLIB$$61c77e1a.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy.invokeMethod(CglibAopProxy.java:386)
+	at org.springframework.aop.framework.CglibAopProxy.access$000(CglibAopProxy.java:85)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:704)
+	at com.example.service.impl.TUserServiceImpl$$EnhancerBySpringCGLIB$$99bd3c7e.login(<generated>)
+	at com.example.controller.AuthController.login(AuthController.java:53)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:926)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1790)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+2025-12-10 14:56:38.939 [http-nio-8088-exec-2] INFO  c.example.controller.AuthController - 接收登录请求: 3
+2025-12-10 14:56:38.939 [http-nio-8088-exec-2] INFO  c.e.service.impl.TUserServiceImpl - 查找用户: 3
+2025-12-10 14:56:39.032 [http-nio-8088-exec-2] DEBUG c.e.mapper.TUserMapper.selectList - ==>  Preparing: SELECT user_id,user_type,account,password,avatar FROM t_user WHERE (account = ?)
+2025-12-10 14:56:39.033 [http-nio-8088-exec-2] DEBUG c.e.mapper.TUserMapper.selectList - ==> Parameters: 3(String)
+2025-12-10 14:56:39.313 [http-nio-8088-exec-2] DEBUG c.e.mapper.TUserMapper.selectList - <==      Total: 1
+2025-12-10 14:56:39.915 [http-nio-8088-exec-2] INFO  c.e.service.impl.TUserServiceImpl - 用户登录成功: 3
+2025-12-10 14:58:36.091 [http-nio-8088-exec-4] DEBUG c.e.mapper.TUserMapper.selectById - ==>  Preparing: SELECT user_id,user_type,account,password,avatar FROM t_user WHERE user_id=?
+2025-12-10 14:58:36.091 [http-nio-8088-exec-4] DEBUG c.e.mapper.TUserMapper.selectById - ==> Parameters: 1997649327776280577(String)
+2025-12-10 14:58:36.362 [http-nio-8088-exec-4] DEBUG c.e.mapper.TUserMapper.selectById - <==      Total: 1
+2025-12-10 14:58:36.362 [http-nio-8088-exec-4] INFO  com.example.config.MyStpInterface - 当前登录用户角色:1
+2025-12-10 14:58:36.423 [http-nio-8088-exec-4] DEBUG c.e.mapper.THrVipMapper.selectById - ==>  Preparing: SELECT user_id,vip_type,begin_time,expire_time FROM t_hr_vip WHERE user_id=?
+2025-12-10 14:58:36.423 [http-nio-8088-exec-4] DEBUG c.e.mapper.THrVipMapper.selectById - ==> Parameters: 1997649327776280577(String)
+2025-12-10 14:58:36.513 [http-nio-8088-exec-4] DEBUG c.e.mapper.THrVipMapper.selectById - <==      Total: 1
+2025-12-10 14:58:47.661 [http-nio-8088-exec-4] DEBUG c.e.m.T.getResumeList - ==>  Preparing: select a.resume_id, b.*, b1.name as employee_name,b1.age,b1.gender,b1.work_experience, c.user_id,c.account,c.avatar, d.*, e.*, f.*, g.* from (select distinct(m1.resume_id) as resume_id from t_resume_interest_job m1 where EXISTS ( select 1 from t_position m2 left join t_position_toolbox m3 on m2.position_id = m3.position_id where m2.position_id = ? and m2.user_id = ? and m2.job_category = m1.job_category ) and NOT EXISTS ( select 1 from t_hr_mark_resume m3 where m3.resume_id = m1.resume_id and m3.position_id = ? and m3.hr_user_id = ? and m3.resume_status = 1 ) ) a inner join t_resume_base_info b on a.resume_id = b.resume_id inner join t_employee b1 on b.user_id = b1.user_id inner join t_user c on b.user_id = c.user_id left join t_resume_work d on a.resume_id = d.resume_id left join t_resume_education e on a.resume_id = e.resume_id left join t_resume_interest_job f on a.resume_id = f.resume_id left join (select * from t_hr_mark_resume where position_id = ?) g on a.resume_id = g.resume_id
+2025-12-10 14:58:47.661 [http-nio-8088-exec-4] DEBUG c.e.m.T.getResumeList - ==> Parameters: 1998035550558650370(String), 1997649327776280577(String), 1998035550558650370(String), 1997649327776280577(String), 1998035550558650370(String)
+2025-12-10 14:58:48.004 [http-nio-8088-exec-4] DEBUG c.e.m.T.getResumeList - <==      Total: 1
+2025-12-10 14:59:22.920 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m9s782ms973µs400ns).
+2025-12-10 14:59:23.021 [http-nio-8088-exec-4] DEBUG c.e.m.T.getResumeList - ==>  Preparing: select a.resume_id, b.*, b1.name as employee_name,b1.age,b1.gender,b1.work_experience, c.user_id,c.account,c.avatar, d.*, e.*, f.*, g.* from (select distinct(m1.resume_id) as resume_id from t_resume_interest_job m1 where EXISTS ( select 1 from t_position m2 left join t_position_toolbox m3 on m2.position_id = m3.position_id where m2.position_id = ? and m2.user_id = ? and m2.job_category = m1.job_category ) and NOT EXISTS ( select 1 from t_hr_mark_resume m3 where m3.resume_id = m1.resume_id and m3.position_id = ? and m3.hr_user_id = ? and m3.resume_status = 1 ) ) a inner join t_resume_base_info b on a.resume_id = b.resume_id inner join t_employee b1 on b.user_id = b1.user_id inner join t_user c on b.user_id = c.user_id left join t_resume_work d on a.resume_id = d.resume_id left join t_resume_education e on a.resume_id = e.resume_id left join t_resume_interest_job f on a.resume_id = f.resume_id left join (select * from t_hr_mark_resume where position_id = ?) g on a.resume_id = g.resume_id
+2025-12-10 14:59:23.032 [http-nio-8088-exec-4] DEBUG c.e.m.T.getResumeList - ==> Parameters: 1998035550558650370(String), 1997649327776280577(String), 1998035550558650370(String), 1997649327776280577(String), 1998035550558650370(String)
+2025-12-10 14:59:23.339 [http-nio-8088-exec-4] DEBUG c.e.m.T.getResumeList - <==      Total: 1
+2025-12-10 15:04:32.404 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m9s484ms781µs100ns).
+2025-12-10 20:45:01.227 [lettuce-nioEventLoop-4-1] INFO  i.l.core.protocol.CommandHandler - null Unexpected exception during request: java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:254)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2025-12-10 20:45:01.352 [lettuce-eventExecutorLoop-1-14] INFO  i.l.core.protocol.ConnectionWatchdog - Reconnecting, last destination was /192.168.64.128:6379
