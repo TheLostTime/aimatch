@@ -27,7 +27,7 @@ public class AuthController {
     private TUserService userService;
 
 
-    @ApiOperation(value = "注册", notes = "", httpMethod = "POST")
+    @ApiOperation(value = "tHrMarkResumeService.updateTHrMarkResume", notes = "", httpMethod = "POST")
     @PostMapping("/register")
     public ResponseResult<?> register(@RequestBody TUser user) {
         logger.info("接收注册请求: {}", user.getAccount());

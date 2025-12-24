@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.fastjson2.JSONObject;
 import com.alipay.easysdk.factory.Factory;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -74,7 +75,7 @@ public class TPaymentServiceImpl extends ServiceImpl<TPaymentMapper, TPayment>
     private THrPaidPermisionsUseDetailService tHrPaidPermisionsUseDetailService;
 
     @Override
-    public String createPayQrcode(String orderId, Integer channel) {
+    public String createPayQrcode(String orderId, Integer channel,String remoteAddress) {
         TOrder order = orderMapper.selectById(orderId);
         if (order == null || order.getStatus() != PayConstant.ORDER_STATUS_PENDING) {
             throw new BusinessException(10000,"订单状态异常");
@@ -101,7 +102,7 @@ public class TPaymentServiceImpl extends ServiceImpl<TPaymentMapper, TPayment>
         try {
             String qrcodeUrl;
             if (channel == PayConstant.CHANNEL_WECHAT) {
-                qrcodeUrl = wxPayUtil.createQrcode(order.getOrderNo(), order.getTotalAmount().doubleValue());
+                qrcodeUrl = wxPayUtil.createQrcode(order.getOrderNo(), order.getTotalAmount().doubleValue(),remoteAddress);
                 payment.setQrcodeUrl(qrcodeUrl);
                 baseMapper.updateById(payment);
                 // 生成二维码图片返回给前端
@@ -226,6 +227,7 @@ public class TPaymentServiceImpl extends ServiceImpl<TPaymentMapper, TPayment>
      * @return
      */
     private String handleCallbackPermission(String orderNo) {
+        log.info("支付成功后增加权益。。。");
         // 根据订单号获取订单继而获取买家ID
         TOrder order = orderMapper.selectOne(new LambdaQueryWrapper<TOrder>().eq(TOrder::getOrderNo, orderNo));
         if (order == null) {
@@ -249,6 +251,7 @@ public class TPaymentServiceImpl extends ServiceImpl<TPaymentMapper, TPayment>
                 .build()
         );
 
+        log.info("支付成功后增加权益。。。");
         // 2.根据packageId查询套餐规格
         TVipPackage tVipPackage = tVipPackageMapper.selectById(order.getPackageId());
         if (null == tVipPackage) {
@@ -262,6 +265,7 @@ public class TPaymentServiceImpl extends ServiceImpl<TPaymentMapper, TPayment>
                 .sayHello(tVipPackage.getSayHello())
                 .viewResume(tVipPackage.getViewResume())
                 .userId(userId)
+                .aiGenerate(tVipPackage.getAiGenerate())
                 .orderId(order.getId())
                 .build();
         tHrPaidPermisionsService.save(tHrPaidPermisions);
@@ -270,7 +274,7 @@ public class TPaymentServiceImpl extends ServiceImpl<TPaymentMapper, TPayment>
         THrPaidPermisionsUseDetail tHrPaidPermisionsUseDetail = tHrPaidPermisionsUseDetailService.getById(userId);
         if (null == tHrPaidPermisionsUseDetail) {
             tHrPaidPermisionsUseDetail = THrPaidPermisionsUseDetail.builder()
-                    .userId(StpUtil.getLoginId().toString())
+                    .userId(userId)
                     .usedPositionNum(tVipPackage.getPositionNum())
                     .usedViewResume(tVipPackage.getViewResume())
                     .usedSayHello(tVipPackage.getSayHello())

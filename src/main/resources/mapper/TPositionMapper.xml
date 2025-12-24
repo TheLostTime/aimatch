@@ -73,14 +73,14 @@
                e.age_upper_limit,e.college, e.major, e.gender, e.residentia_address,
                f.id, f.key_word
         from (
-            select * from t_position
+            select * from t_position tp
             where position_status = 2
             <!-- 岗位关键词精确匹配 -->
             <if test="keyWord != null and keyWord != ''">
                 and EXISTS (
                     SELECT 1
                     FROM t_position_key_word k
-                    WHERE k.position_id = a.position_id
+                    WHERE k.position_id = tp.position_id
                     AND k.key_word = #{keyWord}
                  )
             </if>
@@ -89,7 +89,7 @@
                     select 1
                     from t_hr m1
                     inner join t_company m2 on m1.company_id = m2.company_id
-                    where m1.user_id = a.user_id
+                    where m1.user_id = tp.user_id
                     and m2.scale = #{scale}
                 )
             </if>

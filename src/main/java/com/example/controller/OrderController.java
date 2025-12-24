@@ -3,6 +3,7 @@ package com.example.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.example.entity.ResponseResult;
 import com.example.entity.TOrder;
+import com.example.resp.OrderInfoResp;
 import com.example.service.TOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,8 +32,8 @@ public class OrderController {
     @ApiOperation(value = "获取订单列表", notes = "", httpMethod = "GET")
     @SaCheckLogin
     @GetMapping("/getOrder")
-    public ResponseResult<List<TOrder>> getOrder(@RequestParam(value = "status",required = false) Integer status) {
-        List<TOrder> orderList = orderService.getCommonOrder(status);
+    public ResponseResult<List<OrderInfoResp>> getOrder(@RequestParam(value = "status",required = false) Integer status) {
+        List<OrderInfoResp> orderList = orderService.getCommonOrder(status);
         return ResponseResult.success(orderList);
     }
 

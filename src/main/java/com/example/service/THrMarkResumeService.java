@@ -15,5 +15,5 @@ public interface THrMarkResumeService extends IService<THrMarkResume> {
 
     void updateTHrMarkResume(THrMarkResume tHrMarkResume);
 
-    void handePaper(String positionId, String resumeId);
+    void handePaper(String positionId, String resumeId, String examId);
 }

@@ -66,4 +66,10 @@ public class TOrder implements Serializable {
     @ApiModelProperty("更新时间")
     private LocalDateTime updateTime;
 
+    @ApiModelProperty(value="支付方式")
+    @TableField(exist = false)
+    private Integer channel;
+
+
+
 }

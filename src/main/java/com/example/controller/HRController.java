@@ -196,7 +196,7 @@ public class HRController {
             chatExamReq.setContent(sb.toString());
         } else {
             // 将回答内容进行改造
-            chatExamReq.setContent(chatExamReq.getContent() + "我的答案是：" + chatExamReq.getContent() + "。继续下一题");
+            chatExamReq.setContent("我的答案是：" + chatExamReq.getContent() + "。继续下一题");
         }
         return deepSeekService.chatFluxExam(true, StpUtil.getSession(),chatExamReq,StpUtil.getLoginId().toString(),tPosition.getUserId());
     }
@@ -205,7 +205,7 @@ public class HRController {
     @SaCheckLogin
     @GetMapping("/rcAndPositionNum")
     public ResponseResult<RcAndPositionResp> getRcAndPositionNum() {
-        RcAndPositionResp rcAndPositionResp = tPositionService.getVipPackage();
+        RcAndPositionResp rcAndPositionResp = tPositionService.getRcAndPositionNum();
         return ResponseResult.success(rcAndPositionResp);
     }
 

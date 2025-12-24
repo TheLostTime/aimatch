@@ -24,7 +24,7 @@ public class WxPayUtil {
         this.wxPayConfig = wxPayConfig;
     }
 
-    public String createQrcode(String orderNo, double totalAmount) {
+    public String createQrcode(String orderNo, double totalAmount,String remoteAddress) {
         WXPay wxPay = new WXPay(new WXPayConfig() {
             @Override
             public String getAppID() {
@@ -50,7 +50,7 @@ public class WxPayUtil {
         data.put("body", "订单-" + orderNo);
         data.put("out_trade_no", orderNo);
         data.put("total_fee", String.valueOf((int)(totalAmount * 100))); // 单位分
-        data.put("spbill_create_ip", getServerIp());
+        data.put("spbill_create_ip", remoteAddress);
         data.put("notify_url", wxPayConfig.getNotifyUrl());
         data.put("trade_type", "NATIVE");
         Map<String, String> resp;

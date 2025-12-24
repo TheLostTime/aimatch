@@ -15,7 +15,7 @@ public interface TPaymentService extends IService<TPayment> {
     /**
      * 创建支付二维码
      */
-    String createPayQrcode(String orderId, Integer channel);
+    String createPayQrcode(String orderId, Integer channel,String remoteAddress);
 
     /**
      * 处理支付回调

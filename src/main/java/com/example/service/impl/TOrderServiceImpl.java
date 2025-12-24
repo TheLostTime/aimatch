@@ -7,10 +7,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.constant.PayConstant;
 import com.example.entity.TOrder;
+import com.example.entity.TPayment;
 import com.example.entity.TVipPackage;
 import com.example.exception.BusinessException;
 import com.example.mapper.TOrderMapper;
+import com.example.mapper.TPaymentMapper;
 import com.example.mapper.TVipPackageMapper;
+import com.example.resp.OrderInfoResp;
 import com.example.service.TOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
 * @author wk794
@@ -31,6 +35,9 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder>
 
     @Autowired
     private TVipPackageMapper tVipPackageMapper;
+
+    @Autowired
+    private TPaymentMapper tPaymentMapper;
     @Override
     public TOrder createOrder(String packageId) {
         // 查询套餐
@@ -42,7 +49,7 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder>
         TOrder order = new TOrder();
         order.setOrderNo(generateOrderNo());
         order.setUserId(userId);
-        order.setTotalAmount(BigDecimal.valueOf(tVipPackage.getPrice()));
+        order.setTotalAmount(tVipPackage.getPrice());
         order.setStatus(PayConstant.ORDER_STATUS_PENDING); // 待支付
         order.setCreateTime(LocalDateTime.now());
         order.setUpdateTime(LocalDateTime.now());
@@ -56,20 +63,26 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder>
     public IPage<TOrder> getOrder(Integer pageNum, Integer pageSize,Integer status) {
         IPage<TOrder> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<TOrder> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(TOrder::getUserId, StpUtil.getLoginId());
         queryWrapper.orderByDesc(TOrder::getCreateTime);
         queryWrapper.eq(status != null, TOrder::getStatus, status);
         IPage<TOrder> orderList = this.baseMapper.selectPage(page, queryWrapper);
+        // 获取所有id
+        List<String> ids = orderList.getRecords().stream().map(TOrder::getId).collect(Collectors.toList());
+        List<TPayment> paymentList = tPaymentMapper.selectList(new LambdaQueryWrapper<TPayment>().in(TPayment::getOrderId, ids));
+        orderList.getRecords().forEach(order -> {
+            TPayment payment = paymentList.stream()
+                    .filter(p -> p.getOrderId().equals(order.getId())).findFirst().orElse(null);
+            if (payment != null) {
+                order.setChannel(payment.getChannel());
+            }
+        });
         return orderList;
     }
 
     @Override
-    public List<TOrder> getCommonOrder(Integer status) {
+    public List<OrderInfoResp> getCommonOrder(Integer status) {
         String userId = StpUtil.getLoginId().toString();
-        LambdaQueryWrapper<TOrder> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(status != null, TOrder::getStatus, status);
-        queryWrapper.eq(TOrder::getUserId,userId);
-        List<TOrder> orderList = this.baseMapper.selectList(queryWrapper);
+        List<OrderInfoResp> orderList = this.baseMapper.queryOrderIncDetail(userId,status);
         return orderList;
     }
 

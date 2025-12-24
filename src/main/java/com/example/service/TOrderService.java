@@ -3,6 +3,7 @@ package com.example.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.entity.TOrder;
+import com.example.resp.OrderInfoResp;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,5 +19,5 @@ public interface TOrderService extends IService<TOrder> {
 
     IPage<TOrder> getOrder(Integer pageNum, Integer pageSize,Integer  status);
 
-    List<TOrder> getCommonOrder(Integer status);
+    List<OrderInfoResp> getCommonOrder(Integer status);
 }

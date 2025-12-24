@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@ApiModel(value="RcAndPositionResp")
+@ApiModel(value="PermissionResp")
 @Data
 @Builder
 @AllArgsConstructor

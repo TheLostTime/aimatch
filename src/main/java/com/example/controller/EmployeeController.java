@@ -204,8 +204,9 @@ public class EmployeeController {
     @SaCheckRole(value = {USER_TYPE_EMPLOYEE})
     @PostMapping("/hand/paper")
     public ResponseResult<Boolean> handePaper(@RequestParam("positionId") String positionId,
-                                               @RequestParam("resumeId") String resumeId) {
-        tHrMarkResumeService.handePaper(positionId,resumeId);
+                                               @RequestParam("resumeId") String resumeId,
+                                              @RequestParam("examId") String examId) {
+        tHrMarkResumeService.handePaper(positionId,resumeId,examId);
         return ResponseResult.success(true);
     }
 

@@ -160,7 +160,7 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
     }
 
     @Override
-    public RcAndPositionResp getVipPackage() {
+    public RcAndPositionResp getRcAndPositionNum() {
         // 查询上线岗位数量
         Integer positionOnlineNum = this.baseMapper.queryPositionOnlineNum(StpUtil.getLoginId().toString());
         // 查询未上线岗位数量
@@ -171,8 +171,8 @@ public class TPositionServiceImpl extends ServiceImpl<TPositionMapper, TPosition
         Integer rcMarkNum = tHrMarkResumeMapper.queryRcMarkNum(StpUtil.getLoginId().toString());
 
         return RcAndPositionResp.builder()
-                .positionOfflineNum(positionOnlineNum)
-                .positionOnlineNum(positionOfflineNum)
+                .positionOfflineNum(positionOfflineNum)
+                .positionOnlineNum(positionOnlineNum)
                 .rcMarkNum(rcMarkNum)
                 .rcNewNum(rcNewNum)
                 .build();

@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -83,7 +85,7 @@ public class TVipPackage implements Serializable {
      */
     @TableField(value = "price")
     @ApiModelProperty(value="套餐价格")
-    private Integer price;
+    private BigDecimal price;
 
     /**
      * 状态：1:上架 2:下架

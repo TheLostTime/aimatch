@@ -46,6 +46,13 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
             logger.error("用户名已存在: {}", user.getAccount());
             throw new IllegalArgumentException("用户名已存在");
         }
+        // 账号密码应校验长度大小，字母、数字、特殊符号任意两种组合
+        String PASSWORD_REGEX =
+                "^(?![0-9]+$)(?![a-zA-Z]+$)(?![^0-9a-zA-Z]+$)[0-9A-Za-z\\S]{6,20}$";
+        if (!user.getPassword().matches(PASSWORD_REGEX)) {
+            logger.error("密码格式错误: {}", user.getPassword());
+            throw new BusinessException("密码格式错误");
+        }
         user.setPassword(SaSecureUtil.sha256(user.getPassword()));
         int result = baseMapper.insert(user);
 
@@ -64,7 +71,7 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
     public String login(TUser user) {
         TUser dbUser = findByUsername(user.getAccount());
         if (null == dbUser) {
-            throw new BusinessException("用户不存！");
+            throw new BusinessException("用户不存在！");
         }
 
         // 验证密码是否匹配

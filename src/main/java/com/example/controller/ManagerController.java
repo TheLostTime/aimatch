@@ -2,17 +2,16 @@ package com.example.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.entity.*;
 import com.example.req.AuditCompanyReq;
 import com.example.req.AuditPositionReq;
+import com.example.resp.PositionDetailResp;
 import com.example.resp.QueryCompanyResp;
 import com.example.resp.QueryPositionManageByPageResp;
 import com.example.resp.QueryPositionManageResp;
-import com.example.service.TCompanyService;
-import com.example.service.TOrderService;
-import com.example.service.TPositionService;
-import com.example.service.TVipPackageService;
+import com.example.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -36,6 +35,9 @@ public class ManagerController {
 
     @Autowired
     private TPositionService positionService;
+
+    @Autowired
+    private TPositionKeyWordService positionKeyWordService;
 
     @Autowired
     private TVipPackageService tVipPackageService;
@@ -91,9 +93,15 @@ public class ManagerController {
     @ApiOperation(value = "查询岗位详情", notes = "", httpMethod = "GET")
     @SaCheckLogin
     @GetMapping("/position/detail")
-    public ResponseResult<TPosition> queryPositionDetail(@RequestParam("positionId") String positionId) {
+    public ResponseResult<PositionDetailResp> queryPositionDetail(@RequestParam("positionId") String positionId) {
         TPosition position = positionService.getById(positionId);
-        return ResponseResult.success(position);
+        List<TPositionKeyWord> positionKeyWords = positionKeyWordService
+                .list(new LambdaQueryWrapper<TPositionKeyWord>().eq(TPositionKeyWord::getPositionId,positionId));
+        PositionDetailResp positionDetailResp = PositionDetailResp.builder()
+                .tPositionKeyWord(positionKeyWords)
+                .tPosition(position)
+                .build();
+        return ResponseResult.success(positionDetailResp);
     }
 
     @ApiOperation(value = "岗位审核", notes = "", httpMethod = "POST")
@@ -140,5 +148,13 @@ public class ManagerController {
     public ResponseResult<?> savePackage(@RequestBody TVipPackage tVipPackage) {
         tVipPackageService.save(tVipPackage);
         return ResponseResult.success();
+    }
+
+    @ApiOperation(value = "查询套餐详情", notes = "", httpMethod = "GET")
+    @SaCheckRole(value = {USER_TYPE_OPERATION})
+    @GetMapping("/package/queryDetail")
+    public ResponseResult<TVipPackage> queryPackageInfo(@RequestParam(value = "packageId") String packageId) {
+        TVipPackage vipPackages = tVipPackageService.getById(packageId);
+        return ResponseResult.success(vipPackages);
     }
 }

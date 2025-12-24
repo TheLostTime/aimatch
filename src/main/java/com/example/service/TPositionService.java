@@ -30,5 +30,5 @@ public interface TPositionService extends IService<TPosition>{
 
     List<RecommendResumeResp> recommendResumeList(String positionId,Integer size);
 
-    RcAndPositionResp getVipPackage();
+    RcAndPositionResp getRcAndPositionNum();
 }
